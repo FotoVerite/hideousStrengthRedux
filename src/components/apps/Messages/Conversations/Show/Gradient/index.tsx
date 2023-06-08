@@ -5,8 +5,11 @@ import {View, useWindowDimensions} from 'react-native';
 
 import {
   Canvas,
+  Group,
   LinearGradient,
+  Rect,
   RoundedRect,
+  Skia,
   vec,
 } from '@shopify/react-native-skia';
 
@@ -17,12 +20,14 @@ import {
 } from 'react-native-reanimated';
 import {changeColor} from '../utility';
 import {BubbleDimensionsType} from '../types';
+import {BubblePath, flipPath} from './BubblePath';
 
 export const Gradient: FC<
   {
     color: string[];
     scrollHandler: SharedValue<number>;
     left: boolean;
+    last: boolean;
     textLines?: ReactNode[];
   } & BubbleDimensionsType &
     PropsWithChildren
@@ -31,11 +36,13 @@ export const Gradient: FC<
   children,
   scrollHandler,
   left,
+  last,
   offsetFromTop,
   width,
   height,
   textLines,
 }) => {
+  const PADDING = 16;
   const COLOR_CHANGE_HEIGHT = useWindowDimensions().height / 2;
 
   const currentlyFromTop = useDerivedValue(() => {
@@ -63,25 +70,31 @@ export const Gradient: FC<
     return [color1, color2];
   }, [currentlyFromTop]);
 
+  let bubblePath = BubblePath(width, height + PADDING, 16, last);
+  if (left) {
+    bubblePath = flipPath(bubblePath, width);
+  }
+
   return (
     <View style={{alignItems: left ? undefined : 'flex-end'}}>
       <Canvas
         style={{
           width: width,
-          height: height + 16,
+          height: height + PADDING,
           marginBottom: 2,
           alignItems: left ? undefined : 'flex-end',
         }}>
-        <RoundedRect x={0} y={0} width={width} height={height + 16} r={10}>
-          <LinearGradient
-            colors={computedColors}
-            start={vec(0, 0)}
-            end={vec(0, height)}
-          />
-        </RoundedRect>
-        {textLines && textLines}
+        <Group clip={bubblePath}>
+          <Rect x={0} y={0} width={width} height={height + 16}>
+            <LinearGradient
+              colors={computedColors}
+              start={vec(0, 0)}
+              end={vec(0, height)}
+            />
+          </Rect>
+        </Group>
+        {children}
       </Canvas>
-      {children}
     </View>
   );
 };

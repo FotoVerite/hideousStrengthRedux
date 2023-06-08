@@ -9,6 +9,9 @@
       "@assets/*": [
         "assets/*"
       ],
+      "@apps/*": [
+        "src/components/apps/*"
+      ],
       "@models/*": [
         "src/models/*"
       ],

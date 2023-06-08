@@ -40,17 +40,19 @@ export const returnTextLines = (
   font: SkFont,
   sentence: string,
   width: number,
+  leftSide: boolean,
 ) => {
   let lines = 1;
   let thisLineWidth = 0;
   const textLines: ReactNode[] = [];
   let thisLine = '';
+  const LEFT_PADDING = leftSide ? 24 : 8;
   sentence.split(' ').forEach(word => {
     const thisWordWidth = font.getTextWidth(word);
     if (thisLineWidth + thisWordWidth > width) {
       textLines.push(
         <Text
-          x={12}
+          x={LEFT_PADDING}
           y={19 * lines + 4}
           text={thisLine}
           font={font}
@@ -70,7 +72,7 @@ export const returnTextLines = (
   });
   textLines.push(
     <Text
-      x={12}
+      x={LEFT_PADDING}
       y={19 * lines + 4}
       text={thisLine}
       font={font}

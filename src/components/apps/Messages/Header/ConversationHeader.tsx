@@ -67,7 +67,7 @@ const ConversationHeader: FC = () => {
                 suppressHighlighting={true}
                 name="chevron-left"
                 size={20}
-                color={'pink'}
+                color={context.conversation.state?.interfaceColor}
                 style={[styles.chevron]}
               />
             </TouchableWithoutFeedback>

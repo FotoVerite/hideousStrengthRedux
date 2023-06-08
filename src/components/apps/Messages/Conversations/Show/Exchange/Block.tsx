@@ -25,6 +25,7 @@ const Block: FC<
     message: StringMessageWithMeta | ImageMessageWithMeta,
     left: boolean,
     index: number,
+    last: boolean,
   ) => {
     return (
       <View key={`${index}-view`}>
@@ -41,6 +42,7 @@ const Block: FC<
             colors={mapping.colors}
             content={message.message}
             left={left}
+            last={last}
             offsetFromTopAcc={offsetFromTopAcc}
             scrollHandler={scrollHandler}
             font={font}
@@ -53,6 +55,7 @@ const Block: FC<
             colors={mapping.colors}
             content={message.message}
             left={left}
+            last={last}
             offsetFromTopAcc={offsetFromTopAcc}
             scrollHandler={scrollHandler}
             font={font}
@@ -66,14 +69,16 @@ const Block: FC<
   const renderBubbles = () => {
     const left = block.name !== 'Self';
     return block.messages.map((message, index) => {
+      const last = block.messages.length - 1 === index;
       if (message.hasOwnProperty('type')) {
-        return renderMessageWithMeta(message, left, index);
+        return renderMessageWithMeta(message, left, index, last);
       } else {
         return (
           <TextBubble
             colors={mapping?.colors}
             content={message}
             left={left}
+            last={last}
             offsetFromTopAcc={offsetFromTopAcc}
             scrollHandler={scrollHandler}
             font={font}
@@ -104,7 +109,6 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     marginEnd: theme.spacing.p1,
-    marginBottom: theme.spacing.p1,
     borderRadius: theme.BorderRadius.normal,
   },
   blockLeft: {

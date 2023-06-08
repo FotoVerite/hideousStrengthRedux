@@ -1,61 +1,83 @@
 import {MessagesContext} from 'components/apps/Messages/context';
 import React, {FC, useContext, useRef} from 'react';
 import {
-  Image,
   ImageURISource,
   StyleSheet,
   TouchableWithoutFeedback,
   useWindowDimensions,
+  Image,
+  View,
 } from 'react-native';
 
-import theme from 'themes';
 import {BubbleDimensionsType, ConversationSharedValues} from '../types';
-import {Gradient} from '../Gradient';
+import {
+  Canvas,
+  Group,
+  Image as SkImage,
+  useImage,
+} from '@shopify/react-native-skia';
+import {BubblePath} from '../Gradient/BubblePath';
+//import {BubblePath} from '../Gradient/BubblePath';
 
 const ImageBubble: FC<
   {
     colors: string[];
     content: ImageURISource;
     left: boolean;
+    last: boolean;
   } & ConversationSharedValues
-> = ({colors, content, left, offsetFromTopAcc, scrollHandler}) => {
+> = ({colors, content, left, last, offsetFromTopAcc, scrollHandler}) => {
   const {width, height} = Image.resolveAssetSource(content);
   const windowWidth = useWindowDimensions().width;
-  const aspectRation = height / width;
   const imageWidth = left ? windowWidth * 0.7 - 30 : windowWidth * 0.7;
   const layout = useRef<null | BubbleDimensionsType>();
   const context = useContext(MessagesContext);
-
-  layout.current = {
-    offsetFromTop: offsetFromTopAcc.current,
-    width: imageWidth,
-    height: imageWidth * aspectRation,
-  };
-
+  const aspectRation = height / width;
   offsetFromTopAcc.current += imageWidth * aspectRation;
 
+  const image = useImage(content);
+
+  if (!image) {
+    return null;
+  }
+
+  const imageHeight = imageWidth * aspectRation;
+  if (!layout.current) {
+    layout.current = {
+      offsetFromTop: offsetFromTopAcc.current,
+      width: imageWidth,
+      height: imageHeight,
+    };
+  }
+
+  const bubblePath = BubblePath(imageWidth, imageHeight, 16, last);
   return (
-    <Gradient
-      color={colors}
-      scrollHandler={scrollHandler}
-      left={left}
-      {...layout.current}>
-      <TouchableWithoutFeedback
-        onPress={() => {
-          context.media.set(content);
-        }}>
-        <Image
-          source={content}
+    <TouchableWithoutFeedback
+      onPress={() => {
+        context.media.set(content);
+      }}>
+      <View style={{alignItems: left ? undefined : 'flex-end'}}>
+        <Canvas
           style={[
-            styles.image,
             {
-              width: imageWidth - theme.spacing.p2,
-              height: imageWidth * aspectRation - theme.spacing.p1,
+              width: imageWidth,
+              height: imageHeight,
             },
-          ]}
-        />
-      </TouchableWithoutFeedback>
-    </Gradient>
+            styles.image,
+          ]}>
+          <Group clip={bubblePath}>
+            <SkImage
+              image={image}
+              fit="fitWidth"
+              x={0}
+              y={0}
+              width={imageWidth}
+              height={imageHeight}
+            />
+          </Group>
+        </Canvas>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -63,10 +85,6 @@ export default ImageBubble;
 
 const styles = StyleSheet.create({
   image: {
-    borderRadius: 5,
-    position: 'absolute',
-    alignSelf: 'center',
-    padding: 0,
-    margin: theme.spacing.p1,
+    marginBottom: 2,
   },
 });

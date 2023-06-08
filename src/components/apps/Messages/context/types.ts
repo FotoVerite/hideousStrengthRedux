@@ -1,5 +1,5 @@
 import {PropsWithChildren, ReactNode} from 'react';
-import {ColorValue, ImageURISource} from 'react-native';
+import {ImageURISource} from 'react-native';
 import {SharedValue} from 'react-native-reanimated';
 import {GenericOrUndefinedStateType} from 'types/genericContextTypes';
 import {NAMES} from './names';
@@ -26,6 +26,7 @@ export type ConversationType = {
   listContent: string;
   heroImage: ImageURISource;
   exchanges: ConversationExchangeType[];
+  interfaceColor: string;
 };
 
 export type ConversationExchangeType = {

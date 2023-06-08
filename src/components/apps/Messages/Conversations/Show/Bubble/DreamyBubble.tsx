@@ -51,7 +51,6 @@ const DreamyBubble: FC<{
     p.transform(m);
     return p;
   }, [clock]);
-  console.log(font);
   return (
     <Canvas style={{flex: 1, width: 150, height: 150}}>
       <Path path={path}>

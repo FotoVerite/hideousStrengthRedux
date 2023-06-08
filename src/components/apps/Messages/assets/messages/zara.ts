@@ -1,12 +1,18 @@
 import {ConversationType} from '../../context/types';
-import panopticon from './pantopitcon.jpeg';
-import zolaAvatar from '../avatars/Zara.jpg';
+import zolaAvatar from '@apps/Messages/assets/avatars/Zara.jpg';
+
+//import panopticon from '@apps/Messages/assets/messages/pantopitcon.jpeg';
+import panopticon from '@apps/Messages/assets/avatars/Chris.jpg';
+
+import {userMapping} from '../../context/usersMapping';
+
 export const zola: ConversationType = {
   name: 'Zola',
   tags: [],
   date: 'June 24th',
   listContent: 'Hey Zara, We need to talk',
   heroImage: zolaAvatar,
+  interfaceColor: userMapping.get('Zola')!.colors[1],
   exchanges: [
     {
       time: 'May 15, 2019 3:00pm',
