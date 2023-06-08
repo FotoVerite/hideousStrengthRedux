@@ -4,7 +4,8 @@ import {
   MessagesContextTypeDigest,
   MessagesContextTypeDigested,
 } from './types';
-import {zola} from '../assets/messages/zara';
+import {zola} from '../assets/messages/zola';
+import {chris} from '../assets/messages/chris';
 
 //defaults for empty app
 export const MessagesContext = React.createContext<MessagesContextTypeDigested>(
@@ -12,9 +13,9 @@ export const MessagesContext = React.createContext<MessagesContextTypeDigested>(
 );
 const conversations = [
   zola,
+  chris,
   zola,
-  zola,
-  zola,
+  chris,
   zola,
   zola,
   zola,

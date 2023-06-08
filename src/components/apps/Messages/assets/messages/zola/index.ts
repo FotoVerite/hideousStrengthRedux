@@ -1,10 +1,11 @@
-import {ConversationType} from '../../context/types';
+import {ConversationType} from '../../../context/types';
 import zolaAvatar from '@apps/Messages/assets/avatars/Zara.jpg';
 
 //import panopticon from '@apps/Messages/assets/messages/pantopitcon.jpeg';
 import panopticon from '@apps/Messages/assets/avatars/Chris.jpg';
 
-import {userMapping} from '../../context/usersMapping';
+import {userMapping} from '../../../context/usersMapping';
+import { advertisementExchange } from './advertisment';
 
 export const zola: ConversationType = {
   name: 'Zola',
@@ -152,7 +153,7 @@ export const zola: ConversationType = {
         },
       ],
     },
-
+    advertisementExchange,
     {
       time: 'June 23, 2023 11:00pm',
       exchanges: [
