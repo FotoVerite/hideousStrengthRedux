@@ -6,8 +6,8 @@
       "*": [
         "src/*"
       ],
-      "@assets/*": [
-        "assets/*"
+      "@applicationAssets/*": [
+        "src/assets/*"
       ],
       "@apps/*": [
         "src/components/apps/*"

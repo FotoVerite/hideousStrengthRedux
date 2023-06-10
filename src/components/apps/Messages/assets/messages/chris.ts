@@ -23,7 +23,7 @@ export const chris: ConversationType = {
         },
         {
           name: 'Self',
-          messages: ['Whats up'],
+          messages: ['Whats 🙄 🙄 hellow up 🙄'],
         },
         {
           name: 'Zola',

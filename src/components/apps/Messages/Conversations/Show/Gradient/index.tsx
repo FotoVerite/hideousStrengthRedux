@@ -8,8 +8,6 @@ import {
   Group,
   LinearGradient,
   Rect,
-  RoundedRect,
-  Skia,
   vec,
 } from '@shopify/react-native-skia';
 
@@ -40,7 +38,6 @@ export const Gradient: FC<
   offsetFromTop,
   width,
   height,
-  textLines,
 }) => {
   const PADDING = 16;
   const COLOR_CHANGE_HEIGHT = useWindowDimensions().height / 2;

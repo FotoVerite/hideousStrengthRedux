@@ -16,7 +16,7 @@ const ConversationListItem: FC<{conversation: ConversationType}> = ({
   return (
     <TouchableOpacity
       onPress={() => {
-        context.conversation.set(conversation);
+        context.digestedConversation.set(conversation);
       }}>
       <Row>
         <Image source={conversation.heroImage} style={styles.image} />

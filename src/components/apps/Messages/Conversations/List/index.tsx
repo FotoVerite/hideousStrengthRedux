@@ -1,4 +1,4 @@
-import React, {FC, useContext} from 'react';
+import React, {FC, useContext, useEffect} from 'react';
 import {ListRenderItem, StyleSheet, View} from 'react-native';
 import Animated, {
   interpolate,
@@ -6,6 +6,7 @@ import Animated, {
   useAnimatedStyle,
   useScrollViewOffset,
   useSharedValue,
+  withDelay,
   withTiming,
 } from 'react-native-reanimated';
 
@@ -25,12 +26,15 @@ const Conversations: FC = () => {
   const aref = useAnimatedRef<Animated.FlatList<ConversationType>>();
   const scrollHandler = useScrollViewOffset(aref);
 
-  const AnimateMessagesLeft = useAnimatedStyle(() => {
+  useEffect(() => {
     if (context.conversation.state) {
-      pushLeft.value = withTiming(1, {duration: 750});
+      pushLeft.value = withDelay(450, withTiming(1, {duration: 750}));
     } else {
       pushLeft.value = withTiming(0, {duration: 750});
     }
+  }, [context.conversation.state, pushLeft]);
+
+  const AnimateMessagesLeft = useAnimatedStyle(() => {
     return {
       right: interpolate(pushLeft.value, [0, 1], [0, 75]),
     };

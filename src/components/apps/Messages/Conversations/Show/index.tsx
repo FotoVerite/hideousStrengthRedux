@@ -1,4 +1,4 @@
-import React, {FC, useContext, useRef} from 'react';
+import React, {FC, useContext, useEffect, useRef} from 'react';
 import {
   ListRenderItem,
   View,
@@ -11,6 +11,7 @@ import Animated, {
   useAnimatedStyle,
   useScrollViewOffset,
   useSharedValue,
+  withDelay,
   withTiming,
 } from 'react-native-reanimated';
 import {useFont} from '@shopify/react-native-skia';
@@ -54,12 +55,15 @@ const Conversation: FC = () => {
 
   const showMessage = useSharedValue(0);
 
-  const AnimateMessageLeft = useAnimatedStyle(() => {
+  useEffect(() => {
     if (context.conversation.state) {
-      showMessage.value = withTiming(1, {duration: 750});
+      showMessage.value = withDelay(300, withTiming(1, {duration: 750}));
     } else {
       showMessage.value = withTiming(0, {duration: 750});
     }
+  }, [context.conversation.state, showMessage]);
+
+  const AnimateMessageLeft = useAnimatedStyle(() => {
     return {
       marginLeft: interpolate(showMessage.value, [0, 1], [width, 0]),
     };
@@ -101,6 +105,7 @@ const Conversation: FC = () => {
         keyExtractor={(item: ConversationExchangeType, index) => index + ''}
         ListHeaderComponent={ListHeader}
         ListFooterComponent={ListFooter}
+        windowSize={3}
         scrollEventThrottle={16}
       />
     </Animated.View>

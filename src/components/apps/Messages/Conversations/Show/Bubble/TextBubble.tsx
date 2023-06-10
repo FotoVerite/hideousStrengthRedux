@@ -1,10 +1,11 @@
 /* eslint-disable no-bitwise */
-import React, {FC, useRef} from 'react';
+import React, {FC, useContext, useRef} from 'react';
 import {useWindowDimensions} from 'react-native';
 
 import {Gradient} from '../Gradient';
 import {BubbleDimensionsType, ConversationSharedValues} from '../types';
-import {calculateLines, returnTextLines} from '../utility';
+import {returnTextLinesR} from '../utility';
+import {ApplicationContext} from 'context';
 
 const TextBubble: FC<
   {
@@ -13,34 +14,36 @@ const TextBubble: FC<
     left: boolean;
     last: boolean;
   } & ConversationSharedValues
-> = ({colors, content, font, left, last, offsetFromTopAcc, scrollHandler}) => {
+> = ({colors, content, left, last, offsetFromTopAcc, scrollHandler}) => {
   const layout = useRef<null | BubbleDimensionsType>();
+  const applicationContext = useContext(ApplicationContext);
 
   const {width, height} = useWindowDimensions();
 
   const MAX_WIDTH = left ? width * 0.7 - 30 : width * 0.7;
   const LINE_HEIGHT = 19;
   const LINE_PADDING = 45;
+  const font = applicationContext.fonts.get('HelveticaNeue');
+  const emojiFont = applicationContext.fonts.get('NotoColor');
 
-  if (!layout.current) {
-    const boxWidth = font.getTextWidth(content) + LINE_PADDING;
-    const boxLines = calculateLines(font, content, MAX_WIDTH - LINE_PADDING);
-    layout.current = {
-      offsetFromTop: offsetFromTopAcc.current,
-      width: Math.min(boxWidth, MAX_WIDTH + 8),
-      height: boxLines * LINE_HEIGHT,
-    };
-
-    offsetFromTopAcc.current += boxLines * LINE_HEIGHT + 25;
-  }
-
-  let textLines = returnTextLines(
+  const [lineCount, textLines] = returnTextLinesR(
+    font,
     font,
     content,
     MAX_WIDTH - LINE_PADDING,
     left,
   );
 
+  if (!layout.current) {
+    const boxWidth = font.getTextWidth(content) + LINE_PADDING;
+    layout.current = {
+      offsetFromTop: offsetFromTopAcc.current,
+      width: Math.min(boxWidth, MAX_WIDTH + 8),
+      height: lineCount * LINE_HEIGHT,
+    };
+
+    offsetFromTopAcc.current += lineCount * LINE_HEIGHT + 25;
+  }
   return (
     <Gradient
       color={colors}

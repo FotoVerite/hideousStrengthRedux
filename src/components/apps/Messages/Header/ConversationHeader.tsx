@@ -1,4 +1,4 @@
-import React, {FC, useContext, useRef} from 'react';
+import React, {FC, useContext, useEffect, useRef} from 'react';
 
 import {
   StyleSheet,
@@ -10,6 +10,7 @@ import Animated, {
   interpolate,
   useAnimatedStyle,
   useSharedValue,
+  withDelay,
   withTiming,
 } from 'react-native-reanimated';
 
@@ -38,17 +39,20 @@ const ConversationHeader: FC = () => {
 
   const opacityAndPosition = useSharedValue(0);
 
-  const popInAndTranslateAnimation = useAnimatedStyle(() => {
-    if (context.conversation.state != null) {
-      opacityAndPosition.value = withTiming(1);
+  useEffect(() => {
+    if (context.digestedConversation.state) {
+      opacityAndPosition.value = withDelay(250, withTiming(1, {duration: 750}));
     } else {
-      opacityAndPosition.value = withTiming(0);
+      opacityAndPosition.value = withTiming(0, {duration: 750});
     }
+  }, [context.digestedConversation.state, opacityAndPosition]);
+
+  const popInAndTranslateAnimation = useAnimatedStyle(() => {
     return {
       opacity: opacityAndPosition.value,
       marginLeft: interpolate(opacityAndPosition.value, [0, 1], [width, 0]),
     };
-  }, [context.conversation]);
+  }, [context.digestedConversation]);
 
   return (
     <Animated.View style={[styles.header, popInAndTranslateAnimation]}>
@@ -62,7 +66,7 @@ const ConversationHeader: FC = () => {
         <View style={styles.spacer}>
           <Row style={styles.row}>
             <TouchableWithoutFeedback
-              onPress={() => context.conversation.set(undefined)}>
+              onPress={() => context.digestedConversation.set(undefined)}>
               <Icon
                 suppressHighlighting={true}
                 name="chevron-left"

@@ -4,6 +4,7 @@ import {View, StyleSheet, Image} from 'react-native';
 import theme from 'themes';
 import {userMapping} from 'components/apps/Messages/context/usersMapping';
 import {
+  EmojiMessageWithMeta,
   ExchangeBlockType,
   ImageMessageWithMeta,
   StringMessageWithMeta,
@@ -12,6 +13,7 @@ import {ConversationSharedValues} from '../types';
 import TextBubble from '../Bubble/TextBubble';
 import ImageBubble from '../Bubble/ImageBubble';
 import Reaction from '../Bubble/Reaction';
+import EmojiBubble from '../Bubble/EmojiBubble';
 
 const Block: FC<
   {
@@ -22,7 +24,10 @@ const Block: FC<
   const mapping = userMapping.get(block.name)!;
 
   const renderMessageWithMeta = (
-    message: StringMessageWithMeta | ImageMessageWithMeta,
+    message:
+      | StringMessageWithMeta
+      | ImageMessageWithMeta
+      | EmojiMessageWithMeta,
     left: boolean,
     index: number,
     last: boolean,
@@ -46,10 +51,9 @@ const Block: FC<
             offsetFromTopAcc={offsetFromTopAcc}
             scrollHandler={scrollHandler}
             font={font}
-            key={`${index}-textBubble`}
+            key={`${index}-${message.message}-textBubble`}
           />
         )}
-
         {message.type === 'image' && (
           <ImageBubble
             colors={mapping.colors}
@@ -59,7 +63,16 @@ const Block: FC<
             offsetFromTopAcc={offsetFromTopAcc}
             scrollHandler={scrollHandler}
             font={font}
-            key={`${index}-imageBubble`}
+            key={`${index}-${message.message}-imageBubble`}
+          />
+        )}
+        {message.type === 'emoji' && (
+          <EmojiBubble
+            content={message.message}
+            left={left}
+            offsetFromTopAcc={offsetFromTopAcc}
+            scrollHandler={scrollHandler}
+            key={`${index}-${message.message}-emoji`}
           />
         )}
       </View>
@@ -82,7 +95,7 @@ const Block: FC<
             offsetFromTopAcc={offsetFromTopAcc}
             scrollHandler={scrollHandler}
             font={font}
-            key={`${index}-simpleText`}
+            key={`${index}-${message}-simpleText`}
           />
         );
       }

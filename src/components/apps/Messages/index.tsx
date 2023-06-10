@@ -8,6 +8,7 @@ import Header from './Header';
 import Conversation from './Conversations/Show';
 import ConversationHeader from './Header/ConversationHeader';
 import MediaView from './Conversations/Show/MediaViewer';
+import ReduxList from './Conversations/ShowRedux';
 
 const Messages: FC = () => {
   const insets = useSafeAreaInsets();
@@ -20,7 +21,7 @@ const Messages: FC = () => {
         ]}>
         <Header />
         <Conversations />
-        <Conversation />
+        <ReduxList />
         <ConversationHeader />
         <MediaView />
       </View>

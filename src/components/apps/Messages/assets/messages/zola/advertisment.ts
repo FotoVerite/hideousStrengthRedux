@@ -17,7 +17,7 @@ export const advertisementExchange: ConversationExchangeType = {
       name: 'Zola',
       messages: [
         "Fuck if I know. I've combed my comments,checked my discord, scoped my competition.",
-        "It isn't my content. I'm just not growing enough.",
+        "It isn't my content. I'm just not growing 🌝 enough.",
       ],
     },
     {
@@ -27,7 +27,7 @@ export const advertisementExchange: ConversationExchangeType = {
     {
       name: 'Zola',
       messages: [
-        '🙄',
+        {type: 'emoji', message: '🙄'},
         "I don't want to give 2019 attitude. Maybe I'll start doing livestreams in a hot tub",
       ],
     },

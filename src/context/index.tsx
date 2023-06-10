@@ -4,12 +4,7 @@ import {
   ApplicationContextTypeDigested,
   skFontMap,
 } from './types';
-import {SkFont, useFont} from '@shopify/react-native-skia';
-import Feather from 'react-native-vector-icons/Feather';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import EntypoIcon from 'react-native-vector-icons/Entypo';
+import {useFont} from '@shopify/react-native-skia';
 
 //defaults for empty app
 export const ApplicationContext =
@@ -17,39 +12,34 @@ export const ApplicationContext =
 
 const ApplicationContextProvider: FC<ApplicationContextTypeDigest> = props => {
   const [ready, setReady] = useState(false);
-  const fonts: skFontMap = new Map();
 
   useEffect(() => {
     _loadSettings();
   });
 
   const _loadSettings = async () => {
-    const SFProPath = require('src/assets/fonts/SFPro.ttf');
-    const iconFonts: any[] = [
-      MaterialCommunityIcons,
-      MaterialIcons,
-      EntypoIcon,
-      FontAwesome,
-      Feather,
-    ];
-    const iconFontReturn: Promise<Array<null>>[] = [];
-
-    const SFPro = await useFont(SFProPath, 16);
-    fonts.set('SFPro', SFPro);
-
-    for (const iconFont in iconFonts) {
-      iconFontReturn.push(iconFont.loadFont());
-    }
-    await Promise.all(iconFontReturn).then(result => {
-      setTriggerMap(new Map(result as any));
-      setReady(true);
-    });
+    // const SFPro = await useFont(
+    //   require('@applicationAssets/fonts/SFPro.ttf'),
+    //   16,
+    // );
+    // fonts.set('SFPro', SFPro);
+    // const NotoColor = await useFont(
+    //   require('@applicationAssets/fonts/NotoColorEmoji.ttf'),
+    //   16,
+    // );
+    // fonts.set('NotoColor', NotoColor);
+    // const HelveticaNeue = await useFont(
+    //   require('@applicationAssets/fonts/HelveticaNeue.ttf'),
+    //   16,
+    // );
+    // fonts.set('HelveticaNeue', HelveticaNeue);
+    // setReady(true);
   };
 
   return (
     <ApplicationContext.Provider
       value={{
-        fonts: fonts,
+        fonts: props.fonts,
         ready: ready,
       }}>
       {props.children}
