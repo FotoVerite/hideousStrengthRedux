@@ -30,8 +30,9 @@ const ItemContainer: FC<{
       style={[
         styles.container,
         {
-          height: item.height - 8,
+          height: item.height,
           alignItems: item.alignItems,
+          marginBottom: item.paddingBottom,
         },
       ]}>
       {item.type === 'time' && <P style={[styles.time]}>{item.content}</P>}
@@ -46,7 +47,6 @@ export default ItemContainer;
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    marginBottom: 8,
   },
 
   time: {

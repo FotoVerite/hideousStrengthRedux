@@ -36,7 +36,6 @@ export const ImageBubble: FC<
         alignItems: 'flex-end',
         padding: 0,
         margin: 0,
-        background: 'green',
       }}>
       {leftSide && (
         <View style={styles.avatarContainer}>

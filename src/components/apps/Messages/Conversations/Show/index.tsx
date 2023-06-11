@@ -88,7 +88,7 @@ const Conversation: FC = () => {
         ListHeaderComponent={ListHeader}
         ListFooterComponent={ListFooter}
         getItemLayout={(data, index) => ({
-          length: data[index].height,
+          length: data[index].height + data[index].paddingBottom,
           offset: data[index].offset,
           index,
         })}

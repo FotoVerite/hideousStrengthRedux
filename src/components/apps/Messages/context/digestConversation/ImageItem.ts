@@ -32,10 +32,10 @@ export const createImageItem = (
   }
   const listItem: DigestedConversationImageItemType = {
     alignItems: leftSide ? 'flex-start' : 'flex-end',
-    positionFromStartOfList: positionAcc,
     content: imagePath,
     height: imageHeight,
     width: imageWidth,
+    paddingBottom: hasTail ? 8 : 4,
     offset: positionAcc,
     clip: clip,
     colors: uMapping.get(name)?.colors,

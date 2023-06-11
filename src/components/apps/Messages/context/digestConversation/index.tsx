@@ -6,7 +6,7 @@ import {createStringItem} from './StringItem';
 import {createImageItem} from './ImageItem';
 
 const HEADER_PADDING = 50;
-export const BUBBLE_PADDING = 24;
+export const BUBBLE_PADDING = 18;
 
 export const digestConversation = (
   conversationExchanges: ConversationExchangeType[],
@@ -36,7 +36,7 @@ export const digestConversation = (
               message.reaction,
             );
             ret.push(textBubble);
-            positionAcc += textBubble.height;
+            positionAcc += textBubble.height + textBubble.paddingBottom;
           }
           if (message.type === 'image') {
             const imageBubble = createImageItem(
@@ -48,7 +48,7 @@ export const digestConversation = (
               message.reaction,
             );
             ret.push(imageBubble);
-            positionAcc += imageBubble.height;
+            positionAcc += imageBubble.height + imageBubble.paddingBottom;
           }
         } else {
           const textBubble = createStringItem(
@@ -61,7 +61,7 @@ export const digestConversation = (
             message.reaction,
           );
           ret.push(textBubble);
-          positionAcc += textBubble.height;
+          positionAcc += textBubble.height + textBubble.paddingBottom;
         }
       });
     });

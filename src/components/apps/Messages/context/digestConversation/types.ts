@@ -8,10 +8,10 @@ export enum DigestedItemTypes {
 }
 
 export interface DigestedConversationItemType {
-  positionFromStartOfList: number;
   height: number;
   width: number;
   offset: number;
+  paddingBottom: number;
 }
 
 export interface DigestedConversationTimeType

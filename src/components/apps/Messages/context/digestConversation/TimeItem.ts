@@ -9,9 +9,9 @@ export const createTimeItem = (
   positionAcc: number,
 ): DigestedConversationTimeType => {
   const listItem = {
-    positionFromStartOfList: positionAcc,
     height: HEIGHT,
     width: width,
+    paddingBottom: 0,
     offset: positionAcc,
     content: item.time,
     type: DigestedItemTypes.TIME,

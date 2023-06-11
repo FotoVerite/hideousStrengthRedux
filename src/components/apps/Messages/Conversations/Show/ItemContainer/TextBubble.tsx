@@ -31,7 +31,7 @@ export const TextBubble: FC<
   avatar,
   colors,
   scrollHandler,
-  positionFromStartOfList,
+  offset,
   content,
   leftSide,
   width,
@@ -43,10 +43,7 @@ export const TextBubble: FC<
   const currentlyFromTop = useDerivedValue(() => {
     return Math.max(
       0,
-      Math.min(
-        positionFromStartOfList - scrollHandler.value,
-        COLOR_CHANGE_HEIGHT,
-      ),
+      Math.min(offset - scrollHandler.value, COLOR_CHANGE_HEIGHT),
     );
   }, [scrollHandler]);
 
@@ -87,7 +84,7 @@ export const TextBubble: FC<
         <Canvas
           style={{
             width: width,
-            height: height - 8,
+            height: height,
           }}>
           <Group clip={clip}>
             <Rect x={0} y={0} width={width} height={height}>

@@ -32,9 +32,9 @@ export const createStringItem = (
   }
   const listItem = {
     alignItems: leftSide ? 'flex-start' : 'flex-end',
-    positionFromStartOfList: positionAcc,
     content: textNodes,
     height: boxHeight + BUBBLE_PADDING,
+    paddingBottom: hasTail ? 8 : 4,
     width: boxWidth,
     offset: positionAcc,
     clip: clip,
@@ -43,6 +43,6 @@ export const createStringItem = (
     leftSide: leftSide,
     type: DigestedItemTypes.STRING,
     reaction: reaction,
-  } as DigestedConversationStringItemType;
+  } as unknown as DigestedConversationStringItemType;
   return listItem;
 };
