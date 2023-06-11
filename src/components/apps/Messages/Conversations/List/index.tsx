@@ -27,18 +27,18 @@ const Conversations: FC = () => {
   const scrollHandler = useScrollViewOffset(aref);
 
   useEffect(() => {
-    if (context.conversation.state) {
+    if (context.digestedConversation.state) {
       pushLeft.value = withDelay(450, withTiming(1, {duration: 750}));
     } else {
       pushLeft.value = withTiming(0, {duration: 750});
     }
-  }, [context.conversation.state, pushLeft]);
+  }, [context.digestedConversation.state, pushLeft]);
 
   const AnimateMessagesLeft = useAnimatedStyle(() => {
     return {
       right: interpolate(pushLeft.value, [0, 1], [0, 75]),
     };
-  }, [context.conversation.state]);
+  }, [context.digestedConversation.state]);
 
   const renderItem: ListRenderItem<ConversationType> = ({item}) => (
     <ConversationListItem conversation={item} />

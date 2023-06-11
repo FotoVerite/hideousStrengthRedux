@@ -5,10 +5,9 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import MessagesContextProvider from './context';
 import Conversations from './Conversations/List';
 import Header from './Header';
-import Conversation from './Conversations/Show';
 import ConversationHeader from './Header/ConversationHeader';
 import MediaView from './Conversations/Show/MediaViewer';
-import ReduxList from './Conversations/ShowRedux';
+import Conversation from './Conversations/Show';
 
 const Messages: FC = () => {
   const insets = useSafeAreaInsets();
@@ -21,7 +20,7 @@ const Messages: FC = () => {
         ]}>
         <Header />
         <Conversations />
-        <ReduxList />
+        <Conversation />
         <ConversationHeader />
         <MediaView />
       </View>

@@ -1,23 +1,28 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable no-bitwise */
 import React, {FC, useContext} from 'react';
-import {TouchableWithoutFeedback, View} from 'react-native';
+import {Image, TouchableWithoutFeedback, View} from 'react-native';
 
-import {Canvas, Group, Image, useImage} from '@shopify/react-native-skia';
+import {
+  Canvas,
+  Group,
+  useImage,
+  Image as SkImage,
+} from '@shopify/react-native-skia';
 
 import {SharedValue} from 'react-native-reanimated';
-import {DigestedConversationImageItemType} from 'components/apps/Messages/context/digestConversation';
 import {Row} from 'components/common/layout';
 import {StyleSheet} from 'react-native';
 import theme from 'themes';
-import Reaction from '../../Show/Bubble/Reaction';
 import {MessagesContext} from 'components/apps/Messages/context';
+import Reaction from './Reaction';
+import {DigestedConversationImageItemType} from 'components/apps/Messages/context/digestConversation/types';
 
 export const ImageBubble: FC<
   DigestedConversationImageItemType & {
     scrollHandler: SharedValue<number>;
   }
-> = ({avatar, content, leftSide, width, height, clip, reaction, color}) => {
+> = ({avatar, content, leftSide, width, height, clip, reaction, colors}) => {
   const image = useImage(content);
   const context = useContext(MessagesContext);
 
@@ -44,7 +49,7 @@ export const ImageBubble: FC<
         }}>
         <View>
           {reaction && (
-            <Reaction reaction={reaction} left={leftSide} colors={color} />
+            <Reaction reaction={reaction} left={leftSide} colors={colors} />
           )}
           <Canvas
             style={[
@@ -54,12 +59,12 @@ export const ImageBubble: FC<
               },
             ]}>
             <Group clip={clip}>
-              <Image
+              <SkImage
                 image={image}
-                fit="contain"
+                fit="fill"
                 x={0}
                 y={0}
-                width={width + 24}
+                width={width}
                 height={height}
               />
             </Group>

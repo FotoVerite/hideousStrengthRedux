@@ -1,17 +1,14 @@
 import React, {FC, useContext, useState} from 'react';
 import {
   ConversationType,
+  DigestedConversation,
   MessagesContextTypeDigest,
   MessagesContextTypeDigested,
 } from './types';
 import {zola} from '../assets/messages/zola';
 import {chris} from '../assets/messages/chris';
-import {
-  DigestedConversationStringItemType,
-  DigestedConversationTimeType,
-  digestConversation,
-} from './digestConversation';
-import {useWindowDimensions} from 'react-native';
+import {digestConversation as digestExchanges} from './digestConversation';
+import {DataSourceParam, useWindowDimensions} from 'react-native';
 import {ApplicationContext} from 'context';
 
 //defaults for empty app
@@ -38,26 +35,25 @@ const conversations = [
 ];
 
 const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
-  const [conversation, setConversation] = useState<ConversationType>();
-  const [media, setMedia] = useState<string>();
-  const [digestedConversation, sDc] =
-    useState<
-      (DigestedConversationStringItemType | DigestedConversationTimeType)[]
-    >();
+  const [media, setMedia] = useState<DataSourceParam>();
+  const [digestedConversation, sDc] = useState<DigestedConversation>();
 
-  const {width, height} = useWindowDimensions();
+  const {width, _} = useWindowDimensions();
 
-  const c = useContext(ApplicationContext);
+  const applicationContext = useContext(ApplicationContext);
 
-  const setDigestedConversation = (toDigest: ConversationType) => {
-    if (toDigest) {
-      sDc(
-        digestConversation(
-          toDigest.exchanges,
-          width,
-          c.fonts.get('HelveticaNeue'),
-        ),
+  const setDigestedConversation = (conversation: ConversationType) => {
+    if (conversation) {
+      const {exchanges, ...conversationProps} = conversation;
+      const digestedExchanges = digestExchanges(
+        exchanges,
+        width,
+        applicationContext.fonts.get('HelveticaNeue'),
       );
+      const digested = Object.assign(conversationProps, {
+        exchanges: digestedExchanges,
+      });
+      sDc(digested);
     } else {
       sDc(undefined);
     }
@@ -67,10 +63,6 @@ const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
     <MessagesContext.Provider
       value={{
         conversations: conversations,
-        conversation: {
-          state: conversation,
-          set: setConversation,
-        },
         media: {
           state: media,
           set: setMedia,

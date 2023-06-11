@@ -14,7 +14,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import {Bold, P} from 'components/common/StyledText';
+import {Bold} from 'components/common/StyledText';
 
 import {MessagesContext} from '../context';
 
@@ -26,13 +26,13 @@ import {Row} from 'components/common/layout';
 const ConversationHeader: FC = () => {
   const context = useContext(MessagesContext);
 
-  const conversationName = useRef(context.conversation.state?.name);
+  const conversationName = useRef(context.digestedConversation.state?.name);
 
   if (
-    context.conversation.state?.name != null &&
-    conversationName.current !== context.conversation.state?.name
+    context.digestedConversation.state?.name != null &&
+    conversationName.current !== context.digestedConversation.state?.name
   ) {
-    conversationName.current = context.conversation.state?.name;
+    conversationName.current = context.digestedConversation.state?.name;
   }
 
   const {width, height} = useWindowDimensions();
@@ -71,7 +71,7 @@ const ConversationHeader: FC = () => {
                 suppressHighlighting={true}
                 name="chevron-left"
                 size={20}
-                color={context.conversation.state?.interfaceColor}
+                color={context.digestedConversation.state?.interfaceColor}
                 style={[styles.chevron]}
               />
             </TouchableWithoutFeedback>
@@ -112,13 +112,6 @@ const styles = StyleSheet.create({
   row: {
     alignItems: 'center',
     zIndex: 3,
-  },
-  touchableContainer: {
-    borderRadius: 5,
-    flex: 0,
-    backgroundColor: 'orange',
-    height: 400,
-    width: 400,
   },
   spacer: {
     flex: 1,

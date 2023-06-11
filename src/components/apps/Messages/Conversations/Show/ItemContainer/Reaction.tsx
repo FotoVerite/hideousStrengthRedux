@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {FC} from 'react';
-import {ColorValue, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import Svg, {Ellipse} from 'react-native-svg';
 import Icon from 'react-native-vector-icons/FontAwesome';
 

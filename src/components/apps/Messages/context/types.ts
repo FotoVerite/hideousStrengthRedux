@@ -1,9 +1,10 @@
 import {PropsWithChildren, ReactNode} from 'react';
-import {ImageURISource} from 'react-native';
 import {SharedValue} from 'react-native-reanimated';
+import {DataSourceParam} from '@shopify/react-native-skia';
+
 import {GenericOrUndefinedStateType} from 'types/genericContextTypes';
 import {NAMES} from './names';
-import {DigestedConversationListItem} from './digestConversation';
+import {DigestedConversationListItem} from './digestConversation/types';
 
 export type MessagesSharedValuesType = {
   wordInputShake: SharedValue<number>;
@@ -16,12 +17,11 @@ export type MessagesContextTypeDigest = {
 
 export type MessagesContextTypeDigested = PropsWithChildren<{
   conversations: ConversationType[];
-  conversation: GenericOrUndefinedStateType<ConversationType>;
   digestedConversation: {
-    state: DigestedConversationListItem[] | undefined;
-    set: (toDigest: ConversationType) => void;
+    state: DigestedConversation | undefined;
+    set: (toDigest: ConversationType | undefined) => void;
   };
-  media: GenericOrUndefinedStateType<ImageURISource>;
+  media: GenericOrUndefinedStateType<DataSourceParam>;
 }>;
 
 export type ConversationType = {
@@ -29,8 +29,18 @@ export type ConversationType = {
   name: string;
   date: string;
   listContent: string;
-  heroImage: ImageURISource;
+  heroImage: DataSourceParam;
   exchanges: ConversationExchangeType[];
+  interfaceColor: string;
+};
+
+export type DigestedConversation = {
+  tags: string[];
+  name: string;
+  date: string;
+  listContent: string;
+  heroImage: DataSourceParam;
+  exchanges: DigestedConversationListItem[];
   interfaceColor: string;
 };
 
@@ -61,7 +71,7 @@ export interface StringMessageWithMeta extends MessageWithMetaType {
 
 export interface ImageMessageWithMeta extends MessageWithMetaType {
   type: 'image';
-  message: ImageURISource;
+  message: DataSourceParam;
 }
 
 export interface EmojiMessageWithMeta extends MessageWithMetaType {
