@@ -1,23 +1,24 @@
 import React, {FC, useMemo} from 'react';
 import {View, StyleSheet} from 'react-native';
-import theme from 'themes';
-import {DigestedConversationListItem} from 'components/apps/Messages/context/digestConversation';
 import {P} from 'components/common/StyledText';
 import {TextBubble} from './TextBubble';
 import {SharedValue} from 'react-native-reanimated';
-import {Row} from 'components/common/layout';
 import {ImageBubble} from './ImageBubble';
+import {DigestedConversationListItem} from 'components/apps/Messages/context/digestConversation/types';
 
 const ItemContainer: FC<{
   item: DigestedConversationListItem;
   index: number;
   scrollHandler: SharedValue<number>;
-}> = ({item, scrollHandler, index}) => {
+  group: boolean;
+}> = ({item, scrollHandler, group, index}) => {
   const MemoTextBubble = useMemo(() => {
     if (item.type === 'string') {
-      return <TextBubble {...item} scrollHandler={scrollHandler} />;
+      return (
+        <TextBubble {...item} scrollHandler={scrollHandler} group={group} />
+      );
     }
-  }, [scrollHandler, item]);
+  }, [scrollHandler, group, item]);
 
   const MemoImageBubble = useMemo(() => {
     if (item.type === 'string') {

@@ -20,7 +20,7 @@ const Reaction: FC<ReactionType> = ({reaction, left, colors: color}) => {
         {
           left: left ? undefined : -20,
           top: -15,
-          right: left ? 30 : undefined,
+          right: left ? -15 : undefined,
           transform: [{scaleX: -0.8}, {scaleY: 0.8}],
         },
       ]}>

@@ -1,22 +1,23 @@
 import {Image, ImageSourcePropType} from 'react-native';
-import {BUBBLE_PADDING} from '.';
-import {userMapping} from '../usersMapping';
 import {BubblePath, flipPath} from './BubblePath';
 
 import {DataSourceParam} from '@shopify/react-native-skia';
 import {DigestedConversationImageItemType, DigestedItemTypes} from './types';
-import {NAMES} from '../names';
 import {ReactionType} from '../types';
+import {
+  ContactNames,
+  getAvatarFromContacts,
+  getColorFromContacts,
+} from '../usersMapping';
 
 export const createImageItem = (
   width: number,
   positionAcc: number,
-  name: NAMES,
+  name: ContactNames,
   imagePath: DataSourceParam,
   hasTail: boolean,
   reaction?: ReactionType,
 ) => {
-  const uMapping = userMapping;
   const leftSide = name !== 'Self';
 
   const imageDimensions = Image.resolveAssetSource(
@@ -38,8 +39,8 @@ export const createImageItem = (
     paddingBottom: hasTail ? 8 : 4,
     offset: positionAcc,
     clip: clip,
-    colors: uMapping.get(name)?.colors,
-    avatar: hasTail ? uMapping.get(name)?.avatar : undefined,
+    colors: getColorFromContacts(name),
+    avatar: hasTail ? getAvatarFromContacts(name) : undefined,
     leftSide: leftSide,
     type: DigestedItemTypes.IMAGE,
     reaction: reaction,

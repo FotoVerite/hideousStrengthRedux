@@ -22,6 +22,7 @@ import Reaction from './Reaction';
 import {DigestedConversationStringItemType} from 'components/apps/Messages/context/digestConversation/types';
 
 import theme from 'themes';
+import {P} from 'components/common/StyledText';
 
 export const TextBubble: FC<
   DigestedConversationStringItemType & {
@@ -38,6 +39,7 @@ export const TextBubble: FC<
   height,
   clip,
   reaction,
+  group,
 }) => {
   const COLOR_CHANGE_HEIGHT = useWindowDimensions().height / 2;
   const currentlyFromTop = useDerivedValue(() => {

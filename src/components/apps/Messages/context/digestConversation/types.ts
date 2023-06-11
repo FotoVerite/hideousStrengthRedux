@@ -39,7 +39,7 @@ export interface DigestedConversationImageItemType
   colors: string[];
   content: DataSourceParam;
   type: DigestedItemTypes.IMAGE;
-  avatar?: string;
+  avatar?: DataSourceParam;
   alignItems: FlexAlignType;
   leftSide: boolean;
   reaction?: ReactionType;

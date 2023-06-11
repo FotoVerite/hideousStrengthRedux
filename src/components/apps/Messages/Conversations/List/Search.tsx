@@ -1,44 +1,34 @@
-import React, {FC} from 'react';
+import React, {FC, MutableRefObject, useContext} from 'react';
 import Fuse from 'fuse.js';
 
 import theme from 'themes';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Input} from 'react-native-elements';
 import {StyleSheet, TextInput, View} from 'react-native';
 import {ConversationType} from '../../context/types';
 import Animated, {
   Extrapolate,
   SharedValue,
   interpolate,
-  useAnimatedProps,
   useAnimatedStyle,
   useDerivedValue,
-  useSharedValue,
 } from 'react-native-reanimated';
+import {MessagesContext} from '../../context';
+import {GenericStateType} from 'types/genericContextTypes';
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
 const Search: FC<{
-  conversations: ConversationType[];
+  conversations: GenericStateType<ConversationType[]>;
   scrollOffset: SharedValue<number>;
 }> = ({conversations, scrollOffset}) => {
   const options = {
-    // isCaseSensitive: false,
-    // includeScore: false,
-    // shouldSort: true,
-    // includeMatches: false,
-    // findAllMatches: false,
-    // minMatchCharLength: 1,
-    // location: 0,
-    // threshold: 0.6,
-    // distance: 100,
-    // useExtendedSearch: false,
-    // ignoreLocation: false,
-    // ignoreFieldNorm: false,
+    isCaseSensitive: true,
+
     keys: ['name', 'tags'],
   };
 
-  const fuse = new Fuse<ConversationType>(conversations, options);
+  const fuse = new Fuse<ConversationType>(conversations.state, options);
+  const context = useContext(MessagesContext);
 
   const animatedHeight = useDerivedValue(() => {
     return Math.max(40 - scrollOffset.value, 0);
@@ -69,6 +59,13 @@ const Search: FC<{
       <AnimatedTextInput
         style={[styles.textInput, opacityAnimation]}
         placeholder={'Search'}
+        onChangeText={text => {
+          let results = fuse.search(text).map(item => item.item);
+          if (text == undefined || text === '') {
+            results = context.conversations;
+          }
+          conversations.set(results);
+        }}
       />
     </Animated.View>
   );

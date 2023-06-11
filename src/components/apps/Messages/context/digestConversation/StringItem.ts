@@ -3,18 +3,19 @@ import {ReactionType} from '../types';
 import {GetDimensionsAndSkiaNodes} from './skiaCalculations';
 
 import {BUBBLE_PADDING} from '.';
-import {userMapping} from '../usersMapping';
-import {NAMES} from '../names';
+import {
+  ContactNames,
+  getAvatarFromContacts,
+  getColorFromContacts,
+} from '../usersMapping';
 import {DigestedConversationStringItemType, DigestedItemTypes} from './types';
 import {BubblePath, flipPath} from './BubblePath';
-
-const uMapping = userMapping;
 
 export const createStringItem = (
   font: SkFont,
   width: number,
   positionAcc: number,
-  name: NAMES,
+  name: ContactNames,
   message: string,
   hasTail: boolean,
   reaction?: ReactionType,
@@ -38,8 +39,8 @@ export const createStringItem = (
     width: boxWidth,
     offset: positionAcc,
     clip: clip,
-    colors: uMapping.get(name)?.colors,
-    avatar: hasTail ? uMapping.get(name)?.avatar : undefined,
+    colors: getColorFromContacts(name),
+    avatar: hasTail ? getAvatarFromContacts(name) : undefined,
     leftSide: leftSide,
     type: DigestedItemTypes.STRING,
     reaction: reaction,

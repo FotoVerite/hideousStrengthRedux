@@ -1,4 +1,4 @@
-import React, {FC, useContext, useEffect} from 'react';
+import React, {FC, useContext, useEffect, useRef, useState} from 'react';
 import {ListRenderItem, StyleSheet, View} from 'react-native';
 import Animated, {
   interpolate,
@@ -19,12 +19,14 @@ import Search from './Search';
 function Separator() {
   return <View style={styles.itemSeparator} />;
 }
-const Conversations: FC = () => {
+const Conversations: FC = ({}) => {
   const context = useContext(MessagesContext);
 
   const pushLeft = useSharedValue(0);
   const aref = useAnimatedRef<Animated.FlatList<ConversationType>>();
   const scrollHandler = useScrollViewOffset(aref);
+
+  const [conversations, setConversations] = useState(context.conversations);
 
   useEffect(() => {
     if (context.digestedConversation.state) {
@@ -46,12 +48,15 @@ const Conversations: FC = () => {
 
   return (
     <Animated.View style={[styles.screen, AnimateMessagesLeft]}>
-      <Search scrollOffset={scrollHandler} />
+      <Search
+        scrollOffset={scrollHandler}
+        conversations={{state: conversations, set: setConversations}}
+      />
       <Animated.FlatList
         ref={aref}
         ItemSeparatorComponent={Separator}
         style={styles.list}
-        data={context.conversations}
+        data={conversations}
         renderItem={renderItem}
         keyExtractor={(item: ConversationType, index) =>
           index + '-conversation'

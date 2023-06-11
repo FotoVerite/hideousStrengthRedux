@@ -66,6 +66,7 @@ const Conversation: FC = () => {
   > = ({item, index}) => (
     <ItemContainer
       item={item}
+      group={context.digestedConversation.state?.group}
       scrollHandler={scrollHandler}
       index={index}
       key={`item-${index}`}
@@ -84,7 +85,9 @@ const Conversation: FC = () => {
         style={[styles.list, {width: width}]}
         data={digestedConversation.current?.exchanges}
         renderItem={renderDigestedConversation}
-        keyExtractor={(item: DigestedConversationListItem, index) => index + ''}
+        keyExtractor={(item: DigestedConversationListItem, index) =>
+          `${digestedConversation.current?.name}-${index}`
+        }
         ListHeaderComponent={ListHeader}
         ListFooterComponent={ListFooter}
         getItemLayout={(data, index) => ({

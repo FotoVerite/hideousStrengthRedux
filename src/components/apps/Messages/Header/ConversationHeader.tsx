@@ -26,13 +26,13 @@ import {Row} from 'components/common/layout';
 const ConversationHeader: FC = () => {
   const context = useContext(MessagesContext);
 
-  const conversationName = useRef(context.digestedConversation.state?.name);
+  const conversation = useRef(context.digestedConversation.state);
 
   if (
     context.digestedConversation.state?.name != null &&
-    conversationName.current !== context.digestedConversation.state?.name
+    conversation.current !== context.digestedConversation.state
   ) {
-    conversationName.current = context.digestedConversation.state?.name;
+    conversation.current = context.digestedConversation.state;
   }
 
   const {width, height} = useWindowDimensions();
@@ -71,14 +71,14 @@ const ConversationHeader: FC = () => {
                 suppressHighlighting={true}
                 name="chevron-left"
                 size={20}
-                color={context.digestedConversation.state?.interfaceColor}
+                color={conversation.current?.interfaceColor}
                 style={[styles.chevron]}
               />
             </TouchableWithoutFeedback>
           </Row>
         </View>
         <Bold size={'m'} style={styles.chatName}>
-          {conversationName.current}
+          {conversation.current?.name}
         </Bold>
         <View style={styles.spacer} />
       </Row>

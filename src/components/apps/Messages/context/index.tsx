@@ -8,31 +8,17 @@ import {
 import {zola} from '../assets/messages/zola';
 import {chris} from '../assets/messages/chris';
 import {digestConversation as digestExchanges} from './digestConversation';
-import {DataSourceParam, useWindowDimensions} from 'react-native';
+import {useWindowDimensions} from 'react-native';
 import {ApplicationContext} from 'context';
+import {seamless} from '../assets/messages/seamless';
+import {DataSourceParam} from '@shopify/react-native-skia';
+import {movieNight} from '../assets/messages/movie_night';
 
 //defaults for empty app
 export const MessagesContext = React.createContext<MessagesContextTypeDigested>(
   {},
 );
-const conversations = [
-  zola,
-  chris,
-  zola,
-  chris,
-  zola,
-  zola,
-  zola,
-  zola,
-  zola,
-  zola,
-  zola,
-  zola,
-  zola,
-  zola,
-  zola,
-  zola,
-];
+const conversations = [zola, chris, seamless, movieNight];
 
 const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
   const [media, setMedia] = useState<DataSourceParam>();

@@ -1,24 +1,22 @@
 import {ConversationType} from '../../context/types';
-import zolaAvatar from '@apps/Messages/assets/avatars/Zara.jpg';
+import chrisAvatar from '@apps/Messages/assets/avatars/Chris.jpg';
+import {ContactNames, getColorFromContacts} from '../../context/usersMapping';
 
 //import panopticon from '@apps/Messages/assets/messages/pantopitcon.jpeg';
-import panopticon from '@apps/Messages/assets/avatars/Chris.jpg';
-
-import {userMapping} from '../../context/usersMapping';
 
 export const chris: ConversationType = {
-  name: 'Chris',
+  name: ContactNames.CHRIS,
   tags: [],
   date: 'June 24th',
   listContent: 'Hey Zara, We need to talk',
-  heroImage: zolaAvatar,
-  interfaceColor: userMapping.get('Chris')!.colors[1],
+  heroImage: chrisAvatar,
+  interfaceColor: getColorFromContacts(ContactNames.CHRIS)[0],
   exchanges: [
     {
       time: 'February 23, 2023 11:00pm',
       exchanges: [
         {
-          name: 'Zola',
+          name: ContactNames.CHRIS,
           messages: ['Hey...  need a favor'],
         },
         {
@@ -26,7 +24,7 @@ export const chris: ConversationType = {
           messages: ['Whats 🙄 🙄 hellow up 🙄'],
         },
         {
-          name: 'Zola',
+          name: ContactNames.CHRIS,
           messages: ['Just Call'],
         },
       ],
@@ -36,7 +34,7 @@ export const chris: ConversationType = {
       time: 'June 24, 2023 5:00am',
       exchanges: [
         {
-          name: 'Self',
+          name: ContactNames.SELF,
           messages: ['Hey Zara, We need to talk'],
         },
       ],

@@ -118,9 +118,9 @@ export const GetDimensionsAndSkiaNodes = (
   leftSide: boolean,
 ) => {
   const LINE_HEIGHT = 19;
-  const LINE_PADDING = 45;
+  const LINE_PADDING = 40;
   const RIGHT_SIDE_PADDING = 8;
-  const MAX_WIDTH = leftSide ? width * 0.7 - 30 : width * 0.7;
+  const MAX_WIDTH = leftSide ? width * 0.65 - 30 : width * 0.65;
   let calculatedWidth = font.getTextWidth(sentence) + LINE_PADDING;
   calculatedWidth = Math.min(
     calculatedWidth + RIGHT_SIDE_PADDING,

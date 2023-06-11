@@ -1,5 +1,5 @@
 import {SkFont} from '@shopify/react-native-skia';
-import {DigestedConversationItemType} from './types';
+import {DigestedConversationListItem} from './types';
 import {createTimeItem} from './TimeItem';
 import {ConversationExchangeType} from '../types';
 import {createStringItem} from './StringItem';
@@ -13,7 +13,7 @@ export const digestConversation = (
   width: number,
   font: SkFont,
 ) => {
-  const ret: DigestedConversationItemType[] = [];
+  const ret: DigestedConversationListItem[] = [];
   let positionAcc = HEADER_PADDING;
   conversationExchanges.forEach(block => {
     const time = createTimeItem(block, width, positionAcc);

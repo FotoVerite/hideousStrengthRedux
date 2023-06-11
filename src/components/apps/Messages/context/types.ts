@@ -3,8 +3,8 @@ import {SharedValue} from 'react-native-reanimated';
 import {DataSourceParam} from '@shopify/react-native-skia';
 
 import {GenericOrUndefinedStateType} from 'types/genericContextTypes';
-import {NAMES} from './names';
 import {DigestedConversationListItem} from './digestConversation/types';
+import {ContactNames} from './usersMapping';
 
 export type MessagesSharedValuesType = {
   wordInputShake: SharedValue<number>;
@@ -31,6 +31,7 @@ export type ConversationType = {
   listContent: string;
   heroImage: DataSourceParam;
   exchanges: ConversationExchangeType[];
+  group?: boolean;
   interfaceColor: string;
 };
 
@@ -41,6 +42,7 @@ export type DigestedConversation = {
   listContent: string;
   heroImage: DataSourceParam;
   exchanges: DigestedConversationListItem[];
+  group?: boolean;
   interfaceColor: string;
 };
 
@@ -50,7 +52,7 @@ export type ConversationExchangeType = {
 };
 
 export type ExchangeBlockType = {
-  name: NAMES;
+  name: ContactNames;
   messages: MessageType[];
 };
 
