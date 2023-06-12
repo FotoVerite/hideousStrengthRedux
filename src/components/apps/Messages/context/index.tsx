@@ -13,12 +13,13 @@ import {ApplicationContext} from 'context';
 import {seamless} from '../assets/messages/seamless';
 import {DataSourceParam} from '@shopify/react-native-skia';
 import {movieNight} from '../assets/messages/movie_night';
+import {clay} from '../assets/messages/clay';
 
 //defaults for empty app
 export const MessagesContext = React.createContext<MessagesContextTypeDigested>(
   {},
 );
-const conversations = [zola, chris, seamless, movieNight];
+const conversations = [zola, chris, seamless, movieNight, clay];
 
 const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
   const [media, setMedia] = useState<DataSourceParam>();

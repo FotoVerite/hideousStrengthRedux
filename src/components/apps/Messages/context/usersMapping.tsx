@@ -9,6 +9,7 @@ import {DataSourceParam} from '@shopify/react-native-skia';
 export enum ContactNames {
   ARIAL = 'Arial',
   CHRIS = 'Chris',
+  CLAY = 'Clay',
   SELF = 'Self',
   ZOLA = 'Zola',
   DEFAULT = 'Default',
@@ -22,6 +23,7 @@ export type UserMappingType = {
 export const contactConsts: {[key in ContactNames]: UserMappingType} = {
   Arial: {avatar: arialAvatar, colors: ['#dbaf48', '#cdc8bb']},
   Chris: {avatar: chrisAvatar, colors: ['#6bd8e4', '#363243']},
+  Clay: {avatar: chrisAvatar, colors: ['#6bd8e4', '#363243']},
   Self: {avatar: undefined, colors: ['blue', '#363243']},
   Zola: {avatar: zaraAvatar, colors: ['#b46be4', '#363243']},
   30368: {avatar: defaultAvatar, colors: ['#6b6b6d', '#363243']},
