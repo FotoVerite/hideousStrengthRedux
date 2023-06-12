@@ -10,8 +10,8 @@ import {
 export const clay: ConversationType = {
   name: ContactNames.CLAY,
   tags: [],
-  date: 'December 14th, 2022',
-  listContent: 'Hey Zara, We need to talk',
+  date: 'December 22th, 2022',
+  listContent: 'Meet any interesting people?',
   heroImage: chrisAvatar,
   interfaceColor: getColorFromContacts(ContactNames.CLAY)[0],
   exchanges: [

@@ -8,7 +8,7 @@ export const movieNight = {
   name: 'Movie Night',
   tags: ['Seamless', 'order', 'food', 'hungry', 'grubhub'],
   date: 'June 24th',
-  listContent: 'Your Seamless order from Cozy Corner is here!',
+  listContent: 'Zoolander?',
   heroImage: darkoAvatar,
   interfaceColor: getColorFromContacts('movieNight')[0],
   group: true,
