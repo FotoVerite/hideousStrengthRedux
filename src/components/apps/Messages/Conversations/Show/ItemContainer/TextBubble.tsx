@@ -38,6 +38,7 @@ export const TextBubble: FC<
   width,
   height,
   clip,
+  name,
   reaction,
   group,
 }) => {
@@ -80,6 +81,12 @@ export const TextBubble: FC<
         </View>
       )}
       <View>
+        {group && name != 'Self' && (
+          <P size="s" style={{marginLeft: 20}}>
+            {name}
+          </P>
+        )}
+
         {reaction && (
           <Reaction reaction={reaction} left={leftSide} colors={colors} />
         )}

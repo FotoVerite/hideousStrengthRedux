@@ -1,5 +1,5 @@
 import {SkFont} from '@shopify/react-native-skia';
-import {DigestedConversationListItem} from './types';
+import {DigestConfigurationType, DigestedConversationListItem} from './types';
 import {createTimeItem} from './TimeItem';
 import {ConversationExchangeType} from '../types';
 import {createStringItem} from './StringItem';
@@ -10,14 +10,26 @@ export const BUBBLE_PADDING = 18;
 
 export const digestConversation = (
   conversationExchanges: ConversationExchangeType[],
+  group?: boolean,
   width: number,
   font: SkFont,
 ) => {
   const ret: DigestedConversationListItem[] = [];
   let positionAcc = HEADER_PADDING;
+  const itemConfiguration: DigestConfigurationType = {
+    font: font,
+    width: width,
+    positionAcc: positionAcc,
+    group: group,
+  };
   conversationExchanges.forEach(block => {
-    const time = createTimeItem(block, width, positionAcc);
-    positionAcc += time.height;
+    const time = createTimeItem(
+      block,
+      itemConfiguration.width,
+      itemConfiguration.positionAcc,
+    );
+
+    itemConfiguration.positionAcc += time.height;
     ret.push(time);
     block.exchanges.forEach(exchange => {
       // SIMPLE ARRAY
@@ -27,41 +39,39 @@ export const digestConversation = (
         if (message.hasOwnProperty('type')) {
           if (message.type === 'string') {
             const textBubble = createStringItem(
-              font,
-              width,
-              positionAcc,
+              itemConfiguration,
               exchange.name,
               message.message,
               hasTail,
               message.reaction,
             );
             ret.push(textBubble);
-            positionAcc += textBubble.height + textBubble.paddingBottom;
+            itemConfiguration.positionAcc +=
+              textBubble.height + textBubble.paddingBottom;
           }
           if (message.type === 'image') {
             const imageBubble = createImageItem(
-              width,
-              positionAcc,
+              itemConfiguration,
               exchange.name,
               message.message,
               hasTail,
               message.reaction,
             );
             ret.push(imageBubble);
-            positionAcc += imageBubble.height + imageBubble.paddingBottom;
+            itemConfiguration.positionAcc +=
+              imageBubble.height + imageBubble.paddingBottom;
           }
         } else {
           const textBubble = createStringItem(
-            font,
-            width,
-            positionAcc,
+            itemConfiguration,
             exchange.name,
             message,
             hasTail,
             message.reaction,
           );
           ret.push(textBubble);
-          positionAcc += textBubble.height + textBubble.paddingBottom;
+          itemConfiguration.positionAcc +=
+            textBubble.height + textBubble.paddingBottom;
         }
       });
     });

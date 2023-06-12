@@ -1,11 +1,19 @@
-import {FlexAlignType, DataSourceParam} from 'react-native';
+import {FlexAlignType} from 'react-native';
 import {ReactionType} from '../types';
+import {SkFont} from '@shopify/react-native-skia';
 
 export enum DigestedItemTypes {
   STRING = 'string',
   TIME = 'time',
   IMAGE = 'image',
 }
+
+export type DigestConfigurationType = {
+  font: SkFont;
+  width: number;
+  positionAcc: number;
+  group?: boolean;
+};
 
 export interface DigestedConversationItemType {
   height: number;
@@ -23,6 +31,7 @@ export interface DigestedConversationTimeType
 
 export interface DigestedConversationStringItemType
   extends DigestedConversationItemType {
+  name: string;
   clip: any;
   colors: string[];
   content: React.JSX.Element[];
@@ -35,6 +44,7 @@ export interface DigestedConversationStringItemType
 
 export interface DigestedConversationImageItemType
   extends DigestedConversationItemType {
+  name: string;
   clip: any;
   colors: string[];
   content: DataSourceParam;

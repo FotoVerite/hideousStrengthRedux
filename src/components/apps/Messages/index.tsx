@@ -33,5 +33,6 @@ export default Messages;
 const styles = StyleSheet.create({
   layout: {
     flexGrow: 1,
+    backgroundColor: 'white',
   },
 });

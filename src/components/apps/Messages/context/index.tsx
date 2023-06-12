@@ -33,6 +33,7 @@ const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
       const {exchanges, ...conversationProps} = conversation;
       const digestedExchanges = digestExchanges(
         exchanges,
+        conversationProps.group,
         width,
         applicationContext.fonts.get('HelveticaNeue'),
       );

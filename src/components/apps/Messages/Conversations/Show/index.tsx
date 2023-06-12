@@ -66,7 +66,7 @@ const Conversation: FC = () => {
   > = ({item, index}) => (
     <ItemContainer
       item={item}
-      group={context.digestedConversation.state?.group}
+      group={digestedConversation.current?.group}
       scrollHandler={scrollHandler}
       index={index}
       key={`item-${index}`}
@@ -97,6 +97,7 @@ const Conversation: FC = () => {
         })}
         maxToRenderPerBatch={10}
         scrollEventThrottle={16}
+        key={digestedConversation.current?.name}
       />
     </Animated.View>
   );

@@ -2,7 +2,11 @@ import {Image, ImageSourcePropType} from 'react-native';
 import {BubblePath, flipPath} from './BubblePath';
 
 import {DataSourceParam} from '@shopify/react-native-skia';
-import {DigestedConversationImageItemType, DigestedItemTypes} from './types';
+import {
+  DigestConfigurationType,
+  DigestedConversationImageItemType,
+  DigestedItemTypes,
+} from './types';
 import {ReactionType} from '../types';
 import {
   ContactNames,
@@ -11,13 +15,14 @@ import {
 } from '../usersMapping';
 
 export const createImageItem = (
-  width: number,
-  positionAcc: number,
+  itemConfiguration: DigestConfigurationType,
   name: ContactNames,
   imagePath: DataSourceParam,
   hasTail: boolean,
   reaction?: ReactionType,
 ) => {
+  const {group, width, positionAcc} = itemConfiguration;
+
   const leftSide = name !== 'Self';
 
   const imageDimensions = Image.resolveAssetSource(
@@ -34,9 +39,10 @@ export const createImageItem = (
   const listItem: DigestedConversationImageItemType = {
     alignItems: leftSide ? 'flex-start' : 'flex-end',
     content: imagePath,
-    height: imageHeight,
+    height: group && name !== ContactNames.SELF ? imageHeight + 20 : imageHeight,
     width: imageWidth,
     paddingBottom: hasTail ? 8 : 4,
+    name: name,
     offset: positionAcc,
     clip: clip,
     colors: getColorFromContacts(name),

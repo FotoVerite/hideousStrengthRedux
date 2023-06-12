@@ -8,18 +8,21 @@ import {
   getAvatarFromContacts,
   getColorFromContacts,
 } from '../usersMapping';
-import {DigestedConversationStringItemType, DigestedItemTypes} from './types';
+import {
+  DigestConfigurationType,
+  DigestedConversationStringItemType,
+  DigestedItemTypes,
+} from './types';
 import {BubblePath, flipPath} from './BubblePath';
 
 export const createStringItem = (
-  font: SkFont,
-  width: number,
-  positionAcc: number,
+  itemConfiguration: DigestConfigurationType,
   name: ContactNames,
   message: string,
   hasTail: boolean,
   reaction?: ReactionType,
 ): DigestedConversationStringItemType => {
+  const {font, group, width, positionAcc} = itemConfiguration;
   const leftSide = name !== 'Self';
   const [boxHeight, boxWidth, textNodes] = GetDimensionsAndSkiaNodes(
     font,
@@ -32,18 +35,22 @@ export const createStringItem = (
     flipPath(clip, boxWidth);
   }
   const listItem = {
-    alignItems: leftSide ? 'flex-start' : 'flex-end',
-    content: textNodes,
-    height: boxHeight + BUBBLE_PADDING,
-    paddingBottom: hasTail ? 8 : 4,
-    width: boxWidth,
-    offset: positionAcc,
-    clip: clip,
-    colors: getColorFromContacts(name),
     avatar: hasTail ? getAvatarFromContacts(name) : undefined,
+    alignItems: leftSide ? 'flex-start' : 'flex-end',
+    clip: clip,
+    content: textNodes,
+    colors: getColorFromContacts(name),
+    height:
+      group && name !== ContactNames.SELF
+        ? boxHeight + BUBBLE_PADDING + 20
+        : boxHeight + BUBBLE_PADDING,
     leftSide: leftSide,
-    type: DigestedItemTypes.STRING,
+    name: name,
+    paddingBottom: hasTail ? 8 : 4,
+    offset: positionAcc,
     reaction: reaction,
-  } as unknown as DigestedConversationStringItemType;
+    type: DigestedItemTypes.STRING,
+    width: boxWidth,
+  } as DigestedConversationStringItemType;
   return listItem;
 };
