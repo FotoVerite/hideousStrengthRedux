@@ -5,6 +5,7 @@ import {TextBubble} from './TextBubble';
 import {SharedValue} from 'react-native-reanimated';
 import {ImageBubble} from './ImageBubble';
 import {DigestedConversationListItem} from 'components/apps/Messages/context/digestConversation/types';
+import {GlyphBubble} from './GlyphBubble';
 
 const ItemContainer: FC<{
   item: DigestedConversationListItem;
@@ -38,6 +39,10 @@ const ItemContainer: FC<{
       ]}>
       {item.type === 'time' && <P style={[styles.time]}>{item.content}</P>}
       {item.type === 'string' && MemoTextBubble}
+      {item.type === 'glyph' && (
+        <GlyphBubble {...item} scrollHandler={scrollHandler} group={group} />
+      )}
+
       {item.type === 'image' && <ImageBubble {...item} />}
     </View>
   );

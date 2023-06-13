@@ -4,6 +4,7 @@ import {createTimeItem} from './TimeItem';
 import {ConversationExchangeType} from '../types';
 import {createStringItem} from './StringItem';
 import {createImageItem} from './ImageItem';
+import {createGlyphItem} from './GlyphItem';
 
 const HEADER_PADDING = 50;
 export const BUBBLE_PADDING = 18;
@@ -48,6 +49,18 @@ export const digestConversation = (
             ret.push(textBubble);
             itemConfiguration.positionAcc +=
               textBubble.height + textBubble.paddingBottom;
+          }
+          if (message.type === 'glyph') {
+            const glyphBubble = createGlyphItem(
+              itemConfiguration,
+              exchange.name,
+              message.message,
+              hasTail,
+              message.reaction,
+            );
+            ret.push(glyphBubble);
+            itemConfiguration.positionAcc +=
+              glyphBubble.height + glyphBubble.paddingBottom;
           }
           if (message.type === 'image') {
             const imageBubble = createImageItem(

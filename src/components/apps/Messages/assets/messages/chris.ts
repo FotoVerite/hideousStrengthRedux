@@ -20,6 +20,16 @@ export const chris: ConversationType = {
           messages: ['Hey...  need a favor'],
         },
         {
+          name: ContactNames.CHRIS,
+          messages: [
+            {
+              type: 'glyph',
+              message:
+                'The round-based procedure starts from the first senator to the last senator in the given order. This procedure will last until the end of voting. All the senators who have lost their rights will be skipped during the procedure.',
+            },
+          ],
+        },
+        {
           name: 'Self',
           messages: ['Whats 🙄 🙄 hellow up 🙄'],
         },

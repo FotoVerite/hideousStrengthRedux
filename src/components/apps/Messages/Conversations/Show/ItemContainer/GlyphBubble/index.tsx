@@ -5,9 +5,11 @@ import {Image, View, useWindowDimensions} from 'react-native';
 
 import {
   Canvas,
+  Glyphs,
   Group,
   LinearGradient,
   Rect,
+  useClockValue,
   vec,
 } from '@shopify/react-native-skia';
 
@@ -18,14 +20,15 @@ import {
 } from 'react-native-reanimated';
 import {Row} from 'components/common/layout';
 import {StyleSheet} from 'react-native';
-import Reaction from './Reaction';
-import {DigestedConversationStringItemType} from 'components/apps/Messages/context/digestConversation/types';
+import Reaction from '../Reaction';
+import {DigestedConversationGlyphItemType} from 'components/apps/Messages/context/digestConversation/types';
 
 import theme from 'themes';
 import {P} from 'components/common/StyledText';
+import AnimatedGlyph from './AnimatedGlyph';
 
-export const TextBubble: FC<
-  DigestedConversationStringItemType & {
+export const GlyphBubble: FC<
+  DigestedConversationGlyphItemType & {
     scrollHandler: SharedValue<number>;
     group?: boolean;
   }
@@ -68,7 +71,7 @@ export const TextBubble: FC<
     );
     return [color1, color2];
   }, [currentlyFromTop]);
-
+  const clock = useClockValue();
   return (
     <Row
       style={{
@@ -105,7 +108,14 @@ export const TextBubble: FC<
               />
             </Rect>
           </Group>
-          {content}
+          {content.text.glyphs.map((glyph, idx) => (
+            <AnimatedGlyph
+              font={content.text.font}
+              glyph={glyph}
+              clock={clock}
+              key={`${glyph}-${idx}`}
+            />
+          ))}
         </Canvas>
       </View>
     </Row>

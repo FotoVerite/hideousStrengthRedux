@@ -1,10 +1,5 @@
 import React, {FC, useContext, useEffect, useRef} from 'react';
-import {
-  View,
-  useWindowDimensions,
-  ListRenderItem,
-  StyleSheet,
-} from 'react-native';
+import {View, useWindowDimensions, StyleSheet} from 'react-native';
 import Animated, {
   useAnimatedRef,
   useScrollViewOffset,
@@ -16,9 +11,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {MessagesContext} from '../../context';
-import ItemContainer from './ItemContainer';
 import theme from 'themes';
-import {DigestedConversationListItem} from '../../context/digestConversation/types';
+import List from './List';
 
 function ListHeader() {
   return <View style={styles.listHeader} />;
@@ -34,9 +28,6 @@ const Conversation: FC = () => {
   const context = useContext(MessagesContext);
 
   const digestedConversation = useRef(context.digestedConversation.state);
-
-  const aref = useAnimatedRef<Animated.ScrollView>();
-  const scrollHandler = useScrollViewOffset(aref);
 
   if (
     context.digestedConversation.state != null &&
@@ -61,18 +52,6 @@ const Conversation: FC = () => {
     };
   }, [context.digestedConversation.state]);
 
-  const renderDigestedConversation: ListRenderItem<
-    DigestedConversationListItem
-  > = ({item, index}) => (
-    <ItemContainer
-      item={item}
-      group={digestedConversation.current?.group}
-      scrollHandler={scrollHandler}
-      index={index}
-      key={`item-${index}`}
-    />
-  );
-
   return (
     <Animated.View
       style={[
@@ -80,23 +59,8 @@ const Conversation: FC = () => {
         styles.screen,
         AnimateMessageLeft,
       ]}>
-      <Animated.FlatList
-        ref={aref}
-        style={[styles.list, {width: width}]}
-        data={digestedConversation.current?.exchanges}
-        renderItem={renderDigestedConversation}
-        keyExtractor={(item: DigestedConversationListItem, index) =>
-          `${digestedConversation.current?.name}-${index}`
-        }
-        ListHeaderComponent={ListHeader}
-        ListFooterComponent={ListFooter}
-        getItemLayout={(data, index) => ({
-          length: data[index].height + data[index].paddingBottom,
-          offset: data[index].offset,
-          index,
-        })}
-        maxToRenderPerBatch={10}
-        scrollEventThrottle={16}
+      <List
+        conversation={digestedConversation.current}
         key={digestedConversation.current?.name}
       />
     </Animated.View>

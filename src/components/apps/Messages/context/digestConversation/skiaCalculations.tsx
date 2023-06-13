@@ -1,7 +1,15 @@
 import React from 'react';
-import {SkFont, Text} from '@shopify/react-native-skia';
+import {Glyph, SkFont, Text, Vector, vec} from '@shopify/react-native-skia';
+import {GlyphContent, GlyphItemContentType} from './types';
 
-export const calculateNumberOfLinesAndGenerateTextNodes = (
+type LineQueueType = SectionType[][];
+
+type SectionType = {
+  type: 'emoji' | 'text';
+  starts: number;
+  content: string;
+};
+export const generateLineQueue = (
   font: SkFont,
   emojiFont: SkFont,
   sentence: string,
@@ -9,11 +17,7 @@ export const calculateNumberOfLinesAndGenerateTextNodes = (
   leftSide: boolean,
 ) => {
   const LEFT_PADDING = leftSide ? 24 : 8;
-  const lineQueue: {
-    type: 'emoji' | 'text';
-    starts: number;
-    content: string;
-  }[][] = [];
+  const lineQueue: LineQueueType = [];
   let lineWidth = 0;
   let widthSinceEmoji = 0;
   let content = '';
@@ -93,6 +97,14 @@ export const calculateNumberOfLinesAndGenerateTextNodes = (
   if (content) {
     appendContent(content);
   }
+  return lineQueue;
+};
+
+const generateTextNodes = (
+  lineQueue: LineQueueType,
+  font: SkFont,
+  emojiFont: SkFont,
+) => {
   const lineCount = lineQueue.length;
   const textElements = lineQueue
     .map((line, index) =>
@@ -111,6 +123,47 @@ export const calculateNumberOfLinesAndGenerateTextNodes = (
   return [lineCount, textElements] as const;
 };
 
+const generateGlyphs = (
+  lineQueue: LineQueueType,
+  font: SkFont,
+  emojiFont: SkFont,
+) => {
+  const lineCount = lineQueue.length;
+  const returnItem: {text: GlyphContent; emoji: GlyphContent} = {
+    text: {font: font, glyphs: []},
+    emoji: {font: emojiFont, glyphs: []},
+  };
+
+  lineQueue.forEach((line, index) =>
+    line.forEach(
+      (section, sIdx) =>
+        (returnItem[section.type].glyphs = returnItem[
+          section.type
+        ].glyphs.concat(getGlyphIdsAndWidths(section, font, index))),
+    ),
+  );
+
+  return [lineCount, returnItem] as const;
+};
+
+const getGlyphIdsAndWidths = (
+  section: SectionType,
+  font: SkFont,
+  lineNumber: number,
+): Glyph[] => {
+  const glyphIds = font.getGlyphIDs(section.content);
+  const widths = font.getGlyphWidths(glyphIds);
+  let startsAt = section.starts;
+  return glyphIds.map((glyph, idx) => {
+    const glyphInfo = {
+      id: glyph,
+      pos: vec(startsAt, 19 * (lineNumber + 1) + 4),
+    };
+    startsAt += widths[idx];
+    return glyphInfo;
+  });
+};
+
 export const GetDimensionsAndSkiaNodes = (
   font: SkFont,
   sentence: string,
@@ -126,13 +179,41 @@ export const GetDimensionsAndSkiaNodes = (
     calculatedWidth + RIGHT_SIDE_PADDING,
     MAX_WIDTH + 8,
   );
-  const [lineCount, textNodes] = calculateNumberOfLinesAndGenerateTextNodes(
+  const lineQueue = generateLineQueue(
     font,
     font,
     sentence,
     MAX_WIDTH - LINE_PADDING,
     leftSide,
   );
+  const [lineCount, textNodes] = generateTextNodes(lineQueue, font, font);
 
   return [lineCount * LINE_HEIGHT, calculatedWidth, textNodes] as const;
+};
+
+export const GetDimensionsAndSkiaGlyphs = (
+  font: SkFont,
+  sentence: string,
+  width: number,
+  leftSide: boolean,
+) => {
+  const LINE_HEIGHT = 19;
+  const LINE_PADDING = 40;
+  const RIGHT_SIDE_PADDING = 8;
+  const MAX_WIDTH = leftSide ? width * 0.65 - 30 : width * 0.65;
+  let calculatedWidth = font.getTextWidth(sentence) + LINE_PADDING;
+  calculatedWidth = Math.min(
+    calculatedWidth + RIGHT_SIDE_PADDING,
+    MAX_WIDTH + 8,
+  );
+  const lineQueue = generateLineQueue(
+    font,
+    font,
+    sentence,
+    MAX_WIDTH - LINE_PADDING,
+    leftSide,
+  );
+  const [lineCount, glyphs] = generateGlyphs(lineQueue, font, font);
+
+  return [lineCount * LINE_HEIGHT, calculatedWidth, glyphs] as const;
 };
