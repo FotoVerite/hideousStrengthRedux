@@ -77,7 +77,7 @@ const ConversationHeader: FC = () => {
             </TouchableWithoutFeedback>
           </Row>
         </View>
-        <Bold size={'m'} style={styles.chatName}>
+        <Bold size={'m'} style={[styles.chatName]}>
           {conversation.current?.name}
         </Bold>
         <View style={styles.spacer} />

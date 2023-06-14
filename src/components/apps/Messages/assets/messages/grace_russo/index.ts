@@ -11,7 +11,8 @@ export const grace_russo: ConversationType = {
   name: ContactNames.GRACE_RUSSO,
   tags: ['sleep', 'government', 'midlife crises', 'astrology'],
   date: 'August 14th, 2022',
-  listContent: "I also can't seem to sleep.",
+  listContent:
+    "If someone wouldn't recognize you on the street. You aren't doing yourself any favors.",
   heroImage: getAvatarFromContacts(ContactNames.GRACE_RUSSO),
   interfaceColor: getColorFromContacts(ContactNames.GRACE_RUSSO)[0],
   exchanges: [
@@ -128,6 +129,60 @@ export const grace_russo: ConversationType = {
         {
           name: ContactNames.SELF,
           messages: ["I also can't seem to sleep."],
+        },
+      ],
+    },
+    {
+      time: 'October 12th, 2021 11:50pm',
+      exchanges: [
+        {
+          name: ContactNames.SELF,
+          messages: ['Girl that photo!'],
+        },
+        {
+          name: ContactNames.GRACE_RUSSO,
+          messages: ['Huh?'],
+        },
+        {
+          name: ContactNames.SELF,
+          messages: [
+            "Don't huh me. For the podcast you were just on.",
+            'I mean the outfit like your book is 🔥',
+            'But girl how many levels of photoshop did they do. Five, six?',
+          ],
+        },
+        {
+          name: ContactNames.GRACE_RUSSO,
+          messages: ["And you wonder why you're single"],
+        },
+        {
+          name: ContactNames.SELF,
+          messages: [
+            "Oh don't even. They took off thirty pounds and gave you the skin of a twenty something",
+            'Though love love love the hair you should do tha style more.',
+          ],
+        },
+        {
+          name: ContactNames.GRACE_RUSSO,
+          messages: ['Maybe I am a twenty something in the photo'],
+        },
+        {
+          name: ContactNames.SELF,
+          messages: [
+            "Well you're 35 now so I would call that false advertising",
+          ],
+        },
+        {
+          name: ContactNames.GRACE_RUSSO,
+          messages: [
+            "It's a podcast about optimization of old banking system not a dating website.",
+          ],
+        },
+        {
+          name: ContactNames.SELF,
+          messages: [
+            "If someone wouldn't recognize you on the street. You aren't doing yourself any favors.",
+          ],
         },
       ],
     },

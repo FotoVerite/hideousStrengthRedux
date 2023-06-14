@@ -164,7 +164,61 @@ export const mileena: ConversationType = {
         },
         {
           name: ContactNames.MILEENA,
-          messages: ["Yeah yeah, but I'm a fast tailed girl now."],
+          messages: ['Yeah yeah, but Imma a fast tailed girl now.'],
+        },
+        {
+          name: ContactNames.SELF,
+          messages: [
+            'How many times do I need to apologize for using that slang',
+          ],
+        },
+        {
+          name: ContactNames.MILEENA,
+          messages: [
+            'Forever, I think I heard three other black people actually use that term without making fun of it. Where did you even hear it some low grade blog post on huffington',
+            'Be like one of the black israelites calling me red bone. Just fucking corny',
+          ],
+        },
+        {
+          name: ContactNames.SELF,
+          messages: [
+            'I think probably Salon. Back before Greenwald was a right wing cuck.',
+          ],
+        },
+      ],
+    },
+    {
+      time: 'July 2nd, 2019 3:21pm',
+      exchanges: [
+        {
+          name: ContactNames.MILEENA,
+          messages: ['You want to come to the 🏖️'],
+        },
+        {
+          name: ContactNames.SELF,
+          messages: ["I don't like sand"],
+        },
+        {
+          name: ContactNames.MILEENA,
+          messages: [
+            "But you like sun, and I know you've been wanting to show off those guns you've been workign on all winter.",
+          ],
+        },
+        {
+          name: ContactNames.SELF,
+          messages: [
+            'It’s coarse, and rough, and irritating, and it gets everywhere',
+          ],
+        },
+        {
+          name: ContactNames.MILEENA,
+          messages: [
+            'Yes, we get it you hate sand. Why are you sounding like a whiney bitch of all a sudden',
+          ],
+        },
+        {
+          name: ContactNames.SELF,
+          messages: [{type: 'emoji', message: '🥲'}],
         },
       ],
     },
