@@ -8,6 +8,7 @@ import {
 } from '@shopify/react-native-skia';
 
 export enum DigestedItemTypes {
+  EMOJI = 'emoji',
   STRING = 'string',
   TIME = 'time',
   IMAGE = 'image',
@@ -26,6 +27,7 @@ export type GlyphItemContentType = {
 
 export type DigestConfigurationType = {
   font: SkFont;
+  emojiFont: SkFont;
   width: number;
   positionAcc: number;
   group?: boolean;
@@ -83,7 +85,20 @@ export interface DigestedConversationImageItemType
   leftSide: boolean;
   reaction?: ReactionType;
 }
+
+export interface DigestedConversationEmojiItemType
+  extends DigestedConversationItemType {
+  name: string;
+  content: string;
+  type: DigestedItemTypes.EMOJI;
+  avatar?: DataSourceParam;
+  alignItems: FlexAlignType;
+  leftSide: boolean;
+  reaction?: ReactionType;
+}
 export type DigestedConversationListItem =
+  | DigestedConversationEmojiItemType
   | DigestedConversationTimeType
   | DigestedConversationStringItemType
-  | DigestedConversationImageItemType;
+  | DigestedConversationImageItemType
+  | DigestedConversationGlyphItemType;

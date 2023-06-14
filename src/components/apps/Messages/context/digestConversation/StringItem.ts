@@ -22,9 +22,10 @@ export const createStringItem = (
   hasTail: boolean,
   reaction?: ReactionType,
 ): DigestedConversationStringItemType => {
-  const {font, group, width, positionAcc} = itemConfiguration;
+  const {font, emojiFont, group, width, positionAcc} = itemConfiguration;
   const leftSide = name !== 'Self';
   const [boxHeight, boxWidth, textNodes] = GetDimensionsAndSkiaNodes(
+    font,
     font,
     message as string,
     width,

@@ -5,11 +5,14 @@ import {Image, View, useWindowDimensions} from 'react-native';
 
 import {
   Canvas,
+  DiscretePathEffect,
   Glyphs,
   Group,
   LinearGradient,
+  Path1DPathEffect,
   Rect,
   useClockValue,
+  useComputedValue,
   vec,
 } from '@shopify/react-native-skia';
 
@@ -26,6 +29,7 @@ import {DigestedConversationGlyphItemType} from 'components/apps/Messages/contex
 import theme from 'themes';
 import {P} from 'components/common/StyledText';
 import AnimatedGlyph from './AnimatedGlyph';
+import {createNoise2D} from 'simplex-noise';
 
 export const GlyphBubble: FC<
   DigestedConversationGlyphItemType & {
@@ -71,7 +75,13 @@ export const GlyphBubble: FC<
     );
     return [color1, color2];
   }, [currentlyFromTop]);
+
   const clock = useClockValue();
+
+  const noise2D = createNoise2D();
+  const deviation = useComputedValue(() => {
+    return 20 * noise2D(20, clock.current * 0.0005);
+  }, [clock]);
   return (
     <Row
       style={{

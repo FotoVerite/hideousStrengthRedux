@@ -18,11 +18,16 @@ import {MessagesContext} from 'components/apps/Messages/context';
 import Reaction from './Reaction';
 import {DigestedConversationImageItemType} from 'components/apps/Messages/context/digestConversation/types';
 
-export const ImageBubble: FC<
-  DigestedConversationImageItemType & {
-    scrollHandler: SharedValue<number>;
-  }
-> = ({avatar, content, leftSide, width, height, clip, reaction, colors}) => {
+export const ImageBubble: FC<DigestedConversationImageItemType & {}> = ({
+  avatar,
+  content,
+  leftSide,
+  width,
+  height,
+  clip,
+  reaction,
+  colors,
+}) => {
   const image = useImage(content);
   const context = useContext(MessagesContext);
 

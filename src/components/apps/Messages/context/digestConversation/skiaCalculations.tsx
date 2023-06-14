@@ -166,6 +166,7 @@ const getGlyphIdsAndWidths = (
 
 export const GetDimensionsAndSkiaNodes = (
   font: SkFont,
+  emojiFont: SkFont,
   sentence: string,
   width: number,
   leftSide: boolean,
@@ -181,12 +182,12 @@ export const GetDimensionsAndSkiaNodes = (
   );
   const lineQueue = generateLineQueue(
     font,
-    font,
+    emojiFont,
     sentence,
     MAX_WIDTH - LINE_PADDING,
     leftSide,
   );
-  const [lineCount, textNodes] = generateTextNodes(lineQueue, font, font);
+  const [lineCount, textNodes] = generateTextNodes(lineQueue, font, emojiFont);
 
   return [lineCount * LINE_HEIGHT, calculatedWidth, textNodes] as const;
 };

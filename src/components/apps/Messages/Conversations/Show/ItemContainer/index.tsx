@@ -4,8 +4,12 @@ import {P} from 'components/common/StyledText';
 import {TextBubble} from './TextBubble';
 import {SharedValue} from 'react-native-reanimated';
 import {ImageBubble} from './ImageBubble';
-import {DigestedConversationListItem} from 'components/apps/Messages/context/digestConversation/types';
+import {
+  DigestedConversationListItem,
+  DigestedItemTypes,
+} from 'components/apps/Messages/context/digestConversation/types';
 import {GlyphBubble} from './GlyphBubble';
+import {EmojiBubble} from './EmojiBubble';
 
 const ItemContainer: FC<{
   item: DigestedConversationListItem;
@@ -22,8 +26,14 @@ const ItemContainer: FC<{
   }, [scrollHandler, group, item]);
 
   const MemoImageBubble = useMemo(() => {
-    if (item.type === 'string') {
+    if (item.type === DigestedItemTypes.IMAGE) {
       return <ImageBubble {...item} />;
+    }
+  }, [item]);
+
+  const MemoEmojiBubble = useMemo(() => {
+    if (item.type === DigestedItemTypes.EMOJI) {
+      return <EmojiBubble {...item} />;
     }
   }, [item]);
 
@@ -37,13 +47,19 @@ const ItemContainer: FC<{
           marginBottom: item.paddingBottom,
         },
       ]}>
-      {item.type === 'time' && <P style={[styles.time]}>{item.content}</P>}
-      {item.type === 'string' && MemoTextBubble}
-      {item.type === 'glyph' && (
+      {item.type === DigestedItemTypes.TIME && (
+        <P style={[styles.time]}>{item.content}</P>
+      )}
+
+      {MemoEmojiBubble}
+
+      {item.type === DigestedItemTypes.STRING && MemoTextBubble}
+
+      {item.type === DigestedItemTypes.GLYPH && (
         <GlyphBubble {...item} scrollHandler={scrollHandler} group={group} />
       )}
 
-      {item.type === 'image' && <ImageBubble {...item} />}
+      {item.type === DigestedItemTypes.IMAGE && MemoImageBubble}
     </View>
   );
 };
