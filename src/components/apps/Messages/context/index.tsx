@@ -15,12 +15,25 @@ import {DataSourceParam} from '@shopify/react-native-skia';
 import {movieNight} from '../assets/messages/movie_night';
 import {clay} from '../assets/messages/clay';
 import {grace_russo} from '../assets/messages/grace_russo';
+import {alice} from '../assets/messages/alice';
+import {mileena} from '../assets/messages/mileena';
+import {greg} from '../assets/messages/greg';
 
 //defaults for empty app
 export const MessagesContext = React.createContext<MessagesContextTypeDigested>(
   {},
 );
-const conversations = [zola, chris, seamless, movieNight, clay, grace_russo];
+const conversations = [
+  zola,
+  chris,
+  seamless,
+  movieNight,
+  clay,
+  mileena,
+  grace_russo,
+  alice,
+  greg,
+];
 
 const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
   const [media, setMedia] = useState<DataSourceParam>();
@@ -38,6 +51,7 @@ const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
         conversationProps.group,
         width,
         applicationContext.fonts.get('HelveticaNeue'),
+        applicationContext.fonts.get('NotoColor'),
       );
       const digested = Object.assign(conversationProps, {
         exchanges: digestedExchanges,

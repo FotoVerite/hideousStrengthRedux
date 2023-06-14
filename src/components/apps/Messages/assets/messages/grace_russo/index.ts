@@ -1,7 +1,7 @@
-import chrisAvatar from '@apps/Messages/assets/avatars/alice_avator.jpg';
 import {ConversationType} from 'components/apps/Messages/context/types';
 import {
   ContactNames,
+  getAvatarFromContacts,
   getColorFromContacts,
 } from 'components/apps/Messages/context/usersMapping';
 
@@ -12,7 +12,7 @@ export const grace_russo: ConversationType = {
   tags: ['sleep', 'government', 'midlife crises', 'astrology'],
   date: 'August 14th, 2022',
   listContent: "I also can't seem to sleep.",
-  heroImage: chrisAvatar,
+  heroImage: getAvatarFromContacts(ContactNames.GRACE_RUSSO),
   interfaceColor: getColorFromContacts(ContactNames.GRACE_RUSSO)[0],
   exchanges: [
     {
@@ -98,7 +98,7 @@ export const grace_russo: ConversationType = {
         },
         {
           name: ContactNames.SELF,
-          messages: ['So much sand in my ass. I never liked the 🏖︎.'],
+          messages: ['So much sand in my ass. I never liked the 🏖︎'],
         },
         {
           name: ContactNames.GRACE_RUSSO,
