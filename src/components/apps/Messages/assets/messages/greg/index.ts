@@ -20,11 +20,11 @@ export const greg: ConversationType = {
       exchanges: [
         {
           name: ContactNames.SELF,
-          messages: ['That was very very good last night.'],
+          messages: ['That was very, very good last night.'],
         },
         {
           name: ContactNames.GREG,
-          messages: ['Agreed, and this morning. '],
+          messages: ['Agreed, and this morning'],
         },
         {
           name: ContactNames.GREG,

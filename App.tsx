@@ -6,7 +6,7 @@
  */
 
 import {NavigationContainer} from '@react-navigation/native';
-import React from 'react';
+import React, {useRef} from 'react';
 
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {games} from 'components/apps/hexGame/assets/games';
@@ -14,6 +14,11 @@ import Messages from 'components/apps/Messages';
 import ApplicationContextProvider from 'context';
 import {skFontMap} from 'context/types';
 import {useFont} from '@shopify/react-native-skia';
+import TextBoxEngine from 'components/TextBoxEngine';
+import Navigation from 'navigation';
+import TextBoxEngineContextProvider from 'components/TextBoxEngine/context';
+import {View} from 'react-native';
+import EventOrchestraContextProvider from 'components/EventOrchestra/context';
 
 function App(): JSX.Element {
   const game = games.firstGame;
@@ -28,6 +33,8 @@ function App(): JSX.Element {
     require('@applicationAssets/fonts/HelveticaNeue.ttf'),
     16,
   );
+  const screenRef = useRef<View>(null);
+
   if (!SFPro || !NotoColor || !HelveticaNeue) {
     return <></>;
   } else {
@@ -40,9 +47,16 @@ function App(): JSX.Element {
     return (
       <SafeAreaProvider>
         <ApplicationContextProvider fonts={fonts}>
-          <NavigationContainer>
-            <Messages />
-          </NavigationContainer>
+          <EventOrchestraContextProvider>
+            <TextBoxEngineContextProvider>
+              <NavigationContainer>
+                <View ref={screenRef} style={{flex: 1}}>
+                  <Messages />
+                </View>
+              </NavigationContainer>
+              <TextBoxEngine screenRef={screenRef} />
+            </TextBoxEngineContextProvider>
+          </EventOrchestraContextProvider>
         </ApplicationContextProvider>
       </SafeAreaProvider>
     );

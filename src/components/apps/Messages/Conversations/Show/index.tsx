@@ -1,8 +1,6 @@
 import React, {FC, useContext, useEffect, useRef} from 'react';
-import {View, useWindowDimensions, StyleSheet} from 'react-native';
+import {useWindowDimensions, StyleSheet} from 'react-native';
 import Animated, {
-  useAnimatedRef,
-  useScrollViewOffset,
   useSharedValue,
   withDelay,
   withTiming,
@@ -13,14 +11,6 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {MessagesContext} from '../../context';
 import theme from 'themes';
 import List from './List';
-
-function ListHeader() {
-  return <View style={styles.listHeader} />;
-}
-
-function ListFooter() {
-  return <View style={styles.listFooter} />;
-}
 
 const Conversation: FC = () => {
   const {width, height} = useWindowDimensions();

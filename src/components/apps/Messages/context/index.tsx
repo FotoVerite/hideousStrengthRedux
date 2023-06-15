@@ -18,6 +18,7 @@ import {grace_russo} from '../assets/messages/grace_russo';
 import {alice} from '../assets/messages/alice';
 import {mileena} from '../assets/messages/mileena';
 import {greg} from '../assets/messages/greg';
+import {EventOrchestraContext} from 'components/EventOrchestra/context';
 
 //defaults for empty app
 export const MessagesContext = React.createContext<MessagesContextTypeDigested>(
@@ -36,8 +37,10 @@ const conversations = [
 ];
 
 const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
+  const eventContext = useContext(EventOrchestraContext);
   const [media, setMedia] = useState<DataSourceParam>();
-  const [digestedConversation, sDc] = useState<DigestedConversation>();
+  const [digestedConversation, _setConversation] =
+    useState<DigestedConversation>();
 
   const {width, _} = useWindowDimensions();
 
@@ -56,9 +59,10 @@ const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
       const digested = Object.assign(conversationProps, {
         exchanges: digestedExchanges,
       });
-      sDc(digested);
+      _setConversation(digested);
+      eventContext.events.set(`message-${digested.name}-viewed`);
     } else {
-      sDc(undefined);
+      _setConversation(undefined);
     }
   };
 
