@@ -9,19 +9,16 @@ import {NavigationContainer} from '@react-navigation/native';
 import React, {useRef} from 'react';
 
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {games} from 'components/apps/hexGame/assets/games';
 import Messages from 'components/apps/Messages';
 import ApplicationContextProvider from 'context';
 import {skFontMap} from 'context/types';
 import {useFont} from '@shopify/react-native-skia';
 import TextBoxEngine from 'components/TextBoxEngine';
-import Navigation from 'navigation';
 import TextBoxEngineContextProvider from 'components/TextBoxEngine/context';
 import {View} from 'react-native';
 import EventOrchestraContextProvider from 'components/EventOrchestra/context';
 
 function App(): JSX.Element {
-  const game = games.firstGame;
   const fonts: skFontMap = new Map();
 
   const SFPro = useFont(require('@applicationAssets/fonts/SFPro.ttf'), 16);

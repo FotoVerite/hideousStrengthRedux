@@ -5,33 +5,35 @@ import {TextBoxEngineContext} from './context';
 import Screen from './Screen';
 import {delayFor} from 'common';
 import {StyleSheet, View} from 'react-native';
+import {GlyphContent} from 'components/apps/Messages/context/digestConversation/types';
+
+export type DigestedDialogueType = {name: string; glyphs: GlyphContent};
 
 const TextBoxEngine: FC<{screenRef: any}> = ({screenRef}) => {
-  const [background, setBackground] = useState<SkImage | null>(null);
   const textBoxEngineContext = useContext(TextBoxEngineContext);
-  const configuration =
-    textBoxEngineContext.dialogues.state?.screenConfiguration;
+
+  const [background, setBackground] = useState<SkImage | null>(null);
 
   useEffect(() => {
     const takeSnapShot = async () => {
-      if (screenRef.current && textBoxEngineContext.dialogues.state != null) {
-        if (configuration?.fadeInDelay) {
-          await delayFor(configuration?.fadeInDelay);
+      const {configuration, id} = textBoxEngineContext.dialogues.state;
+      if (screenRef.current && id != null) {
+        if (configuration.fadeInDelay) {
+          await delayFor(configuration.fadeInDelay);
         }
         const image = await makeImageFromView(screenRef);
         setBackground(image);
       }
     };
-    takeSnapShot().catch(console.error);
-  }, [
-    configuration?.fadeInDelay,
-    screenRef,
-    textBoxEngineContext.dialogues.state,
-  ]);
+    if (textBoxEngineContext.dialogues.state) {
+      takeSnapShot().catch(console.error);
+    }
+  }, [screenRef, textBoxEngineContext.dialogues.state]);
 
-  if (!textBoxEngineContext.dialogues.state && !background) {
+  if (!textBoxEngineContext.dialogues.state) {
     return null;
-  } else if (textBoxEngineContext.dialogues.state && !background) {
+  }
+  if (!background) {
     return <View style={styles.protector}></View>;
   } else {
     return <Screen background={background} />;

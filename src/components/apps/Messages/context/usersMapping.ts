@@ -8,6 +8,8 @@ import zaraAvatar from '../assets/avatars/Zara.jpg';
 import chrisAvatar from '../assets/avatars/Chris.jpg';
 import graceAvatar from '@apps/Messages/assets/avatars/grace.jpg';
 import gregAvatar from '@apps/Messages/assets/avatars/greg.jpg';
+import steveLitt from '@apps/Messages/assets/avatars/steve_litt.png';
+
 import meleenaAvatar from '@apps/Messages/assets/avatars/mileena.png';
 
 import {DataSourceParam} from '@shopify/react-native-skia';
@@ -21,6 +23,7 @@ export enum ContactNames {
   GREG = 'Fuck Face',
   MILEENA = 'Mileena',
   SELF = 'Self',
+  STEVE_LITT = 'Steve-0',
   ZOLA = 'Zola',
   DEFAULT = 'Default',
   SEAMLESS = '30368',
@@ -39,6 +42,7 @@ export const contactConsts: {[key in ContactNames]: UserMappingType} = {
   'Fuck Face': {avatar: gregAvatar, colors: ['#48ee4e', '#363243']},
   'Grace Russo': {avatar: graceAvatar, colors: ['#EE6548', '#363243']},
   Self: {avatar: undefined, colors: ['blue', '#363243']},
+  'Steve-0': {avatar: steveLitt, colors: ['#FF002D', '#C3596B']},
   Zola: {avatar: zaraAvatar, colors: ['#b46be4', '#363243']},
   30368: {avatar: defaultAvatar, colors: ['#6b6b6d', '#363243']},
   Default: {avatar: defaultAvatar, colors: ['#6b6b6d', '#363243']},

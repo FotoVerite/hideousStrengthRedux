@@ -1,9 +1,5 @@
-import {SkFont} from '@shopify/react-native-skia';
 import {ReactionType} from '../types';
-import {
-  GetDimensionsAndSkiaGlyphs,
-  GetDimensionsAndSkiaNodes,
-} from './skiaCalculations';
+import {GetDimensionsAndSkiaGlyphs} from './skiaCalculations';
 
 import {BUBBLE_PADDING} from '.';
 import {
@@ -14,7 +10,6 @@ import {
 import {
   DigestConfigurationType,
   DigestedConversationGlyphItemType,
-  DigestedConversationStringItemType,
   DigestedItemTypes,
 } from './types';
 import {BubblePath, flipPath} from './BubblePath';

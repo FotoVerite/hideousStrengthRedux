@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   screen: {
     zIndex: 4,
     position: 'absolute',
-    backgroundColor: 'white',
+    backgroundColor: '#f1f1f1',
     width: '100%',
   },
 });

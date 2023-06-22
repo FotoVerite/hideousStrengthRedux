@@ -1,57 +1,58 @@
-import React, {FC, useContext, useEffect, useMemo, useState} from 'react';
-import {View, StyleSheet, useWindowDimensions} from 'react-native';
-import {P} from 'components/common/StyledText';
+import React, {FC, useCallback, useContext, useEffect, useState} from 'react';
+import {StyleSheet, useWindowDimensions} from 'react-native';
 import {
   BackdropFilter,
   Blur,
-  BoxShadow,
   Canvas,
   Fill,
+  Glyph,
   Group,
   Image,
-  Rect,
-  RoundedRect,
   SkImage,
-  Text,
+  Skia,
   rect,
   rrect,
-  vec,
 } from '@shopify/react-native-skia';
 import {TextBoxEngineContext} from '../context';
-import {
-  useAnimatedStyle,
-  useSharedValue,
-  withDelay,
-  withTiming,
-} from 'react-native-reanimated';
-import theme from 'themes';
+import {useSharedValue, withDelay, withTiming} from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ApplicationContext} from 'context';
 import Frame from '../Frame';
 import {generateFrameDimensions} from '../utility';
+import {DigestedDialogueType} from '..';
+import {TextBoxScreenConfiguration} from '../context/types';
+import TextBoxDisplay from '../Display';
 
-const TextBoxScreen: FC<{background: SkImage}> = ({background}) => {
+const TextBoxScreen: FC<{
+  background: SkImage;
+  configuration: TextBoxScreenConfiguration;
+  dialogues: DigestedDialogueType[];
+}> = ({background, configuration, dialogues}) => {
   const textBoxEngineContext = useContext(TextBoxEngineContext);
   const applicationContext = useContext(ApplicationContext);
   const {width, height} = useWindowDimensions();
   const opacity = useSharedValue(0);
   const insets = useSafeAreaInsets();
-
-  const configuration =
-    textBoxEngineContext.dialogues.state?.screenConfiguration;
+  const font = applicationContext.fonts.get('SFPro');
+  const textFont = Skia.Font(font.getTypeface(), 20);
+  const [screens, setScreens] = useState<{name: string; glyphs: Glyph[]}[]>([]);
 
   useEffect(() => {
     opacity.value = withDelay(0, withTiming(1, {duration: 1000}));
   }, [configuration?.fadeInDelay, opacity]);
 
-  const opacityAnimation = useAnimatedStyle(() => {
-    return {opacity: opacity.value};
-  });
+  useEffect(() => {
+    setScreens(s => {
+      if (textBoxEngineContext.currentScreen) {
+        return s.concat(textBoxEngineContext.currentScreen);
+      } else {
+        return s;
+      }
+    });
+  }, [textBoxEngineContext.currentScreen]);
 
-  const nameFont = applicationContext.fonts.get('SFPro');
-  nameFont?.setSize(24);
   const frameConfiguration = generateFrameDimensions(
-    nameFont,
+    font,
     width,
     height,
     insets.bottom,
@@ -66,16 +67,18 @@ const TextBoxScreen: FC<{background: SkImage}> = ({background}) => {
 
   const textBoxRectRoundClip = rrect(textBoxRect, rounded, rounded);
 
+  const styles = StyleSheet.create({
+    canvas: {
+      position: 'absolute',
+      height: height,
+      width: width,
+      zIndex: 100,
+    },
+  });
+
+  const currentScreen = screens[0];
   return (
-    <Canvas
-      style={[
-        {
-          position: 'absolute',
-          height: height,
-          width: width,
-          zIndex: 100,
-        },
-      ]}>
+    <Canvas style={[styles.canvas]}>
       <Image
         image={background}
         x={0}
@@ -88,25 +91,27 @@ const TextBoxScreen: FC<{background: SkImage}> = ({background}) => {
       <BackdropFilter opacity={opacity} filter={<Blur blur={5} />}>
         <Fill color="rgba(125, 125, 125, 0.3)" />
       </BackdropFilter>
-
-      <Group clip={textBoxRectRoundClip}>
-        <BackdropFilter opacity={opacity} filter={<Blur blur={25} />}>
-          <Fill color="rgba(125, 125, 125, 0.3)" />
-        </BackdropFilter>
-      </Group>
-      <Frame
-        color={'white'}
-        font={nameFont}
-        frameConfiguration={frameConfiguration}
-        name={'Matthew'}
-      />
-      <Text
-        color={'white'}
-        x={frameConfiguration.x + 25}
-        y={frameConfiguration.y + 50}
-        text={textBoxEngineContext.dialogues.state?.dialogues[0].content}
-        font={nameFont}
-      />
+      {currentScreen && (
+        <>
+          <Group clip={textBoxRectRoundClip}>
+            <BackdropFilter opacity={opacity} filter={<Blur blur={25} />}>
+              <Fill color="rgba(125, 125, 125, 0.3)" />
+            </BackdropFilter>
+          </Group>
+          <Frame
+            color={'white'}
+            font={font}
+            frameConfiguration={frameConfiguration}
+            name={currentScreen.name}
+          />
+          <TextBoxDisplay
+            font={textFont}
+            frameConfiguration={frameConfiguration}
+            glyphs={currentScreen.glyphs}
+            setNextScreen={textBoxEngineContext.setNextScreen}
+          />
+        </>
+      )}
     </Canvas>
   );
 };

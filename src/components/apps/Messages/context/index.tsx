@@ -19,6 +19,7 @@ import {alice} from '../assets/messages/alice';
 import {mileena} from '../assets/messages/mileena';
 import {greg} from '../assets/messages/greg';
 import {EventOrchestraContext} from 'components/EventOrchestra/context';
+import {steveLitt} from '../assets/messages/steve_litt';
 
 //defaults for empty app
 export const MessagesContext = React.createContext<MessagesContextTypeDigested>(
@@ -28,6 +29,7 @@ const conversations = [
   zola,
   chris,
   seamless,
+  steveLitt,
   movieNight,
   clay,
   mileena,

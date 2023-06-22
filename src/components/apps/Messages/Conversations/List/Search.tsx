@@ -76,7 +76,7 @@ export default Search;
 const styles = StyleSheet.create({
   searchInput: {
     maxHeight: 40,
-    borderColor: 'white',
+    borderColor: '#dfdede',
     borderStyle: 'solid',
     borderWidth: 2,
     borderRadius: theme.BorderRadius.small,

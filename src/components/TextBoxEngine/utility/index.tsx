@@ -75,12 +75,12 @@ export const generateLineQueue = (
 
 const generateGlyphs = (lineQueue: LineQueueType, font: SkFont) => {
   const lineCount = lineQueue.length;
-  const returnItem: GlyphContent = {font: font, glyphs: []};
+  let returnItem: Glyph[] = [];
 
   lineQueue.forEach((line, index) =>
     line.forEach(
       (section, sIdx) =>
-        (returnItem.glyphs = returnItem.glyphs.concat(
+        (returnItem = returnItem.concat(
           getGlyphIdsAndWidths(section, font, index),
         )),
     ),
@@ -107,9 +107,8 @@ const getGlyphIdsAndWidths = (
   });
 };
 
-export const GetDimensionsAndSkiaGlyphs = (
+export const getDimensionsAndSkiaGlyphs = (
   font: SkFont,
-  emojiFont: SkFont,
   sentence: string,
   width: number,
   fontSize: number,

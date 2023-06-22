@@ -3,6 +3,7 @@ import {
   Group,
   RoundedRect,
   SkFont,
+  Skia,
   Text,
   rect,
 } from '@shopify/react-native-skia';
@@ -17,7 +18,7 @@ const Frame: FC<{
 }> = ({color, frameConfiguration, font, name}) => {
   const {x, y, width, height, radius} = frameConfiguration;
 
-  font.setSize(24);
+  const fontInstance = Skia.Font(font.getTypeface(), 24);
 
   const nameClip = rect(
     x + theme.spacing.p4 - 3,
@@ -45,7 +46,7 @@ const Frame: FC<{
         x={x + theme.spacing.p4}
         y={y + 8}
         text={name}
-        font={font}
+        font={fontInstance}
       />
     </Group>
   );

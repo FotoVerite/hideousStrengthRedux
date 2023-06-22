@@ -36,7 +36,6 @@ export const BubblePath = (
     path.rArcTo(cr, cr, 0, true, false, -cr, -cr);
   }
   path.close();
-
   return path;
 };
 

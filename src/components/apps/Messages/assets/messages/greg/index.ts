@@ -5,8 +5,6 @@ import {
   getColorFromContacts,
 } from 'components/apps/Messages/context/usersMapping';
 
-//import panopticon from '@apps/Messages/assets/messages/pantopitcon.jpeg';
-
 export const greg: ConversationType = {
   name: ContactNames.GREG,
   tags: [],
@@ -25,6 +23,10 @@ export const greg: ConversationType = {
         {
           name: ContactNames.GREG,
           messages: ['Agreed, and this morning'],
+        },
+        {
+          name: ContactNames.SELF,
+          messages: ['Mmmhm'],
         },
         {
           name: ContactNames.GREG,
