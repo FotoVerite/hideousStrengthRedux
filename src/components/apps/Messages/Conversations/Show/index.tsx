@@ -11,6 +11,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {MessagesContext} from '../../context';
 import theme from 'themes';
 import List from './List';
+import MessageInput from './MessageInput';
 
 const Conversation: FC = () => {
   const {width, height} = useWindowDimensions();
@@ -53,6 +54,7 @@ const Conversation: FC = () => {
         conversation={digestedConversation.current}
         key={digestedConversation.current?.name}
       />
+      <MessageInput />
     </Animated.View>
   );
 };

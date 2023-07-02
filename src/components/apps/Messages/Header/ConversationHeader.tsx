@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
   chevron: {
     alignItems: 'center',
     marginStart: theme.spacing.p1,
+    paddingEnd: theme.spacing.p4,
   },
   chatName: {
     fontWeight: 'bold',
