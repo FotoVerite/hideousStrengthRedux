@@ -5,6 +5,7 @@ import {Image, View} from 'react-native';
 
 import {
   Canvas,
+  Circle,
   Group,
   LinearGradient,
   Rect,
@@ -14,14 +15,14 @@ import {
 import Animated, {SharedValue} from 'react-native-reanimated';
 import {Row} from 'components/common/layout';
 import {StyleSheet} from 'react-native';
-import Reaction from './Reaction';
 import {DigestedConversationStringItemType} from 'components/apps/Messages/context/digestConversation/types';
 
 import theme from 'themes';
 import {P} from 'components/common/StyledText';
-import {useHeightDeterminedGradient} from './hooks/useHeightDeterminedGradient';
+import {useHeightDeterminedGradient} from '../hooks/useHeightDeterminedGradient';
+import {Dot} from './Dot';
 
-export const TextBubble: FC<
+export const TypingBubble: FC<
   DigestedConversationStringItemType & {
     scrollHandler: SharedValue<number>;
     scrollRef: React.RefObject<Animated.ScrollView>;
@@ -64,9 +65,6 @@ export const TextBubble: FC<
           </P>
         )}
 
-        {reaction && (
-          <Reaction reaction={reaction} left={leftSide} colors={colors} />
-        )}
         <Canvas
           style={{
             width: width,
@@ -80,8 +78,10 @@ export const TextBubble: FC<
                 end={vec(0, height)}
               />
             </Rect>
+            <Dot height={height / 2} width={40} delay={0} />
+            <Dot height={height / 2} width={width / 2} delay={500} />
+            <Dot height={height / 2} width={width - 30} delay={1000} />
           </Group>
-          {content}
         </Canvas>
       </View>
     </Row>

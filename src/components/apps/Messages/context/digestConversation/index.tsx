@@ -5,7 +5,12 @@ import {
   DigestedItemTypes,
 } from './types';
 import {createTimeItem} from './TimeItem';
-import {ConversationExchangeType} from '../types';
+import {
+  ConversationExchangeType,
+  ConversationType,
+  ExchangeBlockType,
+  MessageType,
+} from '../types';
 import {createStringItem} from './StringItem';
 import {createImageItem} from './ImageItem';
 import {createGlyphItem} from './GlyphItem';
@@ -110,4 +115,95 @@ export const digestConversation = (
   });
 
   return ret;
+};
+
+export const startNewBlock = (
+  startingPosition: number,
+  width: number,
+  font: SkFont,
+  emojiFont: SkFont,
+) => {
+  const itemConfiguration: DigestConfigurationType = {
+    font: font,
+    emojiFont: emojiFont,
+    width: width,
+    positionAcc: startingPosition,
+    group: false,
+  };
+  const time = createTimeItem(
+    {time: new Date().toLocaleDateString('en-US', {}), exchanges: []},
+    itemConfiguration.width,
+    itemConfiguration.positionAcc,
+  );
+
+  return time;
+};
+
+export const addToBlock = (
+  exchange: ExchangeBlockType,
+  message: MessageType,
+  hasTail: boolean,
+  startingPosition: number,
+  width: number,
+  font: SkFont,
+  emojiFont: SkFont,
+) => {
+  const itemConfiguration: DigestConfigurationType = {
+    font: font,
+    emojiFont: emojiFont,
+    width: width,
+    positionAcc: startingPosition,
+    group: false,
+  };
+  if (message.hasOwnProperty('type')) {
+    if (message.type === DigestedItemTypes.EMOJI) {
+      const emojiBubble = createEmojiItem(
+        itemConfiguration,
+        exchange.name,
+        message.message,
+        hasTail,
+        message.reaction,
+      );
+      return emojiBubble;
+    }
+    if (message.type === 'string') {
+      const textBubble = createStringItem(
+        itemConfiguration,
+        exchange.name,
+        message.message,
+        hasTail,
+        message.reaction,
+      );
+      return textBubble;
+    }
+    if (message.type === 'glyph') {
+      const glyphBubble = createGlyphItem(
+        itemConfiguration,
+        exchange.name,
+        message.message,
+        hasTail,
+        message.reaction,
+      );
+      return glyphBubble;
+    }
+    if (message.type === 'image') {
+      const imageBubble = createImageItem(
+        itemConfiguration,
+        exchange.name,
+        message.message,
+        hasTail,
+        message.reaction,
+      );
+      return imageBubble;
+    }
+  } else {
+    const textBubble = createStringItem(
+      itemConfiguration,
+      exchange.name,
+      message,
+      hasTail,
+      message.reaction,
+    );
+    return textBubble;
+  }
 };

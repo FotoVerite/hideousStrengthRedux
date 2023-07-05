@@ -1,25 +1,48 @@
-import React, {FC, MutableRefObject, useContext, useState} from 'react';
-import {View, StyleSheet, TextInput} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import React, {FC, useState} from 'react';
+import {StyleSheet, useWindowDimensions} from 'react-native';
+import Animated from 'react-native-reanimated';
 import theme from 'themes';
+import MessageTextInput from './MessageTextInput';
+import OptionList from './OptionList';
+import {BlurView} from '@react-native-community/blur';
+import {GenericStateType} from 'types/genericContextTypes';
 
-const MessageInput: FC<{}> = ({}) => {
+const MessageInput: FC<{scrollToBottom: GenericStateType<boolean>}> = ({
+  scrollToBottom,
+}) => {
+  const {width, height} = useWindowDimensions();
+
   const [active, setActive] = useState(false);
+  const activeObject = {state: active, set: setActive};
+
   return (
-    <View style={styles.container}>
-      <View style={[styles.textInput]}>
-        <Icon size={20} name="chevron-up" style={styles.icon} />
-      </View>
-    </View>
+    <Animated.View style={[{width: width}, styles.container]}>
+      <BlurView
+        style={styles.blur}
+        blurType="light"
+        blurAmount={25}
+        reducedTransparencyFallbackColor="white"
+      />
+      <MessageTextInput active={activeObject} />
+      <OptionList active={activeObject} scrollToBottom={scrollToBottom} />
+    </Animated.View>
   );
 };
 
 export default MessageInput;
 
 const styles = StyleSheet.create({
-  container: {
-    height: 50,
+  blur: {
     zIndex: 3,
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
+  container: {
+    zIndex: 3,
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: 0,
   },
   textInput: {
     maxHeight: 40,

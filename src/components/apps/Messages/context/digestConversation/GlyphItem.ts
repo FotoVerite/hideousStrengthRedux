@@ -3,7 +3,7 @@ import {GetDimensionsAndSkiaGlyphs} from './skiaCalculations';
 
 import {BUBBLE_PADDING} from '.';
 import {
-  ContactNames,
+  CONTACT_NAMES,
   getAvatarFromContacts,
   getColorFromContacts,
 } from '../usersMapping';
@@ -16,7 +16,7 @@ import {BubblePath, flipPath} from './BubblePath';
 
 export const createGlyphItem = (
   itemConfiguration: DigestConfigurationType,
-  name: ContactNames,
+  name: CONTACT_NAMES,
   message: string,
   hasTail: boolean,
   reaction?: ReactionType,
@@ -40,7 +40,7 @@ export const createGlyphItem = (
     content: textNodes,
     colors: getColorFromContacts(name),
     height:
-      group && name !== ContactNames.SELF
+      group && name !== CONTACT_NAMES.SELF
         ? boxHeight + BUBBLE_PADDING + 20
         : boxHeight + BUBBLE_PADDING,
     leftSide: leftSide,

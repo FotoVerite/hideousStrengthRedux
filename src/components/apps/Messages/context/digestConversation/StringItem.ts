@@ -4,7 +4,7 @@ import {GetDimensionsAndSkiaNodes} from './skiaCalculations';
 
 import {BUBBLE_PADDING} from '.';
 import {
-  ContactNames,
+  CONTACT_NAMES,
   getAvatarFromContacts,
   getColorFromContacts,
 } from '../usersMapping';
@@ -17,7 +17,7 @@ import {BubblePath, flipPath} from './BubblePath';
 
 export const createStringItem = (
   itemConfiguration: DigestConfigurationType,
-  name: ContactNames,
+  name: CONTACT_NAMES,
   message: string,
   hasTail: boolean,
   reaction?: ReactionType,
@@ -42,12 +42,12 @@ export const createStringItem = (
     content: textNodes,
     colors: getColorFromContacts(name),
     height:
-      group && name !== ContactNames.SELF
+      group && name !== CONTACT_NAMES.SELF
         ? boxHeight + BUBBLE_PADDING + 20
         : boxHeight + BUBBLE_PADDING,
     leftSide: leftSide,
     name: name,
-    paddingBottom: hasTail ? 8 : 4,
+    paddingBottom: hasTail ? 8 : 2,
     offset: positionAcc,
     reaction: reaction,
     type: DigestedItemTypes.STRING,

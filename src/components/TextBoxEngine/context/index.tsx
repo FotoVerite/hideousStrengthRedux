@@ -23,7 +23,6 @@ const digestDialogue = (state: TextBoxDialoguesType, textFont: SkFont) => {
     id: state.id,
     configuration: state.screenConfiguration,
     dialogues: state.dialogues.map(dialogue => {
-      console.log(dialogue.content);
       return {
         name: dialogue.name,
         glyphs: getDimensionsAndSkiaGlyphs(textFont, dialogue.content, 500, 18),

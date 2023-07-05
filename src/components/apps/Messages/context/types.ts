@@ -4,7 +4,9 @@ import {DataSourceParam} from '@shopify/react-native-skia';
 
 import {GenericOrUndefinedStateType} from 'types/genericContextTypes';
 import {DigestedConversationListItem} from './digestConversation/types';
-import {ContactNames} from './usersMapping';
+import {CONTACT_NAMES, UserMappingType} from './usersMapping';
+import {APP_NAMES} from 'components/apps/types';
+import {Route} from '@react-navigation/native';
 
 export type MessagesSharedValuesType = {
   wordInputShake: SharedValue<number>;
@@ -22,27 +24,30 @@ export type MessagesContextTypeDigested = PropsWithChildren<{
     set: (toDigest: ConversationType | undefined) => void;
   };
   media: GenericOrUndefinedStateType<DataSourceParam>;
+  sharedValues: {optionsHeight: SharedValue<number>};
 }>;
 
 export type ConversationType = {
   tags: string[];
-  name: string;
+  name: CONTACT_NAMES;
   date: string;
   listContent: string;
   heroImage: DataSourceParam;
   exchanges: ConversationExchangeType[];
   group?: boolean;
+  routes?: MessageRouteType[];
   interfaceColor: string;
 };
 
 export type DigestedConversation = {
   tags: string[];
-  name: string;
+  name: CONTACT_NAMES;
   date: string;
   listContent: string;
   heroImage: DataSourceParam;
   exchanges: DigestedConversationListItem[];
   group?: boolean;
+  route?: MessageRouteType;
   interfaceColor: string;
 };
 
@@ -52,7 +57,7 @@ export type ConversationExchangeType = {
 };
 
 export type ExchangeBlockType = {
-  name: ContactNames;
+  name: CONTACT_NAMES;
   messages: MessageType[];
 };
 
@@ -82,3 +87,24 @@ export interface EmojiMessageWithMeta extends MessageWithMetaType {
 }
 
 export type ReactionType = {name: string; color: string};
+
+export type MessageEventType = {
+  [APP_NAMES.MESSAGE]: {
+    [key in CONTACT_NAMES]?: {
+      views: [Date];
+      routes: {[routeId: string]: {date: Date; chosen: string}};
+    };
+  };
+};
+
+export type RouteTriggerType = {
+  [APP_NAMES.MESSAGE]?: {
+    [key in CONTACT_NAMES]?: {views?: number; routes?: {[key: string]: string}};
+  };
+};
+export type MessageRouteType = {
+  id: string;
+  triggers?: RouteTriggerType;
+  options: [{key: string; value: string}];
+  routes: {[key: string]: ExchangeBlockType[]};
+};

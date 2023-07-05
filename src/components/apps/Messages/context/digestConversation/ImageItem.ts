@@ -9,14 +9,14 @@ import {
 } from './types';
 import {ReactionType} from '../types';
 import {
-  ContactNames,
+  CONTACT_NAMES,
   getAvatarFromContacts,
   getColorFromContacts,
 } from '../usersMapping';
 
 export const createImageItem = (
   itemConfiguration: DigestConfigurationType,
-  name: ContactNames,
+  name: CONTACT_NAMES,
   imagePath: DataSourceParam,
   hasTail: boolean,
   reaction?: ReactionType,
@@ -39,7 +39,8 @@ export const createImageItem = (
   const listItem: DigestedConversationImageItemType = {
     alignItems: leftSide ? 'flex-start' : 'flex-end',
     content: imagePath,
-    height: group && name !== ContactNames.SELF ? imageHeight + 20 : imageHeight,
+    height:
+      group && name !== CONTACT_NAMES.SELF ? imageHeight + 20 : imageHeight,
     width: imageWidth,
     paddingBottom: hasTail ? 8 : 4,
     name: name,

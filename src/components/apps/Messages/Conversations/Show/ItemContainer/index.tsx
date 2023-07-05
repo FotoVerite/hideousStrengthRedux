@@ -1,8 +1,13 @@
-import React, {FC, useMemo} from 'react';
+import React, {FC, useContext, useEffect, useMemo} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {P} from 'components/common/StyledText';
 import {TextBubble} from './TextBubble';
-import {SharedValue} from 'react-native-reanimated';
+import Animated, {
+  SharedValue,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import {ImageBubble} from './ImageBubble';
 import {
   DigestedConversationListItem,
@@ -10,17 +15,50 @@ import {
 } from 'components/apps/Messages/context/digestConversation/types';
 import {GlyphBubble} from './GlyphBubble';
 import {EmojiBubble} from './EmojiBubble';
+import {delayFor} from 'common';
+import {MessagesContext} from 'components/apps/Messages/context';
+import {TypingBubble} from './TypingBubble';
 
 const ItemContainer: FC<{
   item: DigestedConversationListItem;
   index: number;
   scrollHandler: SharedValue<number>;
+  scrollRef: React.RefObject<Animated.ScrollView>;
   group: boolean;
-}> = ({item, scrollHandler, group, index}) => {
+}> = ({item, scrollHandler, scrollRef, group, index}) => {
+  const context = useContext(MessagesContext);
+  const opacity = useSharedValue(item.delay ? 0 : 1);
+
   const MemoTextBubble = useMemo(() => {
-    if (item.type === 'string') {
+    if (item.type === DigestedItemTypes.STRING) {
       return (
-        <TextBubble {...item} scrollHandler={scrollHandler} group={group} />
+        <TextBubble
+          {...item}
+          scrollHandler={scrollHandler}
+          group={group}
+          scrollRef={scrollRef}
+        />
+      );
+    }
+  }, [scrollHandler, group, item]);
+
+  const MemoGlyphBubble = useMemo(() => {
+    if (item.type === DigestedItemTypes.GLYPH) {
+      return (
+        <GlyphBubble {...item} scrollHandler={scrollHandler} group={group} />
+      );
+    }
+  }, [scrollHandler, group, item]);
+
+  const MemoTypingBubble = useMemo(() => {
+    if (item.type === DigestedItemTypes.STRING) {
+      return (
+        <TypingBubble
+          {...item}
+          scrollHandler={scrollHandler}
+          group={group}
+          scrollRef={scrollRef}
+        />
       );
     }
   }, [scrollHandler, group, item]);
@@ -37,8 +75,24 @@ const ItemContainer: FC<{
     }
   }, [item]);
 
+  useEffect(() => {
+    const toBottom = async (delay: number) => {
+      await delayFor(5);
+      scrollRef.current?.scrollToEnd({animated: true});
+      opacity.value = withTiming(1, {duration: 300});
+      context.textFinished(true);
+    };
+    if (item.delay) {
+      toBottom(item.delay);
+    }
+  }, [item.delay]);
+
+  const fadeInAnimation = useAnimatedStyle(() => {
+    return {opacity: opacity.value};
+  });
+
   return (
-    <View
+    <Animated.View
       style={[
         styles.container,
         {
@@ -46,21 +100,24 @@ const ItemContainer: FC<{
           alignItems: item.alignItems,
           marginBottom: item.paddingBottom,
         },
+        fadeInAnimation,
       ]}>
       {item.type === DigestedItemTypes.TIME && (
         <P style={[styles.time]}>{item.content}</P>
       )}
-
-      {MemoEmojiBubble}
-
-      {item.type === DigestedItemTypes.STRING && MemoTextBubble}
-
-      {item.type === DigestedItemTypes.GLYPH && (
-        <GlyphBubble {...item} scrollHandler={scrollHandler} group={group} />
-      )}
-
-      {item.type === DigestedItemTypes.IMAGE && MemoImageBubble}
-    </View>
+      {/* <View style={{position: 'absolute'}}>
+        {MemoEmojiBubble}
+        {MemoTextBubble}
+        {MemoGlyphBubble}
+        {MemoImageBubble}
+      </View> */}
+      <View>
+        {MemoEmojiBubble}
+        {MemoTextBubble}
+        {MemoGlyphBubble}
+        {MemoImageBubble}
+      </View>
+    </Animated.View>
   );
 };
 

@@ -4,11 +4,11 @@ import {
   DigestedItemTypes,
 } from './types';
 import {ReactionType} from '../types';
-import {ContactNames, getAvatarFromContacts} from '../usersMapping';
+import {CONTACT_NAMES, getAvatarFromContacts} from '../usersMapping';
 
 export const createEmojiItem = (
   itemConfiguration: DigestConfigurationType,
-  name: ContactNames,
+  name: CONTACT_NAMES,
   content: string,
   hasTail: boolean,
   reaction?: ReactionType,
@@ -22,7 +22,7 @@ export const createEmojiItem = (
   const listItem: DigestedConversationEmojiItemType = {
     alignItems: leftSide ? 'flex-start' : 'flex-end',
     content: content,
-    height: group && name !== ContactNames.SELF ? 60 + 20 : 60,
+    height: group && name !== CONTACT_NAMES.SELF ? 60 + 20 : 60,
     width: maxWidth,
     paddingBottom: hasTail ? 8 : 4,
     name: name,

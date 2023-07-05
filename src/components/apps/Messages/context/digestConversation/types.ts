@@ -38,6 +38,7 @@ export interface DigestedConversationItemType {
   width: number;
   offset: number;
   paddingBottom: number;
+  delay?: number;
 }
 
 export interface DigestedConversationTimeType

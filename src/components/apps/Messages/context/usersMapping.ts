@@ -14,7 +14,7 @@ import meleenaAvatar from '@apps/Messages/assets/avatars/mileena.png';
 
 import {DataSourceParam} from '@shopify/react-native-skia';
 
-export enum ContactNames {
+export enum CONTACT_NAMES {
   ARIAL = 'Arial',
   ALICE = 'Alice',
   CHRIS = 'Chris',
@@ -33,7 +33,7 @@ export type UserMappingType = {
   avatar?: DataSourceParam;
   colors: string[];
 };
-export const contactConsts: {[key in ContactNames]: UserMappingType} = {
+export const contactConsts: {[key in CONTACT_NAMES]: UserMappingType} = {
   Arial: {avatar: arialAvatar, colors: ['#dbaf48', '#cdc8bb']},
   Mileena: {avatar: meleenaAvatar, colors: ['#ff0095', '#cdbbc6']},
   Alice: {avatar: aliceAvatar, colors: ['#d0bd28', '#cdc8bb']},
@@ -48,19 +48,19 @@ export const contactConsts: {[key in ContactNames]: UserMappingType} = {
   Default: {avatar: defaultAvatar, colors: ['#6b6b6d', '#363243']},
 };
 
-export const getColorFromContacts = (name: ContactNames | string) => {
-  if (Object.values(ContactNames).some(v => v === name)) {
-    return contactConsts[name as ContactNames].colors;
+export const getColorFromContacts = (name: CONTACT_NAMES | string) => {
+  if (Object.values(CONTACT_NAMES).some(v => v === name)) {
+    return contactConsts[name as CONTACT_NAMES].colors;
   } else {
-    return contactConsts[ContactNames.DEFAULT].colors;
+    return contactConsts[CONTACT_NAMES.DEFAULT].colors;
   }
 };
 
-export const getAvatarFromContacts = (name: ContactNames | 'string') => {
-  if (Object.values(ContactNames).some(v => v === name)) {
-    return contactConsts[name as ContactNames].avatar;
+export const getAvatarFromContacts = (name: CONTACT_NAMES | 'string') => {
+  if (Object.values(CONTACT_NAMES).some(v => v === name)) {
+    return contactConsts[name as CONTACT_NAMES].avatar;
   } else {
-    return contactConsts[ContactNames.DEFAULT].avatar;
+    return contactConsts[CONTACT_NAMES.DEFAULT].avatar;
   }
 };
 

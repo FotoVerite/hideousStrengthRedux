@@ -1,4 +1,4 @@
-import React, {FC, useContext, useEffect, useRef} from 'react';
+import React, {FC, useContext, useEffect, useRef, useState} from 'react';
 import {useWindowDimensions, StyleSheet} from 'react-native';
 import Animated, {
   useSharedValue,
@@ -29,6 +29,8 @@ const Conversation: FC = () => {
 
   const showMessage = useSharedValue(0);
 
+  const [scrollToBottom, setScrollToBottom] = useState(false);
+
   useEffect(() => {
     if (context.digestedConversation.state) {
       showMessage.value = withDelay(300, withTiming(1, {duration: 750}));
@@ -53,8 +55,11 @@ const Conversation: FC = () => {
       <List
         conversation={digestedConversation.current}
         key={digestedConversation.current?.name}
+        scrollToBottom={{state: scrollToBottom, set: setScrollToBottom}}
       />
-      <MessageInput />
+      <MessageInput
+        scrollToBottom={{state: scrollToBottom, set: setScrollToBottom}}
+      />
     </Animated.View>
   );
 };

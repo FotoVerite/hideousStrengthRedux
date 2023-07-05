@@ -2,7 +2,9 @@ import React, {FC, useState} from 'react';
 import {
   EventOrchestraContextTypeDigest,
   EventOrchestraContextTypeDigested,
+  EventOrchestraObjectType,
 } from './types';
+import {APP_NAMES} from 'components/apps/types';
 
 //defaults for empty app
 export const EventOrchestraContext =
@@ -11,16 +13,9 @@ export const EventOrchestraContext =
 const EventOrchestraContextProvider: FC<
   EventOrchestraContextTypeDigest
 > = props => {
-  const [events, _setEvent] = useState<Map<string, number>>(new Map());
-
-  const setEvent = (event: string) => {
-    _setEvent(state => {
-      const newState = new Map(state);
-      const numberOfTimes = newState.get(event);
-      newState.set(event, (numberOfTimes || 0) + 1);
-      return newState;
-    });
-  };
+  const [events, setEvent] = useState<EventOrchestraObjectType>({
+    [APP_NAMES.MESSAGE]: {},
+  });
 
   return (
     <EventOrchestraContext.Provider
