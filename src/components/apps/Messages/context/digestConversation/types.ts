@@ -4,6 +4,7 @@ import {
   DataSourceParam,
   Glyph,
   SkFont,
+  SkPath,
   Vector,
 } from '@shopify/react-native-skia';
 
@@ -51,7 +52,7 @@ export interface DigestedConversationTimeType
 export interface DigestedConversationStringItemType
   extends DigestedConversationItemType {
   name: string;
-  clip: any;
+  clip: SkPath;
   colors: string[];
   content: React.JSX.Element[];
   type: DigestedItemTypes.STRING;

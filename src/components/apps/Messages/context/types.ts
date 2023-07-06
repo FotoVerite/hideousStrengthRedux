@@ -21,10 +21,10 @@ export type MessagesContextTypeDigested = PropsWithChildren<{
   conversations: ConversationType[];
   digestedConversation: {
     state: DigestedConversation | undefined;
-    set: (toDigest: ConversationType | undefined) => void;
+    set: React.Dispatch<React.SetStateAction<DigestedConversation | undefined>>;
+    digest: (toDigest: ConversationType | undefined) => void;
   };
   media: GenericOrUndefinedStateType<DataSourceParam>;
-  sharedValues: {optionsHeight: SharedValue<number>};
 }>;
 
 export type ConversationType = {
@@ -87,24 +87,3 @@ export interface EmojiMessageWithMeta extends MessageWithMetaType {
 }
 
 export type ReactionType = {name: string; color: string};
-
-export type MessageEventType = {
-  [APP_NAMES.MESSAGE]: {
-    [key in CONTACT_NAMES]?: {
-      views: [Date];
-      routes: {[routeId: string]: {date: Date; chosen: string}};
-    };
-  };
-};
-
-export type RouteTriggerType = {
-  [APP_NAMES.MESSAGE]?: {
-    [key in CONTACT_NAMES]?: {views?: number; routes?: {[key: string]: string}};
-  };
-};
-export type MessageRouteType = {
-  id: string;
-  triggers?: RouteTriggerType;
-  options: [{key: string; value: string}];
-  routes: {[key: string]: ExchangeBlockType[]};
-};

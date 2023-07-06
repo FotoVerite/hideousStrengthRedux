@@ -1,17 +1,18 @@
 import React, {FC, useContext} from 'react';
 import Animated, {useAnimatedStyle} from 'react-native-reanimated';
+import {TextOrchestrationContext} from 'components/apps/Messages/context/textOrchestration';
+
 import theme from 'themes';
-import {MessagesContext} from 'components/apps/Messages/context';
 
 const Footer: FC = () => {
-  const messageContext = useContext(MessagesContext);
-
+  const context = useContext(TextOrchestrationContext);
+  console.log(context);
   const animatedMargin = useAnimatedStyle(() => {
     return {
       marginBottom:
-        theme.spacing.p2 + 50 + messageContext.sharedValues.optionsHeight.value,
+        theme.spacing.p2 + 50 + context.sharedValues.optionsHeight.value,
     };
-  }, [messageContext.sharedValues.optionsHeight.value]);
+  }, [context.sharedValues.optionsHeight.value]);
   return <Animated.View style={animatedMargin} />;
 };
 

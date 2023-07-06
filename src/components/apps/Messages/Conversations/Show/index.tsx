@@ -12,6 +12,7 @@ import {MessagesContext} from '../../context';
 import theme from 'themes';
 import List from './List';
 import MessageInput from './MessageInput';
+import TextOrchestrationContextProvider from '../../context/textOrchestration';
 
 const Conversation: FC = () => {
   const {width, height} = useWindowDimensions();
@@ -46,21 +47,23 @@ const Conversation: FC = () => {
   }, [context.digestedConversation.state]);
 
   return (
-    <Animated.View
-      style={[
-        {height: height - (insets.top + insets.bottom)},
-        styles.screen,
-        AnimateMessageLeft,
-      ]}>
-      <List
-        conversation={digestedConversation.current}
-        key={digestedConversation.current?.name}
-        scrollToBottom={{state: scrollToBottom, set: setScrollToBottom}}
-      />
-      <MessageInput
-        scrollToBottom={{state: scrollToBottom, set: setScrollToBottom}}
-      />
-    </Animated.View>
+    <TextOrchestrationContextProvider>
+      <Animated.View
+        style={[
+          {height: height - (insets.top + insets.bottom)},
+          styles.screen,
+          AnimateMessageLeft,
+        ]}>
+        <List
+          conversation={digestedConversation.current}
+          key={digestedConversation.current?.name}
+          scrollToBottom={{state: scrollToBottom, set: setScrollToBottom}}
+        />
+        <MessageInput
+          scrollToBottom={{state: scrollToBottom, set: setScrollToBottom}}
+        />
+      </Animated.View>
+    </TextOrchestrationContextProvider>
   );
 };
 

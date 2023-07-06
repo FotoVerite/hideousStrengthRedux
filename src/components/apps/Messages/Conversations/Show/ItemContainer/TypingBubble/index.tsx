@@ -1,26 +1,22 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable no-bitwise */
-import React, {FC} from 'react';
-import {Image, View} from 'react-native';
+import React, {FC, useEffect, useRef, useState} from 'react';
+import {View} from 'react-native';
 
-import {
-  Canvas,
-  Circle,
-  Group,
-  LinearGradient,
-  Rect,
-  vec,
-} from '@shopify/react-native-skia';
-
-import Animated, {SharedValue} from 'react-native-reanimated';
-import {Row} from 'components/common/layout';
+import Animated, {
+  SharedValue,
+  interpolate,
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withTiming,
+} from 'react-native-reanimated';
 import {StyleSheet} from 'react-native';
 import {DigestedConversationStringItemType} from 'components/apps/Messages/context/digestConversation/types';
 
-import theme from 'themes';
-import {P} from 'components/common/StyledText';
-import {useHeightDeterminedGradient} from '../hooks/useHeightDeterminedGradient';
-import {Dot} from './Dot';
+import {WaitingBubble} from './WaitingBubble';
+import {TextBubble} from '../TextBubble';
 
 export const TypingBubble: FC<
   DigestedConversationStringItemType & {
@@ -28,80 +24,45 @@ export const TypingBubble: FC<
     scrollRef: React.RefObject<Animated.ScrollView>;
     group?: boolean;
   }
-> = ({
-  avatar,
-  colors,
-  delay,
-  scrollHandler,
-  scrollRef,
-  offset,
-  content,
-  leftSide,
-  width,
-  height,
-  clip,
-  name,
-  reaction,
-  group,
-}) => {
-  const computedColors = useHeightDeterminedGradient(
-    colors,
-    offset,
-    leftSide,
-    scrollHandler,
-  );
+> = props => {
+  const opacity = useSharedValue(1);
+  const [renderWaiting, setRenderWaiting] = useState(true);
+  const waitingOpacity = useAnimatedStyle(() => {
+    return {opacity: opacity.value};
+  });
+
+  const textOpacity = useAnimatedStyle(() => {
+    return {opacity: interpolate(opacity.value, [1, 0], [0, 1])};
+  });
+
+  useEffect(() => {
+    opacity.value = withDelay(
+      1000 + (props.delay || 500),
+      withTiming(0, {duration: 500}, finished => {
+        if (finished) {
+          runOnJS(setRenderWaiting)(false);
+        }
+      }),
+    );
+  });
 
   return (
-    <Row style={styles.row}>
-      {leftSide && (
-        <View style={styles.avatarContainer}>
-          {avatar && <Image source={avatar} style={styles.avatar} />}
-        </View>
+    <View style={{height: props.height}}>
+      {renderWaiting && (
+        <Animated.View style={[styles.waiting, waitingOpacity]}>
+          <WaitingBubble {...props} />
+        </Animated.View>
       )}
-      <View>
-        {group && name != 'Self' && (
-          <P size="s" style={{marginLeft: 20}}>
-            {name}
-          </P>
-        )}
-
-        <Canvas
-          style={{
-            width: width,
-            height: height,
-          }}>
-          <Group clip={clip}>
-            <Rect x={0} y={0} width={width} height={height}>
-              <LinearGradient
-                colors={computedColors}
-                start={vec(0, 0)}
-                end={vec(0, height)}
-              />
-            </Rect>
-            <Dot height={height / 2} width={40} delay={0} />
-            <Dot height={height / 2} width={width / 2} delay={500} />
-            <Dot height={height / 2} width={width - 30} delay={1000} />
-          </Group>
-        </Canvas>
-      </View>
-    </Row>
+      <Animated.View style={[styles.main, textOpacity]}>
+        <TextBubble {...props} />
+      </Animated.View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  row: {
-    alignItems: 'flex-end',
-    padding: 0,
-    margin: 0,
+  waiting: {
+    position: 'absolute',
   },
-  avatarContainer: {
-    width: 30,
-    height: 30,
-    marginEnd: theme.spacing.p1,
-  },
-  avatar: {
-    width: 30,
-    height: 30,
-    borderRadius: theme.BorderRadius.normal,
-  },
+  main: {},
 });

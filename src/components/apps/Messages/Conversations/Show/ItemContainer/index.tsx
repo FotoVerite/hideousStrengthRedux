@@ -29,8 +29,13 @@ const ItemContainer: FC<{
   const context = useContext(MessagesContext);
   const opacity = useSharedValue(item.delay ? 0 : 1);
 
+  const isWaiting =
+    item.type === DigestedItemTypes.STRING &&
+    item.leftSide == true &&
+    item.delay;
+
   const MemoTextBubble = useMemo(() => {
-    if (item.type === DigestedItemTypes.STRING) {
+    if (item.type === DigestedItemTypes.STRING && !isWaiting) {
       return (
         <TextBubble
           {...item}
@@ -51,7 +56,7 @@ const ItemContainer: FC<{
   }, [scrollHandler, group, item]);
 
   const MemoTypingBubble = useMemo(() => {
-    if (item.type === DigestedItemTypes.STRING) {
+    if (isWaiting) {
       return (
         <TypingBubble
           {...item}
@@ -77,9 +82,12 @@ const ItemContainer: FC<{
 
   useEffect(() => {
     const toBottom = async (delay: number) => {
-      await delayFor(5);
+      await delayFor(delay);
       scrollRef.current?.scrollToEnd({animated: true});
       opacity.value = withTiming(1, {duration: 300});
+      if (isWaiting) {
+        await delayFor(1000 + delay);
+      }
       context.textFinished(true);
     };
     if (item.delay) {
@@ -114,6 +122,7 @@ const ItemContainer: FC<{
       <View>
         {MemoEmojiBubble}
         {MemoTextBubble}
+        {MemoTypingBubble}
         {MemoGlyphBubble}
         {MemoImageBubble}
       </View>

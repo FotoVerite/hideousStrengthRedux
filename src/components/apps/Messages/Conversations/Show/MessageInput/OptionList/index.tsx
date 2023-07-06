@@ -13,12 +13,14 @@ import {GenericStateType} from 'types/genericContextTypes';
 import Option from './Option';
 import theme from 'themes';
 import NoOption from './NoOption';
+import {TextOrchestrationContext} from 'components/apps/Messages/context/textOrchestration';
 
 const Conversations: FC<{
   active: GenericStateType<boolean>;
   scrollToBottom: GenericStateType<boolean>;
 }> = ({active, scrollToBottom}) => {
   const context = useContext(MessagesContext);
+  const textOrchestraContext = useContext(TextOrchestrationContext);
 
   const showOptions = useSharedValue(0);
 
@@ -42,13 +44,13 @@ const Conversations: FC<{
 
   useEffect(() => {
     if (active.state) {
-      context.sharedValues.optionsHeight.value = withTiming(
+      textOrchestraContext.sharedValues.optionsHeight.value = withTiming(
         optionsHeight,
         {duration: 50},
         () => runOnJS(scrollToBottom.set)(true),
       );
     } else {
-      context.sharedValues.optionsHeight.value = withDelay(
+      textOrchestraContext.sharedValues.optionsHeight.value = withDelay(
         50,
         withTiming(0, {duration: 300}),
       );
