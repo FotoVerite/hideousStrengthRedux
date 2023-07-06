@@ -17,8 +17,7 @@ import {TextOrchestrationContext} from 'components/apps/Messages/context/textOrc
 
 const Conversations: FC<{
   active: GenericStateType<boolean>;
-  scrollToBottom: GenericStateType<boolean>;
-}> = ({active, scrollToBottom}) => {
+}> = ({active}) => {
   const context = useContext(MessagesContext);
   const textOrchestraContext = useContext(TextOrchestrationContext);
 
@@ -47,7 +46,7 @@ const Conversations: FC<{
       textOrchestraContext.sharedValues.optionsHeight.value = withTiming(
         optionsHeight,
         {duration: 50},
-        () => runOnJS(scrollToBottom.set)(true),
+        () => runOnJS(textOrchestraContext.scrollTo.set)(-1),
       );
     } else {
       textOrchestraContext.sharedValues.optionsHeight.value = withDelay(

@@ -1,6 +1,6 @@
 import {DigestedConversationListItem} from 'components/apps/Messages/context/digestConversation/types';
 import {DigestedConversation} from 'components/apps/Messages/context/types';
-import React, {FC, useEffect} from 'react';
+import React, {FC, useContext, useEffect} from 'react';
 import {
   View,
   useWindowDimensions,
@@ -15,6 +15,7 @@ import ItemContainer from '../ItemContainer';
 import theme from 'themes';
 import Footer from './Footer';
 import {GenericStateType} from 'types/genericContextTypes';
+import {TextOrchestrationContext} from 'components/apps/Messages/context/textOrchestration';
 
 function ListHeader() {
   return <View style={styles.listHeader} />;
@@ -22,10 +23,9 @@ function ListHeader() {
 
 const List: FC<{
   conversation: DigestedConversation | undefined;
-  scrollToBottom: GenericStateType<boolean>;
-}> = ({conversation, scrollToBottom}) => {
+}> = ({conversation}) => {
   const {width, height} = useWindowDimensions();
-
+  const textOrchestration = useContext(TextOrchestrationContext);
   const aref = useAnimatedRef<Animated.ScrollView>();
   const scrollHandler = useScrollViewOffset(aref);
   const renderDigestedConversation: ListRenderItem<
@@ -42,11 +42,18 @@ const List: FC<{
   );
 
   useEffect(() => {
-    if (scrollToBottom.state) {
-      aref.current?.scrollToEnd({animated: true});
-      scrollToBottom.set(false);
+    if (textOrchestration.scrollTo.state != null) {
+      if (textOrchestration.scrollTo.state === -1) {
+        aref.current?.scrollToEnd({animated: true});
+      } else {
+        aref.current?.scrollTo({
+          y: textOrchestration.scrollTo.state,
+          animated: true,
+        });
+      }
+      textOrchestration.scrollTo.set(undefined);
     }
-  }, [scrollToBottom.state]);
+  }, [textOrchestration.scrollTo.state]);
 
   return (
     <Animated.FlatList

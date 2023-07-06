@@ -15,9 +15,10 @@ import {
 } from 'components/apps/Messages/context/digestConversation/types';
 import {GlyphBubble} from './GlyphBubble';
 import {EmojiBubble} from './EmojiBubble';
-import {delayFor} from 'common';
-import {MessagesContext} from 'components/apps/Messages/context';
 import {TypingBubble} from './TypingBubble';
+
+import {TextOrchestrationContext} from 'components/apps/Messages/context/textOrchestration';
+import {delayFor} from 'common';
 
 const ItemContainer: FC<{
   item: DigestedConversationListItem;
@@ -26,7 +27,7 @@ const ItemContainer: FC<{
   scrollRef: React.RefObject<Animated.ScrollView>;
   group: boolean;
 }> = ({item, scrollHandler, scrollRef, group, index}) => {
-  const context = useContext(MessagesContext);
+  const context = useContext(TextOrchestrationContext);
   const opacity = useSharedValue(item.delay ? 0 : 1);
 
   const isWaiting =
@@ -88,7 +89,7 @@ const ItemContainer: FC<{
       if (isWaiting) {
         await delayFor(1000 + delay);
       }
-      context.textFinished(true);
+      context.textIsFinished(true);
     };
     if (item.delay) {
       toBottom(item.delay);

@@ -151,7 +151,10 @@ const TextOrchestrationContextProvider: FC<
         },
         pickRoute: setPickedRoute,
         textIsFinished: setTextFinished,
-        scrollTo: scrollTo,
+        scrollTo: {
+          state: scrollTo,
+          set: setScrollTo,
+        },
       }}>
       {props.children}
     </TextOrchestrationContext.Provider>

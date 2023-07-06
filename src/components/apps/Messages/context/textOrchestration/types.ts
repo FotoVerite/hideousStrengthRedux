@@ -3,6 +3,7 @@ import {APP_NAMES} from 'components/apps/types';
 import {ExchangeBlockType} from '../types';
 import {CONTACT_NAMES} from '../usersMapping';
 import {SharedValue} from 'react-native-reanimated';
+import {GenericOrUndefinedStateType} from 'types/genericContextTypes';
 
 export type TextOrchestrationContextTypeDigest = {
   children: ReactNode;
@@ -14,7 +15,7 @@ export type TextOrchestrationContextTypeDigested = PropsWithChildren<{
   };
   pickRoute: React.Dispatch<React.SetStateAction<string | undefined>>;
   textIsFinished: React.Dispatch<React.SetStateAction<boolean>>;
-  scrollTo?: number;
+  scrollTo: GenericOrUndefinedStateType<number>;
 }>;
 
 export type MessageEventType = {

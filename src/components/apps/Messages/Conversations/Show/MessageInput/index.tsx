@@ -1,15 +1,14 @@
 import React, {FC, useState} from 'react';
 import {StyleSheet, useWindowDimensions} from 'react-native';
+import {BlurView} from '@react-native-community/blur';
 import Animated from 'react-native-reanimated';
-import theme from 'themes';
+
 import MessageTextInput from './MessageTextInput';
 import OptionList from './OptionList';
-import {BlurView} from '@react-native-community/blur';
-import {GenericStateType} from 'types/genericContextTypes';
 
-const MessageInput: FC<{scrollToBottom: GenericStateType<boolean>}> = ({
-  scrollToBottom,
-}) => {
+import theme from 'themes';
+
+const MessageInput: FC = () => {
   const {width, height} = useWindowDimensions();
 
   const [active, setActive] = useState(false);
@@ -24,7 +23,7 @@ const MessageInput: FC<{scrollToBottom: GenericStateType<boolean>}> = ({
         reducedTransparencyFallbackColor="white"
       />
       <MessageTextInput active={activeObject} />
-      <OptionList active={activeObject} scrollToBottom={scrollToBottom} />
+      <OptionList active={activeObject} />
     </Animated.View>
   );
 };

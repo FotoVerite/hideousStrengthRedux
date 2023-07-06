@@ -13,18 +13,19 @@ import {Row} from 'components/common/layout';
 import theme from 'themes';
 import {MessagesContext} from 'components/apps/Messages/context';
 import {GenericStateType} from 'types/genericContextTypes';
+import {TextOrchestrationContext} from 'components/apps/Messages/context/textOrchestration';
 
 const Option: FC<{
   active: GenericStateType<boolean>;
   totalHeight: React.Dispatch<React.SetStateAction<number>>;
   option: {key: string; value: string};
 }> = ({active, option, totalHeight}) => {
-  const context = useContext(MessagesContext);
+  const context = useContext(TextOrchestrationContext);
   return (
     <TouchableOpacity
       onPress={() => {
         active.set(false);
-        context.startRoute(option.key);
+        context.pickRoute(option.key);
       }}>
       <Row
         style={styles.container}
