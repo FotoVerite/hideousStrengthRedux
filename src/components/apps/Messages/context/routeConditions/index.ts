@@ -1,14 +1,13 @@
 import {
-  MessageRouteEventType,
-  MessageRouteType,
-  RouteConditionsType,
-} from './types';
+  EventOrchestraObjectType,
+  MessageAppContactsEventType,
+} from 'components/EventOrchestra/context/types';
+import {ConversationType, MessageRouteType} from '../types';
 import {CONTACT_NAMES} from '../usersMapping';
-import {MessageEventType} from '../textOrchestration/types';
 
 const contactHasBeenViewedCheck = (
   name: CONTACT_NAMES,
-  messageEvents: MessageRouteEventType,
+  messageEvents: MessageAppContactsEventType,
   conditions: RouteConditionsType,
 ) => {
   const viewCondition = conditions[name]?.views;
@@ -21,7 +20,7 @@ const contactHasBeenViewedCheck = (
 
 const routeHasBeenChosenCheck = (
   name: CONTACT_NAMES,
-  messageEvents: MessageRouteEventType,
+  messageEvents: MessageAppContactsEventType,
   conditions: RouteConditionsType,
 ) => {
   const routeConditions = conditions[name]?.routes || {};
@@ -39,36 +38,34 @@ const routeHasBeenChosenCheck = (
   }, true);
 };
 
-const conditionsMet = (
-  state: MessageEventType,
+const messageAppConditionsMet = (
+  state: MessageAppContactsEventType,
   conditions: RouteConditionsType,
 ) => {
   let ret = false;
   Object.keys(conditions).forEach((key: string) => {
     ret =
-      ret &&
-      contactHasBeenViewedCheck(
-        key as CONTACT_NAMES,
-        state.Message,
-        conditions,
-      );
+      ret && contactHasBeenViewedCheck(key as CONTACT_NAMES, state, conditions);
     ret =
-      ret &&
-      routeHasBeenChosenCheck(key as CONTACT_NAMES, state.Message, conditions);
+      ret && routeHasBeenChosenCheck(key as CONTACT_NAMES, state, conditions);
   });
   return ret;
 };
 
 export const findAvailableRoutes = (
-  state: MessageEventType,
-  routes?: MessageRouteType[],
+  name: CONTACT_NAMES,
+  routes: MessageRouteType[],
+  state: EventOrchestraObjectType,
 ) => {
-  if (routes == null) {
+  if (routes == null || routes.length == 0) {
     return undefined;
   } else {
-    return routes.filter(
-      route =>
-        route.conditions == null || conditionsMet(state, route.conditions),
-    )[0];
+    return routes.filter(route => {
+      return (
+        !Object.keys(state.Message[name]?.routes || {}).includes(route.id) &&
+        (route.conditions == null ||
+          messageAppConditionsMet(state.Message, route.conditions))
+      );
+    })[0];
   }
 };

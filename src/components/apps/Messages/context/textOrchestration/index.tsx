@@ -16,6 +16,7 @@ import {
 } from '../types';
 import {delayFor} from 'common';
 import {MessagesContext} from '../index';
+import {findAvailableRoutes} from '../routeConditions';
 
 //defaults for empty app
 export const TextOrchestrationContext =
@@ -109,7 +110,21 @@ const TextOrchestrationContextProvider: FC<
   };
 
   useEffect(() => {
-    if (pickedRoute) {
+    if (
+      pickedRoute &&
+      digestedConversation &&
+      digestedConversation.route != null
+    ) {
+      eventContext.events.set(state => {
+        const newState = Object.assign({}, state);
+        const seenRoutes = newState.Message[digestedConversation.name]!.routes!;
+        seenRoutes[digestedConversation.route!.id] = {
+          chosen: pickedRoute,
+          date: new Date(),
+          position: Object.keys(seenRoutes).length + 1,
+        };
+        return newState;
+      });
       startTheRoute();
     }
   }, [pickedRoute]);
@@ -132,6 +147,15 @@ const TextOrchestrationContextProvider: FC<
         incrementRouteIndexes(exchange);
       } else {
         setPickedRoute(undefined);
+        addToConversation(state => {
+          const newState = Object.assign({}, state);
+          newState.route = findAvailableRoutes(
+            digestedConversation.name,
+            digestedConversation.availableRoutes,
+            eventContext.events.state,
+          );
+          return newState;
+        });
         setRouteIndexes({exchangeIndex: 0, messageIndex: 0});
       }
     }

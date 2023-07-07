@@ -4,9 +4,7 @@ import {DataSourceParam} from '@shopify/react-native-skia';
 
 import {GenericOrUndefinedStateType} from 'types/genericContextTypes';
 import {DigestedConversationListItem} from './digestConversation/types';
-import {CONTACT_NAMES, UserMappingType} from './usersMapping';
-import {APP_NAMES} from 'components/apps/types';
-import {Route} from '@react-navigation/native';
+import {CONTACT_NAMES} from './usersMapping';
 
 export type MessagesSharedValuesType = {
   wordInputShake: SharedValue<number>;
@@ -26,6 +24,17 @@ export type MessagesContextTypeDigested = PropsWithChildren<{
   };
   media: GenericOrUndefinedStateType<DataSourceParam>;
 }>;
+
+export type RouteConditionsType = {
+  [key in CONTACT_NAMES]?: {views?: number; routes?: {[key: string]: string}};
+};
+
+export type MessageRouteType = {
+  id: string;
+  conditions?: RouteConditionsType;
+  options: [{key: string; value: string}];
+  routes: {[key: string]: ExchangeBlockType[]};
+};
 
 export type ConversationType = {
   tags: string[];
@@ -47,6 +56,7 @@ export type DigestedConversation = {
   heroImage: DataSourceParam;
   exchanges: DigestedConversationListItem[];
   group?: boolean;
+  availableRoutes: MessageRouteType[];
   route?: MessageRouteType;
   interfaceColor: string;
 };

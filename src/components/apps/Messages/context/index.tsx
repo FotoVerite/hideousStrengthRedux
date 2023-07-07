@@ -1,13 +1,19 @@
 import React, {FC, useContext, useState} from 'react';
 import {
+  ConversationExchangeType,
   ConversationType,
   DigestedConversation,
+  ExchangeBlockType,
+  MessageRouteType,
   MessagesContextTypeDigest,
   MessagesContextTypeDigested,
 } from './types';
 import {zola} from '../assets/messages/zola';
 import {chris} from '../assets/messages/chris';
-import {digestConversation as digestExchanges} from './digestConversation';
+import {
+  TIME_OPTIONS,
+  digestConversation as digestExchanges,
+} from './digestConversation';
 import {useWindowDimensions} from 'react-native';
 import {ApplicationContext} from 'context';
 import {seamless} from '../assets/messages/seamless';
@@ -24,6 +30,10 @@ import {APP_NAMES} from 'components/apps/types';
 import {CONTACT_NAMES} from './usersMapping';
 import {useSharedValue} from 'react-native-reanimated';
 import {findAvailableRoutes} from './routeConditions';
+import {
+  MessageRouteEventDataType,
+  MessageRouteEventType,
+} from 'components/EventOrchestra/context/types';
 
 //defaults for empty app
 export const MessagesContext = React.createContext<MessagesContextTypeDigested>(
@@ -71,9 +81,48 @@ const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
     });
   };
 
+  const createBlockFromSeenRoute = (
+    digested: DigestedConversation,
+    routeId: string,
+    data: MessageRouteEventDataType,
+    availableRoutes: {[index: string]: {[key: string]: ExchangeBlockType[]}},
+  ) => {
+    const lastNode = digested.exchanges[digested.exchanges.length - 1];
+    const offset = lastNode.offset + lastNode.height + lastNode.paddingBottom;
+    const conversationBlock: ConversationExchangeType = {
+      time: data.date.toLocaleDateString('en-US', TIME_OPTIONS as any),
+      exchanges: availableRoutes[routeId][data.chosen],
+    };
+    digested.exchanges = digested.exchanges.concat(
+      digestExchanges(
+        [conversationBlock],
+        digested.group,
+        width,
+        applicationContext.fonts.get('HelveticaNeue'),
+        applicationContext.fonts.get('NotoColor'),
+        offset,
+      ),
+    );
+  };
+
+  const appendSeenRoutes = (digested: DigestedConversation) => {
+    if (digested.availableRoutes == null) {
+      return;
+    }
+    const routes: {[index: string]: {[key: string]: ExchangeBlockType[]}} = {};
+    const seenRoutes =
+      eventContext.events.state.Message[digested.name]?.routes || {};
+    digested.availableRoutes.forEach(
+      route => (routes[route.id] = route.routes),
+    );
+    Object.keys(seenRoutes).forEach(routeId =>
+      createBlockFromSeenRoute(digested, routeId, seenRoutes[routeId], routes),
+    );
+  };
+
   const setDigestedConversation = (conversation?: ConversationType) => {
     if (conversation) {
-      const {exchanges, routes, ...conversationProps} = conversation;
+      const {exchanges, ...conversationProps} = conversation;
       const digestedExchanges = digestExchanges(
         exchanges,
         conversationProps.group,
@@ -83,8 +132,14 @@ const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
       );
       const digested = Object.assign(conversationProps, {
         exchanges: digestedExchanges,
-        route: findAvailableRoutes(eventContext.events.state, routes),
+        availableRoutes: conversation.routes || [],
+        route: findAvailableRoutes(
+          conversation.name,
+          conversation.routes || [],
+          eventContext.events.state,
+        ),
       });
+      appendSeenRoutes(digested);
       _setConversation(digested);
       setConversationAsViewed(digested.name);
     } else {

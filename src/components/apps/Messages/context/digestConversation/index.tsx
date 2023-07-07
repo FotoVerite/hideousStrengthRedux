@@ -16,8 +16,16 @@ import {createImageItem} from './ImageItem';
 import {createGlyphItem} from './GlyphItem';
 import {createEmojiItem} from './EmojiItem';
 
-const HEADER_PADDING = 50;
 export const BUBBLE_PADDING = 18;
+
+export const TIME_OPTIONS = {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: true,
+};
 
 export const digestConversation = (
   conversationExchanges: ConversationExchangeType[],
@@ -25,9 +33,10 @@ export const digestConversation = (
   width: number,
   font: SkFont,
   emojiFont: SkFont,
+  offset?: number = 50,
 ) => {
   const ret: DigestedConversationListItem[] = [];
-  let positionAcc = HEADER_PADDING;
+  let positionAcc = offset;
   const itemConfiguration: DigestConfigurationType = {
     font: font,
     emojiFont: emojiFont,
@@ -130,8 +139,12 @@ export const startNewBlock = (
     positionAcc: startingPosition,
     group: false,
   };
+
   const time = createTimeItem(
-    {time: new Date().toLocaleDateString('en-US', {}), exchanges: []},
+    {
+      time: new Date().toLocaleDateString('en-US', TIME_OPTIONS as any),
+      exchanges: [],
+    },
     itemConfiguration.width,
     itemConfiguration.positionAcc,
   );
