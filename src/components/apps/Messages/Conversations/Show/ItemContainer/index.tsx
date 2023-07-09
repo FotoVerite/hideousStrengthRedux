@@ -81,6 +81,12 @@ const ItemContainer: FC<{
     }
   }, [item]);
 
+  const MemoTimeBubble = useMemo(() => {
+    if (item.type === DigestedItemTypes.TIME) {
+      return <P style={[styles.time]}>{item.content}</P>;
+    }
+  }, [item]);
+
   useEffect(() => {
     const toBottom = async (delay: number) => {
       await delayFor(delay);
@@ -111,9 +117,7 @@ const ItemContainer: FC<{
         },
         fadeInAnimation,
       ]}>
-      {item.type === DigestedItemTypes.TIME && (
-        <P style={[styles.time]}>{item.content}</P>
-      )}
+      {MemoTimeBubble}
       {/* <View style={{position: 'absolute'}}>
         {MemoEmojiBubble}
         {MemoTextBubble}

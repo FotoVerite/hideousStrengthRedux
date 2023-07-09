@@ -33,8 +33,8 @@ const TextBoxScreen: FC<{
   const {width, height} = useWindowDimensions();
   const opacity = useSharedValue(0);
   const insets = useSafeAreaInsets();
-  const font = applicationContext.fonts.get('SFPro');
-  const textFont = Skia.Font(font.getTypeface(), 20);
+  const font = applicationContext.fonts.SFPro;
+  const textFont = Skia.Font(font.getTypeface() || undefined, 20);
   const [screens, setScreens] = useState<{name: string; glyphs: Glyph[]}[]>([]);
 
   useEffect(() => {

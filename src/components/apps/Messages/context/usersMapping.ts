@@ -30,7 +30,7 @@ export enum CONTACT_NAMES {
 }
 
 export type UserMappingType = {
-  avatar?: DataSourceParam;
+  avatar?: string;
   colors: string[];
 };
 export const contactConsts: {[key in CONTACT_NAMES]: UserMappingType} = {

@@ -3,6 +3,7 @@ import {PropsWithChildren, ReactNode} from 'react';
 
 type skFontNames = 'SFPro' | 'NotoColor' | 'HelveticaNeue';
 export type skFontMap = Map<skFontNames, SkFont>;
+export type skFontRecords = Record<skFontNames, SkFont>;
 
 export type ApplicationContextTypeDigest = {
   fonts: skFontMap;
@@ -10,6 +11,6 @@ export type ApplicationContextTypeDigest = {
 };
 
 export type ApplicationContextTypeDigested = PropsWithChildren<{
-  fonts: skFontMap;
+  fonts: skFontRecords;
   ready: boolean;
 }>;

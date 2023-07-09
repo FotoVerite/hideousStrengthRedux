@@ -40,14 +40,16 @@ export const WaitingBubble: FC<
     scrollHandler,
   );
 
-  const waitingWidth = 125;
+  const waitingWidth = 75;
   const waitingHeight = 38;
-  clip = BubblePath(waitingWidth, waitingHeight - 5, 16, false);
+  clip = BubblePath(waitingWidth, waitingHeight - 5, 12, false);
   flipPath(clip, waitingWidth);
 
-  clip.addCircle(18, 25, 10);
-  clip.addCircle(18, 25, 10);
-  clip.addCircle(5, 33, 4);
+  clip.addCircle(13, 26, 7);
+  clip.addCircle(13, 26, 7);
+  clip.addCircle(4, 33, 3);
+
+  const dotHeight = (waitingHeight - 2.5) / 2;
 
   return (
     <Row style={styles.row}>
@@ -76,17 +78,13 @@ export const WaitingBubble: FC<
                 end={vec(0, waitingHeight)}
               />
             </Rect>
-            <Dot height={waitingHeight / 2} width={40} delay={0} />
+            <Dot height={dotHeight} width={28} delay={0} />
             <Dot
-              height={waitingHeight / 2}
-              width={(waitingWidth + 16) / 2}
-              delay={1000}
+              height={dotHeight}
+              width={(waitingWidth + 12) / 2}
+              delay={500}
             />
-            <Dot
-              height={waitingHeight / 2}
-              width={waitingWidth - 24}
-              delay={2000}
-            />
+            <Dot height={dotHeight} width={waitingWidth - 15} delay={1000} />
           </Group>
         </Canvas>
       </View>

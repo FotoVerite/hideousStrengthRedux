@@ -3,9 +3,12 @@ import {SharedValue} from 'react-native-reanimated';
 import {DataSourceParam} from '@shopify/react-native-skia';
 
 import {GenericOrUndefinedStateType} from 'types/genericContextTypes';
-import {DigestedConversationListItem} from './digestConversation/types';
 import {CONTACT_NAMES} from './usersMapping';
 
+import {
+  DigestedConversationListItem,
+  DigestedItemTypes,
+} from './digestConversation/types';
 export type MessagesSharedValuesType = {
   wordInputShake: SharedValue<number>;
   infoOpened: SharedValue<number>;
@@ -77,23 +80,30 @@ export type MessageType =
   | ImageMessageWithMeta
   | EmojiMessageWithMeta;
 
-interface MessageWithMetaType {
+export type MessageWithMetaType =
+  | EmojiMessageWithMeta
+  | GlyphMessageWithMeta
+  | StringMessageWithMeta
+  | ImageMessageWithMeta;
+
+interface AbstractMessageWithMetaType {
+  message: string;
   reaction?: ReactionType;
 }
 
-export interface StringMessageWithMeta extends MessageWithMetaType {
-  type: 'string';
-  message: string;
+export interface StringMessageWithMeta extends AbstractMessageWithMetaType {
+  type: DigestedItemTypes.STRING;
 }
 
-export interface ImageMessageWithMeta extends MessageWithMetaType {
-  type: 'image';
-  message: DataSourceParam;
+export interface ImageMessageWithMeta extends AbstractMessageWithMetaType {
+  type: DigestedItemTypes.IMAGE;
 }
 
-export interface EmojiMessageWithMeta extends MessageWithMetaType {
-  type: 'emoji';
-  message: string;
+export interface EmojiMessageWithMeta extends AbstractMessageWithMetaType {
+  type: DigestedItemTypes.EMOJI;
+}
+export interface GlyphMessageWithMeta extends AbstractMessageWithMetaType {
+  type: DigestedItemTypes.GLYPH;
 }
 
 export type ReactionType = {name: string; color: string};

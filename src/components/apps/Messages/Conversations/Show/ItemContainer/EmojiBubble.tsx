@@ -6,23 +6,18 @@ import {Image, Text, View} from 'react-native';
 import {Row} from 'components/common/layout';
 import {StyleSheet} from 'react-native';
 import Reaction from './Reaction';
-import {DigestedConversationStringItemType} from 'components/apps/Messages/context/digestConversation/types';
+import {DigestedConversationEmojiItemType} from 'components/apps/Messages/context/digestConversation/types';
 
 import theme from 'themes';
 import {P} from 'components/common/StyledText';
 
 export const EmojiBubble: FC<
-  DigestedConversationStringItemType & {
+  DigestedConversationEmojiItemType & {
     group?: boolean;
   }
 > = ({avatar, colors, content, leftSide, height, name, reaction, group}) => {
   return (
-    <Row
-      style={{
-        alignItems: 'flex-end',
-        padding: 0,
-        margin: 0,
-      }}>
+    <Row style={styles.row}>
       {leftSide && (
         <View style={styles.avatarContainer}>
           {avatar && <Image source={avatar} style={styles.avatar} />}

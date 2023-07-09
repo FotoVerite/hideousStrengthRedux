@@ -4,7 +4,6 @@ import {
   ApplicationContextTypeDigested,
   skFontMap,
 } from './types';
-import {useFont} from '@shopify/react-native-skia';
 
 //defaults for empty app
 export const ApplicationContext =

@@ -11,7 +11,7 @@ import React, {useRef} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Messages from 'components/apps/Messages';
 import ApplicationContextProvider from 'context';
-import {skFontMap} from 'context/types';
+import {skFontRecords} from 'context/types';
 import {useFont} from '@shopify/react-native-skia';
 import TextBoxEngine from 'components/TextBoxEngine';
 import TextBoxEngineContextProvider from 'components/TextBoxEngine/context';
@@ -19,8 +19,6 @@ import {View} from 'react-native';
 import EventOrchestraContextProvider from 'components/EventOrchestra/context';
 
 function App(): JSX.Element {
-  const fonts: skFontMap = new Map();
-
   const SFPro = useFont(require('@applicationAssets/fonts/SFPro.ttf'), 16);
   const NotoColor = useFont(
     require('@applicationAssets/fonts/NotoColorEmoji.ttf'),
@@ -35,15 +33,15 @@ function App(): JSX.Element {
   if (!SFPro || !NotoColor || !HelveticaNeue) {
     return <></>;
   } else {
-    fonts.set('SFPro', SFPro);
-
-    fonts.set('NotoColor', NotoColor);
-
-    fonts.set('HelveticaNeue', HelveticaNeue);
+    const skFontRecord: skFontRecords = {
+      ['SFPro']: SFPro,
+      ['NotoColor']: NotoColor,
+      ['HelveticaNeue']: HelveticaNeue,
+    };
 
     return (
       <SafeAreaProvider>
-        <ApplicationContextProvider fonts={fonts}>
+        <ApplicationContextProvider fonts={skFontRecord}>
           <EventOrchestraContextProvider>
             <TextBoxEngineContextProvider>
               <NavigationContainer>

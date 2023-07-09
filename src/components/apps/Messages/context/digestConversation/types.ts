@@ -7,6 +7,7 @@ import {
   SkPath,
   Vector,
 } from '@shopify/react-native-skia';
+import {CONTACT_NAMES} from '../usersMapping';
 
 export enum DigestedItemTypes {
   EMOJI = 'emoji',
@@ -34,7 +35,7 @@ export type DigestConfigurationType = {
   group?: boolean;
 };
 
-export interface DigestedConversationItemType {
+export interface AbstractDigestedConversationItemType {
   height: number;
   width: number;
   offset: number;
@@ -43,60 +44,47 @@ export interface DigestedConversationItemType {
 }
 
 export interface DigestedConversationTimeType
-  extends DigestedConversationItemType {
+  extends AbstractDigestedConversationItemType {
   content: string;
+  alignItems: undefined;
   type: DigestedItemTypes.TIME;
-  alignItems?: undefined;
+}
+
+export interface AbstractMetaDigestedConversationItemType
+  extends AbstractDigestedConversationItemType {
+  alignItems: FlexAlignType;
+  avatar?: string;
+  colors: string[];
+  name: CONTACT_NAMES;
+  leftSide: boolean;
+  reaction?: ReactionType;
 }
 
 export interface DigestedConversationStringItemType
-  extends DigestedConversationItemType {
-  name: string;
+  extends AbstractMetaDigestedConversationItemType {
   clip: SkPath;
-  colors: string[];
   content: React.JSX.Element[];
   type: DigestedItemTypes.STRING;
-  avatar?: string;
-  alignItems: FlexAlignType;
-  leftSide: boolean;
-  reaction?: ReactionType;
 }
 
 export interface DigestedConversationGlyphItemType
-  extends DigestedConversationItemType {
-  name: string;
-  clip: any;
-  colors: string[];
-  content: GlyphItemContentType;
+  extends AbstractMetaDigestedConversationItemType {
+  clip: SkPath;
+  content: React.JSX.Element[];
   type: DigestedItemTypes.GLYPH;
-  avatar?: string;
-  alignItems: FlexAlignType;
-  leftSide: boolean;
-  reaction?: ReactionType;
 }
 
 export interface DigestedConversationImageItemType
-  extends DigestedConversationItemType {
-  name: string;
-  clip: any;
-  colors: string[];
-  content: DataSourceParam;
+  extends AbstractMetaDigestedConversationItemType {
+  clip: SkPath;
+  content: string;
   type: DigestedItemTypes.IMAGE;
-  avatar?: DataSourceParam;
-  alignItems: FlexAlignType;
-  leftSide: boolean;
-  reaction?: ReactionType;
 }
 
 export interface DigestedConversationEmojiItemType
-  extends DigestedConversationItemType {
-  name: string;
+  extends AbstractMetaDigestedConversationItemType {
   content: string;
   type: DigestedItemTypes.EMOJI;
-  avatar?: DataSourceParam;
-  alignItems: FlexAlignType;
-  leftSide: boolean;
-  reaction?: ReactionType;
 }
 export type DigestedConversationListItem =
   | DigestedConversationEmojiItemType

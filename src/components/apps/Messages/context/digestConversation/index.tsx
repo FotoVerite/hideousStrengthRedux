@@ -1,20 +1,14 @@
 import {SkFont} from '@shopify/react-native-skia';
-import {
-  DigestConfigurationType,
-  DigestedConversationListItem,
-  DigestedItemTypes,
-} from './types';
+import {DigestConfigurationType, DigestedConversationListItem} from './types';
 import {createTimeItem} from './TimeItem';
 import {
   ConversationExchangeType,
-  ConversationType,
   ExchangeBlockType,
   MessageType,
+  MessageWithMetaType,
 } from '../types';
 import {createStringItem} from './StringItem';
-import {createImageItem} from './ImageItem';
-import {createGlyphItem} from './GlyphItem';
-import {createEmojiItem} from './EmojiItem';
+import {SkMessageItem} from './SkMessageItem';
 
 export const BUBBLE_PADDING = 18;
 
@@ -29,11 +23,11 @@ export const TIME_OPTIONS = {
 
 export const digestConversation = (
   conversationExchanges: ConversationExchangeType[],
-  group?: boolean,
+  group: boolean = false,
   width: number,
   font: SkFont,
   emojiFont: SkFont,
-  offset?: number = 50,
+  offset: number = 50,
 ) => {
   const ret: DigestedConversationListItem[] = [];
   let positionAcc = offset;
@@ -57,68 +51,9 @@ export const digestConversation = (
       // SIMPLE ARRAY
       exchange.messages.forEach((message, index) => {
         const hasTail = index === exchange.messages.length - 1;
-
-        if (message.hasOwnProperty('type')) {
-          if (message.type === DigestedItemTypes.EMOJI) {
-            const emojiBubble = createEmojiItem(
-              itemConfiguration,
-              exchange.name,
-              message.message,
-              hasTail,
-              message.reaction,
-            );
-            ret.push(emojiBubble);
-            itemConfiguration.positionAcc +=
-              emojiBubble.height + emojiBubble.paddingBottom;
-          }
-          if (message.type === 'string') {
-            const textBubble = createStringItem(
-              itemConfiguration,
-              exchange.name,
-              message.message,
-              hasTail,
-              message.reaction,
-            );
-            ret.push(textBubble);
-            itemConfiguration.positionAcc +=
-              textBubble.height + textBubble.paddingBottom;
-          }
-          if (message.type === 'glyph') {
-            const glyphBubble = createGlyphItem(
-              itemConfiguration,
-              exchange.name,
-              message.message,
-              hasTail,
-              message.reaction,
-            );
-            ret.push(glyphBubble);
-            itemConfiguration.positionAcc +=
-              glyphBubble.height + glyphBubble.paddingBottom;
-          }
-          if (message.type === 'image') {
-            const imageBubble = createImageItem(
-              itemConfiguration,
-              exchange.name,
-              message.message,
-              hasTail,
-              message.reaction,
-            );
-            ret.push(imageBubble);
-            itemConfiguration.positionAcc +=
-              imageBubble.height + imageBubble.paddingBottom;
-          }
-        } else {
-          const textBubble = createStringItem(
-            itemConfiguration,
-            exchange.name,
-            message,
-            hasTail,
-            message.reaction,
-          );
-          ret.push(textBubble);
-          itemConfiguration.positionAcc +=
-            textBubble.height + textBubble.paddingBottom;
-        }
+        const item = createItem(itemConfiguration, exchange, message, hasTail);
+        ret.push(item);
+        itemConfiguration.positionAcc += item.height + item.paddingBottom;
       });
     });
   });
@@ -168,55 +103,29 @@ export const addToBlock = (
     positionAcc: startingPosition,
     group: false,
   };
+  return createItem(itemConfiguration, exchange, message, hasTail);
+};
+
+const createItem = (
+  itemConfiguration: DigestConfigurationType,
+  exchange: ExchangeBlockType,
+  message: MessageType,
+  hasTail: boolean,
+) => {
   if (message.hasOwnProperty('type')) {
-    if (message.type === DigestedItemTypes.EMOJI) {
-      const emojiBubble = createEmojiItem(
-        itemConfiguration,
-        exchange.name,
-        message.message,
-        hasTail,
-        message.reaction,
-      );
-      return emojiBubble;
-    }
-    if (message.type === 'string') {
-      const textBubble = createStringItem(
-        itemConfiguration,
-        exchange.name,
-        message.message,
-        hasTail,
-        message.reaction,
-      );
-      return textBubble;
-    }
-    if (message.type === 'glyph') {
-      const glyphBubble = createGlyphItem(
-        itemConfiguration,
-        exchange.name,
-        message.message,
-        hasTail,
-        message.reaction,
-      );
-      return glyphBubble;
-    }
-    if (message.type === 'image') {
-      const imageBubble = createImageItem(
-        itemConfiguration,
-        exchange.name,
-        message.message,
-        hasTail,
-        message.reaction,
-      );
-      return imageBubble;
-    }
+    return SkMessageItem(
+      itemConfiguration,
+      message as MessageWithMetaType,
+      exchange.name,
+      hasTail,
+    );
   } else {
-    const textBubble = createStringItem(
+    return createStringItem(
       itemConfiguration,
       exchange.name,
-      message,
+      message as string,
       hasTail,
-      message.reaction,
+      undefined,
     );
-    return textBubble;
   }
 };

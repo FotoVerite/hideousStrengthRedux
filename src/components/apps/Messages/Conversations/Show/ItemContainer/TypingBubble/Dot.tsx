@@ -23,28 +23,40 @@ export const Dot: FC<{height: number; width: number; delay: number}> = ({
 }) => {
   const color = useSharedValue(0);
 
+  const blink = withSequence(
+    withTiming(1, {
+      duration: 250,
+      easing: Easing.inOut(Easing.ease),
+    }),
+    withTiming(
+      0,
+      {
+        duration: 250,
+        easing: Easing.inOut(Easing.ease),
+      },
+      () =>
+        (color.value = withRepeat(
+          withDelay(
+            1000,
+            withSequence(
+              withTiming(1, {
+                duration: 250,
+                easing: Easing.inOut(Easing.ease),
+              }),
+              withTiming(0, {
+                duration: 250,
+                easing: Easing.inOut(Easing.ease),
+              }),
+            ),
+          ),
+          -1,
+        )),
+    ),
+  );
+
   const repeatForever = () => {
     'worklet';
-    color.value = withDelay(
-      delay,
-      withRepeat(
-        withDelay(
-          2000,
-          withSequence(
-            // split duration of 500ms to 250ms
-            withTiming(1, {
-              duration: 500,
-              easing: Easing.inOut(Easing.ease),
-            }),
-            withTiming(0, {
-              duration: 500,
-              easing: Easing.inOut(Easing.ease),
-            }),
-          ),
-        ),
-        -1,
-      ),
-    );
+    color.value = withDelay(delay, blink);
   };
 
   useEffect(() => {

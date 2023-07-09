@@ -45,7 +45,7 @@ const TextBoxEngineContextProvider: FC<
   const eventOrchestra = useContext(EventOrchestraContext);
   const appContext = useContext(ApplicationContext);
 
-  const font = appContext.fonts.get('SFPro');
+  const font = appContext.fonts.SFPro;
 
   const setDigestDialogues = useCallback(
     (dialogue: TextBoxDialoguesType) => {

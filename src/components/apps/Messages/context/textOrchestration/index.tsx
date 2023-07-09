@@ -63,6 +63,9 @@ const TextOrchestrationContextProvider: FC<
   };
 
   const getConversationOffset = (state: DigestedConversation) => {
+    if (state.exchanges == undefined) {
+      return;
+    }
     const lastNode = state.exchanges[state.exchanges.length - 1];
     return lastNode.offset + lastNode.height + lastNode.paddingBottom;
   };
@@ -73,8 +76,8 @@ const TextOrchestrationContextProvider: FC<
       const timeNode = startNewBlock(
         getConversationOffset(newState),
         width,
-        applicationContext.fonts.get('HelveticaNeue'),
-        applicationContext.fonts.get('NotoColor'),
+        applicationContext.fonts.HelveticaNeue,
+        applicationContext.fonts.NotoColor,
       );
       newState.exchanges = [...newState.exchanges, timeNode];
       return newState;
@@ -94,8 +97,8 @@ const TextOrchestrationContextProvider: FC<
         hasTail,
         getConversationOffset(newState),
         width,
-        applicationContext.fonts.get('HelveticaNeue'),
-        applicationContext.fonts.get('NotoColor'),
+        applicationContext.fonts.HelveticaNeue,
+        applicationContext.fonts.NotoColor,
       );
       messageNode.delay = 50;
       newState.exchanges = [...newState.exchanges, messageNode];

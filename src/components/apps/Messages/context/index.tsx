@@ -28,7 +28,6 @@ import {EventOrchestraContext} from 'components/EventOrchestra/context';
 import {steveLitt} from '../assets/messages/steve_litt';
 import {APP_NAMES} from 'components/apps/types';
 import {CONTACT_NAMES} from './usersMapping';
-import {useSharedValue} from 'react-native-reanimated';
 import {findAvailableRoutes} from './routeConditions';
 import {
   MessageRouteEventDataType,
@@ -98,8 +97,8 @@ const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
         [conversationBlock],
         digested.group,
         width,
-        applicationContext.fonts.get('HelveticaNeue'),
-        applicationContext.fonts.get('NotoColor'),
+        applicationContext.fonts.HelveticaNeue,
+        applicationContext.fonts.NotoColor,
         offset,
       ),
     );
@@ -127,8 +126,8 @@ const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
         exchanges,
         conversationProps.group,
         width,
-        applicationContext.fonts.get('HelveticaNeue'),
-        applicationContext.fonts.get('NotoColor'),
+        applicationContext.fonts.HelveticaNeue,
+        applicationContext.fonts.NotoColor,
       );
       const digested = Object.assign(conversationProps, {
         exchanges: digestedExchanges,
