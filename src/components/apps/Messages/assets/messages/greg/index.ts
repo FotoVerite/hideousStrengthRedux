@@ -14,7 +14,7 @@ export const greg: ConversationType = {
   interfaceColor: getColorFromContacts(CONTACT_NAMES.GREG)[0],
   exchanges: [
     {
-      time: 'May 28th, 2019 11:34pm',
+      time: '2019-05-28T23:34:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.SELF,

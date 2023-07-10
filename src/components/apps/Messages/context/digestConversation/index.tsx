@@ -9,6 +9,7 @@ import {
 } from '../types';
 import {createStringItem} from './StringItem';
 import {SkMessageItem} from './SkMessageItem';
+import {isMessageWithMeta} from '../utility';
 
 export const BUBBLE_PADDING = 18;
 
@@ -77,7 +78,7 @@ export const startNewBlock = (
 
   const time = createTimeItem(
     {
-      time: new Date().toLocaleDateString('en-US', TIME_OPTIONS as any),
+      time: new Date().toISOString(),
       exchanges: [],
     },
     itemConfiguration.width,
@@ -112,18 +113,13 @@ const createItem = (
   message: MessageType,
   hasTail: boolean,
 ) => {
-  if (message.hasOwnProperty('type')) {
-    return SkMessageItem(
-      itemConfiguration,
-      message as MessageWithMetaType,
-      exchange.name,
-      hasTail,
-    );
+  if (isMessageWithMeta(message)) {
+    return SkMessageItem(itemConfiguration, message, exchange.name, hasTail);
   } else {
     return createStringItem(
       itemConfiguration,
       exchange.name,
-      message as string,
+      message,
       hasTail,
       undefined,
     );

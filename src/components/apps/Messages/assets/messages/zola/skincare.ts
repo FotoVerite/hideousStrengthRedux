@@ -1,8 +1,9 @@
 import {CONTACT_NAMES} from 'components/apps/Messages/context/usersMapping';
 import {ConversationExchangeType} from '../../../context/types';
+import {DigestedItemTypes} from 'components/apps/Messages/context/digestConversation/types';
 
 export const skincare: ConversationExchangeType = {
-  time: 'June 20, 2021 2:00pm',
+  time: '2021-06-21T14:00:00Z',
   exchanges: [
     {
       name: CONTACT_NAMES.ZOLA,
@@ -28,7 +29,7 @@ export const skincare: ConversationExchangeType = {
       name: CONTACT_NAMES.SELF,
       messages: [
         {
-          type: 'string',
+          type: DigestedItemTypes.STRING,
           message: "I know I'm cute. God damn spend enough time at the gym.",
           reaction: {name: 'heart', color: '#f487d3'},
         },
@@ -38,7 +39,7 @@ export const skincare: ConversationExchangeType = {
       name: CONTACT_NAMES.ZOLA,
       messages: [
         {
-          type: 'string',
+          type: DigestedItemTypes.STRING,
           message:
             "Well your confidence is intact. The gym is no place to train one's skin though",
           reaction: {name: 'thumbs-down', color: '#c22036'},

@@ -1,6 +1,6 @@
 import {EventOrchestraContext} from 'components/EventOrchestra/context';
 import {ApplicationContext} from 'context';
-import React, {FC, useContext, useEffect, useState} from 'react';
+import React, {FC, useContext, useEffect, useRef, useState} from 'react';
 import {useWindowDimensions} from 'react-native';
 import {useSharedValue} from 'react-native-reanimated';
 import {
@@ -8,17 +8,11 @@ import {
   TextOrchestrationContextTypeDigested,
 } from './types';
 import {addToBlock, startNewBlock} from '../digestConversation';
-import {
-  ConversationExchangeType,
-  DigestedConversation,
-  ExchangeBlockType,
-  MessageType,
-} from '../types';
+import {DigestedConversation, ExchangeBlockType, MessageType} from '../types';
 import {delayFor} from 'common';
 import {MessagesContext} from '../index';
 import {findAvailableRoutes} from '../routeConditions';
 
-//defaults for empty app
 export const TextOrchestrationContext =
   React.createContext<TextOrchestrationContextTypeDigested>({});
 
@@ -44,6 +38,8 @@ const TextOrchestrationContextProvider: FC<
 
   const {width, _} = useWindowDimensions();
 
+  const conversationRef = useRef(digestedConversation);
+
   const MINIMUM_DELAY = 500;
 
   const incrementRouteIndexes = (exchange: ExchangeBlockType) => {
@@ -64,9 +60,9 @@ const TextOrchestrationContextProvider: FC<
 
   const getConversationOffset = (state: DigestedConversation) => {
     if (state.exchanges == undefined) {
-      return;
+      return 0;
     }
-    const lastNode = state.exchanges[state.exchanges.length - 1];
+    const lastNode = state.exchanges.slice(-1)[0];
     return lastNode.offset + lastNode.height + lastNode.paddingBottom;
   };
 
@@ -90,6 +86,9 @@ const TextOrchestrationContextProvider: FC<
     hasTail: boolean,
   ) => {
     addToConversation(state => {
+      if (state == null) {
+        return undefined;
+      }
       const newState = Object.assign({}, state);
       const messageNode = addToBlock(
         exchange,
@@ -115,13 +114,14 @@ const TextOrchestrationContextProvider: FC<
   useEffect(() => {
     if (
       pickedRoute &&
-      digestedConversation &&
-      digestedConversation.route != null
+      conversationRef.current &&
+      conversationRef.current.route != null
     ) {
       eventContext.events.set(state => {
         const newState = Object.assign({}, state);
-        const seenRoutes = newState.Message[digestedConversation.name]!.routes!;
-        seenRoutes[digestedConversation.route!.id] = {
+        const seenRoutes =
+          newState.Message[conversationRef.current!.name]!.routes!;
+        seenRoutes[conversationRef.current!.route!.id] = {
           chosen: pickedRoute,
           date: new Date(),
           position: Object.keys(seenRoutes).length + 1,
@@ -133,13 +133,14 @@ const TextOrchestrationContextProvider: FC<
   }, [pickedRoute]);
 
   const sendNextText = async () => {
-    if (digestedConversation == null || pickedRoute == null) {
+    const conversation = conversationRef.current;
+    if (conversation == null || pickedRoute == null) {
       return;
     } else {
       setTextFinished(false);
       await delayFor(MINIMUM_DELAY);
       const {messageIndex, exchangeIndex} = routeIndexes;
-      const route = digestedConversation.route?.routes[pickedRoute]!;
+      const route = conversation.route?.routes[pickedRoute]!;
       const exchange = route[exchangeIndex];
       if (exchange != null) {
         textContact(
@@ -153,8 +154,8 @@ const TextOrchestrationContextProvider: FC<
         addToConversation(state => {
           const newState = Object.assign({}, state);
           newState.route = findAvailableRoutes(
-            digestedConversation.name,
-            digestedConversation.availableRoutes,
+            conversation.name,
+            conversation.availableRoutes,
             eventContext.events.state,
           );
           return newState;
@@ -169,6 +170,12 @@ const TextOrchestrationContextProvider: FC<
       sendNextText();
     }
   }, [textFinished]);
+
+  useEffect(() => {
+    if (digestedConversation != null) {
+      conversationRef.current = digestedConversation;
+    }
+  }, [digestedConversation]);
 
   return (
     <TextOrchestrationContext.Provider

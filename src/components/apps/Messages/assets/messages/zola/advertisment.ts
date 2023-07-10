@@ -1,10 +1,11 @@
 import {CONTACT_NAMES} from 'components/apps/Messages/context/usersMapping';
 import {ConversationExchangeType} from '../../../context/types';
+import {DigestedItemTypes} from 'components/apps/Messages/context/digestConversation/types';
 
 //import panopticon from '@apps/Messages/assets/messages/pantopitcon.jpeg';
 
 export const advertisementExchange: ConversationExchangeType = {
-  time: 'May 20, 2021 2:00pm',
+  time: '2021-05-20T14:00:00Z',
   exchanges: [
     {
       name: CONTACT_NAMES.ZOLA,
@@ -28,7 +29,7 @@ export const advertisementExchange: ConversationExchangeType = {
     {
       name: CONTACT_NAMES.ZOLA,
       messages: [
-        {type: 'emoji', message: '🙄'},
+        {type: DigestedItemTypes.EMOJI, message: '🙄'},
         "I don't want to give 2019 attitude. Maybe I'll start doing livestreams in a hot tub",
       ],
     },

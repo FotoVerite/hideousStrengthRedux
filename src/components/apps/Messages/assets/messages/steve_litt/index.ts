@@ -19,7 +19,7 @@ export const steveLitt: ConversationType = {
   interfaceColor: getColorFromContacts(CONTACT_NAMES.STEVE_LITT)[0],
   exchanges: [
     {
-      time: 'October 11th, 2021 5:32pm',
+      time: '2021-10-11T17:32:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.STEVE_LITT,
@@ -55,7 +55,7 @@ export const steveLitt: ConversationType = {
       ],
     },
     {
-      time: 'May 1st, 2022 11:32pm',
+      time: '2022-05-01T23:55:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.STEVE_LITT,
@@ -113,7 +113,7 @@ export const steveLitt: ConversationType = {
       ],
     },
     {
-      time: 'June 28th, 2022 11:32pm',
+      time: '2022-06-28T22:22:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.STEVE_LITT,
@@ -163,7 +163,7 @@ export const steveLitt: ConversationType = {
     },
 
     {
-      time: 'October 28th, 2022 9:32pm',
+      time: '2022-10-28T20:32:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.STEVE_LITT,

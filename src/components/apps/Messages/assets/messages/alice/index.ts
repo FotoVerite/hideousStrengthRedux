@@ -1,5 +1,6 @@
 import aliceAvatar from '@apps/Messages/assets/avatars/alice_avator.jpg';
 import metroidDread from '@apps/Messages/assets/messages/alice/MetroidDread.jpeg';
+import {DigestedItemTypes} from 'components/apps/Messages/context/digestConversation/types';
 import {ConversationType} from 'components/apps/Messages/context/types';
 import {
   CONTACT_NAMES,
@@ -17,13 +18,13 @@ export const alice: ConversationType = {
   interfaceColor: getColorFromContacts(CONTACT_NAMES.ALICE)[0],
   exchanges: [
     {
-      time: 'August 14th, 2022 7:04pm',
+      time: '2022-08-14T19:00:04Z',
       exchanges: [
         {
           name: CONTACT_NAMES.ALICE,
           messages: [
-            {type: 'string', message: `And done!`},
-            {type: 'image', message: metroidDread},
+            {type: DigestedItemTypes.STRING, message: `And done!`},
+            {type: DigestedItemTypes.IMAGE, message: metroidDread},
           ],
         },
         {

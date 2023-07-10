@@ -14,7 +14,7 @@ export const movieNight = {
   group: true,
   exchanges: [
     {
-      time: 'Feb 10, 2021 5:00pm',
+      time: '2021-02-10T17:02:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.ARIAL,
@@ -45,7 +45,7 @@ export const movieNight = {
       ],
     },
     {
-      time: 'April 16, 2021 5:00pm',
+      time: '2021-04-16T17:04:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.CHRIS,
@@ -72,7 +72,7 @@ export const movieNight = {
       ],
     },
     {
-      time: 'May 25, 2021 3:22pm',
+      time: '2021-05-25T15:32:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.ARIAL,
@@ -103,7 +103,7 @@ export const movieNight = {
       ],
     },
     {
-      time: 'August 14, 2021 3:52pm',
+      time: '2021-08-25T15:52:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.ZOLA,

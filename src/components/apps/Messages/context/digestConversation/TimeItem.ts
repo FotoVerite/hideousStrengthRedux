@@ -1,3 +1,4 @@
+import moment, {Moment} from 'moment';
 import {ConversationExchangeType} from '../types';
 import {DigestedConversationTimeType, DigestedItemTypes} from './types';
 
@@ -13,8 +14,19 @@ export const createTimeItem = (
     width: width,
     paddingBottom: 0,
     offset: positionAcc,
-    content: item.time,
+    content: formatMoment(moment(item.time)),
     type: DigestedItemTypes.TIME,
   } as DigestedConversationTimeType;
   return listItem;
+};
+
+export const formatMoment = (date: Moment): string => {
+  const now = moment();
+  if (now.diff(date, 'day') === 0) {
+    return date.format('h:mm a');
+  } else if (now.diff(date, 'week') === 0) {
+    return date.format('dddd hh:mm a');
+  } else {
+    return date.format('ddd, MMMM DD, YYYY hh:mm a');
+  }
 };

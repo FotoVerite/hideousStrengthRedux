@@ -11,6 +11,7 @@ import {
 import {advertisementExchange} from './advertisment';
 import {skincare} from './skincare';
 import {ZaraOrZolaRoute} from './routes/zolaOrZora';
+import {DigestedItemTypes} from 'components/apps/Messages/context/digestConversation/types';
 
 export const zola: ConversationType = {
   name: CONTACT_NAMES.ZOLA,
@@ -22,7 +23,7 @@ export const zola: ConversationType = {
   routes: [ZaraOrZolaRoute],
   exchanges: [
     {
-      time: 'May 15, 2019 3:00pm',
+      time: '2019-05-15T15:00:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.SELF,
@@ -62,7 +63,7 @@ export const zola: ConversationType = {
     },
 
     {
-      time: 'May 15, 2019 5:24pm',
+      time: '2019-05-15T17:24:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.SELF,
@@ -87,12 +88,12 @@ export const zola: ConversationType = {
           name: CONTACT_NAMES.SELF,
           messages: [
             {
-              type: 'string',
+              type: DigestedItemTypes.STRING,
               message:
                 'In the tower there can be a warden looking in on the prisoners. But from the prisoners point of view there is no way to know if they are being watched or the tower is empty?.',
             },
             {
-              type: 'image',
+              type: DigestedItemTypes.IMAGE,
               message: panopticon,
             },
           ],
@@ -140,7 +141,7 @@ export const zola: ConversationType = {
           messages: [
             {
               message: 'Liberal Arts Education',
-              type: 'string',
+              type: DigestedItemTypes.STRING,
               reaction: {name: 'heart', color: 'pink'},
             },
           ],
@@ -163,7 +164,7 @@ export const zola: ConversationType = {
     skincare,
 
     {
-      time: 'June 23, 2023 11:00pm',
+      time: '2023-06-15T23:00:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.ZOLA,
@@ -180,7 +181,7 @@ export const zola: ConversationType = {
       ],
     },
     {
-      time: 'June 24, 2023 5:00am',
+      time: '2023-06-24T05:00:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.SELF,

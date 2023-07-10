@@ -1,3 +1,4 @@
+import {DigestedItemTypes} from 'components/apps/Messages/context/digestConversation/types';
 import {ConversationType} from 'components/apps/Messages/context/types';
 import {
   CONTACT_NAMES,
@@ -16,7 +17,7 @@ export const mileena: ConversationType = {
   interfaceColor: getColorFromContacts(CONTACT_NAMES.MILEENA)[0],
   exchanges: [
     {
-      time: 'May 27th, 2019 5:34pm',
+      time: '2019-05-27T17:34:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.MILEENA,
@@ -33,7 +34,7 @@ export const mileena: ConversationType = {
       ],
     },
     {
-      time: 'May 28th, 2019 4:34am',
+      time: '2019-05-28T04:24:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.MILEENA,
@@ -94,7 +95,7 @@ export const mileena: ConversationType = {
       ],
     },
     {
-      time: 'June 5th, 2019 11:28am',
+      time: '2019-06-05T23:29:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.SELF,
@@ -188,7 +189,7 @@ export const mileena: ConversationType = {
       ],
     },
     {
-      time: 'July 2nd, 2019 3:21pm',
+      time: '2019-07-02T15:21:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.MILEENA,
@@ -201,7 +202,7 @@ export const mileena: ConversationType = {
         {
           name: CONTACT_NAMES.MILEENA,
           messages: [
-            "But you like sun, and I know you've been wanting to show off those guns you've been workign on all winter.",
+            "But you like sun, and I know you've been wanting to show off those guns you've been working on all winter.",
           ],
         },
         {
@@ -218,7 +219,7 @@ export const mileena: ConversationType = {
         },
         {
           name: CONTACT_NAMES.SELF,
-          messages: [{type: 'emoji', message: '🥲'}],
+          messages: [{type: DigestedItemTypes.EMOJI, message: '🥲'}],
         },
       ],
     },

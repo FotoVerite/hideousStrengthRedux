@@ -17,7 +17,7 @@ export const grace_russo: ConversationType = {
   interfaceColor: getColorFromContacts(CONTACT_NAMES.GRACE_RUSSO)[0],
   exchanges: [
     {
-      time: 'August 14th, 2021 8:04pm',
+      time: '2021-08-14T20:04:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.GRACE_RUSSO,
@@ -45,7 +45,7 @@ export const grace_russo: ConversationType = {
       ],
     },
     {
-      time: 'August 14th, 2021 8:24pm',
+      time: '2021-08-14T20:24:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.GRACE_RUSSO,
@@ -124,7 +124,7 @@ export const grace_russo: ConversationType = {
       ],
     },
     {
-      time: 'August 14th, 2021 10:50pm',
+      time: '2021-08-14T22:50:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.SELF,
@@ -133,7 +133,7 @@ export const grace_russo: ConversationType = {
       ],
     },
     {
-      time: 'October 12th, 2021 11:50pm',
+      time: '2021-10-12T23:23:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.SELF,

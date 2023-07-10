@@ -16,7 +16,7 @@ export const clay: ConversationType = {
   interfaceColor: getColorFromContacts(CONTACT_NAMES.CLAY)[0],
   exchanges: [
     {
-      time: 'December 14, 2020 8:04pm',
+      time: '2020-12-14T20:04:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.SELF,
@@ -51,7 +51,7 @@ export const clay: ConversationType = {
       ],
     },
     {
-      time: 'December 14, 2020 8:50pm',
+      time: '2020-12-14T20:50:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.CLAY,
@@ -123,7 +123,7 @@ export const clay: ConversationType = {
       ],
     },
     {
-      time: 'December 14, 2020 9:02pm',
+      time: '2020-12-14T21:02:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.CLAY,
@@ -140,7 +140,7 @@ export const clay: ConversationType = {
       ],
     },
     {
-      time: 'December 22, 2020 11:05am',
+      time: '2020-12-22T23:05:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.SELF,

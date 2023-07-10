@@ -16,7 +16,7 @@ export const seamless: ConversationType = {
   interfaceColor: getColorFromContacts('seamless')[0],
   exchanges: [
     {
-      time: 'February 23, 2021 5:00pm',
+      time: '2021-02-23T17:22:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.SEAMLESS,
@@ -118,7 +118,7 @@ export const seamless: ConversationType = {
       ],
     },
     {
-      time: 'March 12, 2021 5:10pm',
+      time: '2023-02-23T17:22:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.SEAMLESS,

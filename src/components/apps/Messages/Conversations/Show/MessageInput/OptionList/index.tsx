@@ -26,10 +26,14 @@ const Conversations: FC<{
   const [optionsHeight, setOptionsHeight] = useState(0);
 
   const conversation = context.digestedConversation.state;
+  const conversationRef = useRef(conversation);
 
   useEffect(() => {
     if (!conversation) {
       setOptionsHeight(0);
+      active.set(false);
+    } else {
+      conversationRef.current = conversation;
     }
   }, [conversation]);
 
@@ -64,13 +68,13 @@ const Conversations: FC<{
 
   return (
     <Animated.View style={[styles.screen, animateOptionsUp]}>
-      {conversation && (
+      {conversationRef.current && (
         <View style={{}}>
-          {conversation && conversation.route == null && (
+          {conversationRef.current.route == null && (
             <NoOption active={active} totalHeight={setOptionsHeight} />
           )}
-          {conversation.route &&
-            conversation.route.options.map(option => (
+          {conversationRef.current.route &&
+            conversationRef.current.route.options.map(option => (
               <Option
                 key={option.key}
                 option={option}

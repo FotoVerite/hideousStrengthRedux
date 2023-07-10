@@ -1,5 +1,6 @@
 import chrisAvatar from '@apps/Messages/assets/avatars/Chris.jpg';
 import coil from '@apps/Messages/assets/messages/chris/coil.jpeg';
+import {DigestedItemTypes} from 'components/apps/Messages/context/digestConversation/types';
 
 import {ConversationType} from 'components/apps/Messages/context/types';
 import {
@@ -18,7 +19,7 @@ export const chris: ConversationType = {
   interfaceColor: getColorFromContacts(CONTACT_NAMES.CHRIS)[0],
   exchanges: [
     {
-      time: 'September 28th 2021 3:00pm',
+      time: '2021-10-28T15:00:04Z',
       exchanges: [
         {
           name: CONTACT_NAMES.CHRIS,
@@ -41,8 +42,11 @@ export const chris: ConversationType = {
         {
           name: CONTACT_NAMES.SELF,
           messages: [
-            {type: 'string', message: 'Funny thing about Hellraiser.'},
-            {type: 'image', message: coil},
+            {
+              type: DigestedItemTypes.STRING,
+              message: 'Funny thing about Hellraiser.',
+            },
+            {type: DigestedItemTypes.IMAGE, message: coil},
           ],
         },
         {
@@ -92,8 +96,8 @@ export const chris: ConversationType = {
         {
           name: CONTACT_NAMES.CHRIS,
           messages: [
-            {type: 'string', message: 'Guilty'},
-            {type: 'emoji', message: '😈'},
+            {type: DigestedItemTypes.STRING, message: 'Guilty'},
+            {type: DigestedItemTypes.EMOJI, message: '😈'},
           ],
         },
         {
@@ -143,7 +147,7 @@ export const chris: ConversationType = {
       ],
     },
     {
-      time: 'November 12th 2021 4:12pm',
+      time: '2021-11-12T16:12:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.CHRIS,
@@ -207,7 +211,7 @@ export const chris: ConversationType = {
       ],
     },
     {
-      time: 'November 15th 2021 9:12am',
+      time: '2021-11-15T21:12:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.CHRIS,
@@ -222,7 +226,7 @@ export const chris: ConversationType = {
       ],
     },
     {
-      time: 'June 15th 2022 10:20am',
+      time: '2022-06-15T10:20:00Z',
       exchanges: [
         {
           name: CONTACT_NAMES.CHRIS,
