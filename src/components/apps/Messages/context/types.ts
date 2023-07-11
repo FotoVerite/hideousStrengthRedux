@@ -29,7 +29,7 @@ export type MessagesContextTypeDigested = PropsWithChildren<{
 }>;
 
 export type RouteConditionsType = {
-  [key in CONTACT_NAMES]?: {views?: number; routes?: {[key: string]: string}};
+  [key in CONTACT_NAMES]?: {views?: number; routes?: {[key: string]: string[]}};
 };
 
 export type MessageRouteType = {

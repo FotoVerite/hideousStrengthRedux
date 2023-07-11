@@ -25,7 +25,7 @@ export const nothing_found: MessageRouteType = {
   conditions: {
     [CONTACT_NAMES.ZOLA]: {
       routes: {
-        [ZARA_ROUTE_IDS.FIRST_MESSAGE_TO_ZARA]: ZARA_FIRST_MESSAGE_OPTIONS.A,
+        [ZARA_ROUTE_IDS.FIRST_MESSAGE_TO_ZARA]: [ZARA_FIRST_MESSAGE_OPTIONS.A],
       },
     },
   },

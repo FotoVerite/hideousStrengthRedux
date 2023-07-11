@@ -28,16 +28,23 @@ const Conversations: FC<{
   const conversation = context.digestedConversation.state;
   const conversationRef = useRef(conversation);
   const [refresh, setRefresh] = useState(0);
+  const name = conversationRef.current?.name;
+  const route = conversationRef.current?.route;
 
   useEffect(() => {
     if (!conversation) {
-      setOptionsHeight(0);
       active.set(false);
     } else {
       conversationRef.current = conversation;
+      setRefresh(i => (i += 1));
     }
-    setRefresh(i => i + 1);
   }, [conversation]);
+
+  useEffect(() => {
+    if (conversationRef.current) {
+      setOptionsHeight(0);
+    }
+  }, [name, route]);
 
   useEffect(() => {
     if (active.state) {

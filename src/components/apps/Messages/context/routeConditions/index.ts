@@ -37,7 +37,7 @@ const routeHasBeenChosenCheck = (
     return (
       acc &&
       viewedRoutes[key] != null &&
-      viewedRoutes[key].chosen == routeConditions[key]
+      routeConditions[key].includes(viewedRoutes[key].chosen)
     );
   }, true);
 };

@@ -13,13 +13,14 @@ import {skincare} from './skincare';
 import {first_message_to_zara} from './routes/first_message_to_zara';
 import {DigestedItemTypes} from 'components/apps/Messages/context/digestConversation/types';
 import {nothing_found} from './routes/nothing_found';
+import {why_is_the_contact_zola} from './routes/why_is_the_contact_zola';
 
 export const zola: ConversationType = {
   name: CONTACT_NAMES.ZOLA,
   tags: [CONTACT_NAMES.ZOLA, 'Zara', 'Hopescope', 'Panopticon', 'Ads', 'Money'],
   heroImage: zolaAvatar,
   interfaceColor: getColorFromContacts(CONTACT_NAMES.ZOLA)[0],
-  routes: [first_message_to_zara, nothing_found],
+  routes: [first_message_to_zara, nothing_found, why_is_the_contact_zola],
   exchanges: [
     {
       time: '2019-05-15T15:00:00Z',
