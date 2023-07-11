@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable no-bitwise */
-import React, {FC, useEffect, useRef, useState} from 'react';
+import React, {FC, useContext, useEffect, useRef, useState} from 'react';
 import {View} from 'react-native';
 
 import Animated, {
@@ -17,6 +17,7 @@ import {DigestedConversationStringItemType} from 'components/apps/Messages/conte
 
 import {WaitingBubble} from './WaitingBubble';
 import {TextBubble} from '../TextBubble';
+import {TextOrchestrationContext} from 'components/apps/Messages/context/textOrchestration';
 
 export const TypingBubble: FC<
   DigestedConversationStringItemType & {
@@ -25,6 +26,7 @@ export const TypingBubble: FC<
     group?: boolean;
   }
 > = props => {
+  const context = useContext(TextOrchestrationContext);
   const opacity = useSharedValue(1);
   const [renderWaiting, setRenderWaiting] = useState(true);
   const waitingOpacity = useAnimatedStyle(() => {
@@ -36,9 +38,15 @@ export const TypingBubble: FC<
   });
 
   useEffect(() => {
+    if (!renderWaiting) {
+      context.textIsFinished(true);
+    }
+  }, [renderWaiting]);
+
+  useEffect(() => {
     opacity.value = withDelay(
-      1000 + (props.delay || 500),
-      withTiming(0, {duration: 500}, finished => {
+      1250 + (props.typingDelay || 0),
+      withTiming(0, {duration: 300}, finished => {
         if (finished) {
           runOnJS(setRenderWaiting)(false);
         }

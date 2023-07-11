@@ -61,6 +61,7 @@ export const getSeenRoutes = (
     return [];
   }
   const routeEvents = events.Message[name]?.routes || {};
+
   return constructSeenRoutes(
     routeEvents,
     constructAvailableRouteObject(availableRoutes),

@@ -30,7 +30,7 @@ export const TextBubble: FC<
 > = ({
   avatar,
   colors,
-  delay,
+  messageDelay: delay,
   scrollHandler,
   scrollRef,
   offset,

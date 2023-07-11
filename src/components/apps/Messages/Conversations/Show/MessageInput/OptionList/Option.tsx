@@ -11,21 +11,20 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Bold, P} from 'components/common/StyledText';
 import {Row} from 'components/common/layout';
 import theme from 'themes';
-import {MessagesContext} from 'components/apps/Messages/context';
 import {GenericStateType} from 'types/genericContextTypes';
 import {TextOrchestrationContext} from 'components/apps/Messages/context/textOrchestration';
 
 const Option: FC<{
   active: GenericStateType<boolean>;
   totalHeight: React.Dispatch<React.SetStateAction<number>>;
-  option: {key: string; value: string};
+  option: string;
 }> = ({active, option, totalHeight}) => {
   const context = useContext(TextOrchestrationContext);
   return (
     <TouchableOpacity
       onPress={() => {
         active.set(false);
-        context.pickRoute(option.key);
+        context.pickRoute(option);
       }}>
       <Row
         style={styles.container}
@@ -36,7 +35,7 @@ const Option: FC<{
         <View style={styles.content}>
           <Row style={styles.infoRow}>
             <Row style={styles.dateRow}>
-              <P style={styles.content}>{option.value}</P>
+              <P style={styles.content}>{option}</P>
               <Icon
                 name="chevron-right"
                 color={'black'}

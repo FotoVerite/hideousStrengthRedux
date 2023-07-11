@@ -40,7 +40,8 @@ export interface AbstractDigestedConversationItemType {
   width: number;
   offset: number;
   paddingBottom: number;
-  delay?: number;
+  messageDelay?: number;
+  typingDelay?: number;
 }
 
 export interface DigestedConversationTimeType

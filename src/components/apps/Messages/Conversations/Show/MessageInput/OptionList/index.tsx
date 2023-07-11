@@ -27,6 +27,7 @@ const Conversations: FC<{
 
   const conversation = context.digestedConversation.state;
   const conversationRef = useRef(conversation);
+  const [refresh, setRefresh] = useState(0);
 
   useEffect(() => {
     if (!conversation) {
@@ -35,6 +36,7 @@ const Conversations: FC<{
     } else {
       conversationRef.current = conversation;
     }
+    setRefresh(i => i + 1);
   }, [conversation]);
 
   useEffect(() => {
@@ -62,21 +64,24 @@ const Conversations: FC<{
 
   const animateOptionsUp = useAnimatedStyle(() => {
     return {
-      height: interpolate(showOptions.value, [0, 1], [0, 50]),
+      height: interpolate(showOptions.value, [0, 1], [0, optionsHeight]),
     };
   }, [showOptions, active.state]);
-
   return (
     <Animated.View style={[styles.screen, animateOptionsUp]}>
       {conversationRef.current && (
         <View style={{}}>
           {conversationRef.current.route == null && (
-            <NoOption active={active} totalHeight={setOptionsHeight} />
+            <NoOption
+              active={active}
+              totalHeight={setOptionsHeight}
+              key={conversationRef.current.name}
+            />
           )}
           {conversationRef.current.route &&
             conversationRef.current.route.options.map(option => (
               <Option
-                key={option.key}
+                key={option}
                 option={option}
                 active={active}
                 totalHeight={setOptionsHeight}

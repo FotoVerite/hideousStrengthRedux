@@ -13,7 +13,7 @@ export type MessageRouteEventDataType = {
 };
 
 export type MessageRouteEventType = {
-  [routeId: string]: MessageRouteEventDataType;
+  [routeId: number]: MessageRouteEventDataType;
 };
 
 export type ContactEventType = {

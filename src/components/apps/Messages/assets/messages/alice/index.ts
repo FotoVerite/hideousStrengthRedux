@@ -12,8 +12,6 @@ import {
 export const alice: ConversationType = {
   name: CONTACT_NAMES.ALICE,
   tags: ['sleep', 'games', 'metroid'],
-  date: 'August 14th, 2022',
-  listContent: "I don't want to talk about that right now",
   heroImage: aliceAvatar,
   interfaceColor: getColorFromContacts(CONTACT_NAMES.ALICE)[0],
   exchanges: [

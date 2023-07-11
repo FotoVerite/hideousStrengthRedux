@@ -2,7 +2,11 @@ import {
   EventOrchestraObjectType,
   MessageAppContactsEventType,
 } from 'components/EventOrchestra/context/types';
-import {ConversationType, MessageRouteType} from '../types';
+import {
+  ConversationType,
+  MessageRouteType,
+  RouteConditionsType,
+} from '../types';
 import {CONTACT_NAMES} from '../usersMapping';
 
 const contactHasBeenViewedCheck = (
@@ -42,7 +46,7 @@ const messageAppConditionsMet = (
   state: MessageAppContactsEventType,
   conditions: RouteConditionsType,
 ) => {
-  let ret = false;
+  let ret = true;
   Object.keys(conditions).forEach((key: string) => {
     ret =
       ret && contactHasBeenViewedCheck(key as CONTACT_NAMES, state, conditions);
@@ -61,8 +65,11 @@ export const findAvailableRoutes = (
     return undefined;
   } else {
     return routes.filter(route => {
+      // Convert number to string due to objects keys needing to be strings
       return (
-        !Object.keys(state.Message[name]?.routes || {}).includes(route.id) &&
+        !Object.keys(state.Message[name]?.routes || {}).includes(
+          route.id.toString(),
+        ) &&
         (route.conditions == null ||
           messageAppConditionsMet(state.Message, route.conditions))
       );

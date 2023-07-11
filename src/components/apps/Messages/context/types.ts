@@ -33,17 +33,15 @@ export type RouteConditionsType = {
 };
 
 export type MessageRouteType = {
-  id: string;
+  id: number;
   conditions?: RouteConditionsType;
-  options: [{key: string; value: string}];
-  routes: {[key: string]: ExchangeBlockType[]};
+  options: string[];
+  routes: {[key: string | number]: ExchangeBlockType[]};
 };
 
 export type ConversationType = {
   tags: string[];
   name: CONTACT_NAMES;
-  date: string;
-  listContent: string;
   heroImage: DataSourceParam;
   exchanges: ConversationExchangeType[];
   group?: boolean;
@@ -88,6 +86,8 @@ export type MessageWithMetaType =
 
 interface AbstractMessageWithMetaType {
   message: string;
+  messageDelay?: number;
+  typingDelay?: number;
   reaction?: ReactionType;
 }
 

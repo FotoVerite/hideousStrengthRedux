@@ -12,6 +12,7 @@ import {DigestedConversation, ExchangeBlockType, MessageType} from '../types';
 import {delayFor} from 'common';
 import {MessagesContext} from '../index';
 import {findAvailableRoutes} from '../routeConditions';
+import {CONTACT_NAMES} from '../usersMapping';
 
 export const TextOrchestrationContext =
   React.createContext<TextOrchestrationContextTypeDigested>({});
@@ -40,7 +41,7 @@ const TextOrchestrationContextProvider: FC<
 
   const conversationRef = useRef(digestedConversation);
 
-  const MINIMUM_DELAY = 500;
+  const MINIMUM_DELAY = 250;
 
   const incrementRouteIndexes = (exchange: ExchangeBlockType) => {
     setRouteIndexes(indexes => {
@@ -99,7 +100,8 @@ const TextOrchestrationContextProvider: FC<
         applicationContext.fonts.HelveticaNeue,
         applicationContext.fonts.NotoColor,
       );
-      messageNode.delay = 50;
+      messageNode.messageDelay = messageNode.messageDelay ||=
+        messageNode.name === CONTACT_NAMES.SELF ? 50 : 200;
       newState.exchanges = [...newState.exchanges, messageNode];
       return newState;
     });
@@ -176,6 +178,10 @@ const TextOrchestrationContextProvider: FC<
       conversationRef.current = digestedConversation;
     }
   }, [digestedConversation]);
+
+  useEffect(() => {
+    setRouteIndexes({exchangeIndex: 0, messageIndex: 0});
+  }, [conversationRef.current?.route]);
 
   return (
     <TextOrchestrationContext.Provider

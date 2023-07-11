@@ -28,12 +28,12 @@ const ItemContainer: FC<{
   group: boolean;
 }> = ({item, scrollHandler, scrollRef, group, index}) => {
   const context = useContext(TextOrchestrationContext);
-  const opacity = useSharedValue(item.delay ? 0 : 1);
+  const opacity = useSharedValue(item.messageDelay ? 0 : 1);
 
   const isWaiting =
     item.type === DigestedItemTypes.STRING &&
     item.leftSide == true &&
-    item.delay;
+    item.messageDelay;
 
   const MemoTextBubble = useMemo(() => {
     if (item.type === DigestedItemTypes.STRING && !isWaiting) {
@@ -92,15 +92,14 @@ const ItemContainer: FC<{
       await delayFor(delay);
       scrollRef.current?.scrollToEnd({animated: true});
       opacity.value = withTiming(1, {duration: 300});
-      if (isWaiting) {
-        await delayFor(1000 + delay);
+      if (!isWaiting) {
+        context.textIsFinished(true);
       }
-      context.textIsFinished(true);
     };
-    if (item.delay) {
-      toBottom(item.delay);
+    if (item.messageDelay) {
+      toBottom(item.messageDelay);
     }
-  }, [item.delay]);
+  }, [item.messageDelay]);
 
   const fadeInAnimation = useAnimatedStyle(() => {
     return {opacity: opacity.value};

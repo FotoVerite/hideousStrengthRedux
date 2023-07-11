@@ -72,6 +72,8 @@ export const SkMessageItem = (
     leftSide: leftSide,
     type: message.type,
     reaction: message.reaction,
+    messageDelay: message.messageDelay,
+    typingDelay: message.typingDelay,
   };
 
   return skItem;

@@ -10,17 +10,16 @@ import {
 } from '../../../context/usersMapping';
 import {advertisementExchange} from './advertisment';
 import {skincare} from './skincare';
-import {ZaraOrZolaRoute} from './routes/zolaOrZora';
+import {first_message_to_zara} from './routes/first_message_to_zara';
 import {DigestedItemTypes} from 'components/apps/Messages/context/digestConversation/types';
+import {nothing_found} from './routes/nothing_found';
 
 export const zola: ConversationType = {
   name: CONTACT_NAMES.ZOLA,
   tags: [CONTACT_NAMES.ZOLA, 'Zara', 'Hopescope', 'Panopticon', 'Ads', 'Money'],
-  date: 'June 24th',
-  listContent: 'Hey Zara, We need to talk',
   heroImage: zolaAvatar,
   interfaceColor: getColorFromContacts(CONTACT_NAMES.ZOLA)[0],
-  routes: [ZaraOrZolaRoute],
+  routes: [first_message_to_zara, nothing_found],
   exchanges: [
     {
       time: '2019-05-15T15:00:00Z',
