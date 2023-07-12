@@ -17,6 +17,7 @@ import TextBoxEngine from 'components/TextBoxEngine';
 import TextBoxEngineContextProvider from 'components/TextBoxEngine/context';
 import {View} from 'react-native';
 import EventOrchestraContextProvider from 'components/EventOrchestra/context';
+import SnapShotContextProvider from 'components/Snapshot/context';
 
 function App(): JSX.Element {
   const SFPro = useFont(require('@applicationAssets/fonts/SFPro.ttf'), 16);
@@ -46,7 +47,9 @@ function App(): JSX.Element {
             <TextBoxEngineContextProvider>
               <NavigationContainer>
                 <View ref={screenRef} style={{flex: 1}}>
-                  <Messages />
+                  <SnapShotContextProvider snapShotRef={screenRef}>
+                    <Messages />
+                  </SnapShotContextProvider>
                 </View>
               </NavigationContainer>
               <TextBoxEngine screenRef={screenRef} />

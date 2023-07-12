@@ -1,3 +1,4 @@
+import {DigestedItemTypes} from 'components/apps/Messages/context/digestConversation/types';
 import {ConversationType} from 'components/apps/Messages/context/types';
 import {
   CONTACT_NAMES,
@@ -8,8 +9,6 @@ import {
 export const greg: ConversationType = {
   name: CONTACT_NAMES.GREG,
   tags: [],
-  date: 'January 19th, 2023',
-  listContent: "I don't want to talk about that right now",
   heroImage: getAvatarFromContacts(CONTACT_NAMES.GREG),
   interfaceColor: getColorFromContacts(CONTACT_NAMES.GREG)[0],
   exchanges: [
@@ -31,6 +30,12 @@ export const greg: ConversationType = {
         {
           name: CONTACT_NAMES.GREG,
           messages: ['We should plan another session soon'],
+        },
+        {
+          name: CONTACT_NAMES.GREG,
+          messages: [
+            {type: DigestedItemTypes.SNAPSHOT, message: 'ZOLA_SNAPSHOT'},
+          ],
         },
       ],
     },

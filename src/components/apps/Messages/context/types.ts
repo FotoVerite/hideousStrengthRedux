@@ -72,16 +72,13 @@ export type ExchangeBlockType = {
   messages: MessageType[];
 };
 
-export type MessageType =
-  | string
-  | StringMessageWithMeta
-  | ImageMessageWithMeta
-  | EmojiMessageWithMeta;
+export type MessageType = string | MessageWithMetaType;
 
 export type MessageWithMetaType =
   | EmojiMessageWithMeta
   | GlyphMessageWithMeta
   | StringMessageWithMeta
+  | SnapshotMessageWithMeta
   | ImageMessageWithMeta;
 
 interface AbstractMessageWithMetaType {
@@ -104,6 +101,10 @@ export interface EmojiMessageWithMeta extends AbstractMessageWithMetaType {
 }
 export interface GlyphMessageWithMeta extends AbstractMessageWithMetaType {
   type: DigestedItemTypes.GLYPH;
+}
+
+export interface SnapshotMessageWithMeta extends AbstractMessageWithMetaType {
+  type: DigestedItemTypes.SNAPSHOT;
 }
 
 export type ReactionType = {name: string; color: string};

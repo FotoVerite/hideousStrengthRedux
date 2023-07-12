@@ -1,4 +1,4 @@
-import {Image, ImageSourcePropType} from 'react-native';
+import {Image, ImageSourcePropType, Platform} from 'react-native';
 import {BubblePath, flipPath} from './BubblePath';
 
 import {
@@ -19,6 +19,7 @@ import {MessageWithMetaType} from '../types';
 import {GetDimensionsAndSkiaNodes} from './skiaCalculations';
 import {SkFont} from '@shopify/react-native-skia';
 import {BUBBLE_PADDING} from '.';
+import ReactNativeBlobUtil from 'react-native-blob-util';
 
 type CalculationsType = {
   height: number;
@@ -101,6 +102,8 @@ const calculateWidthHeightAndContent = (
   switch (message.type) {
     case DigestedItemTypes.EMOJI:
       return {width: itemWidth, height: 60, content: message.message};
+    case DigestedItemTypes.SNAPSHOT:
+      return {width: itemWidth, height: 60, content: message.message};
     case DigestedItemTypes.IMAGE:
       const imageDimensions = Image.resolveAssetSource(
         message.message as ImageSourcePropType,
@@ -134,4 +137,17 @@ const calculateWidthHeightAndContent = (
     default:
       return {width: itemWidth, height: 60, content: ''};
   }
+};
+
+const setSnapshot = async (fileUri: string) => {
+  const dirs = ReactNativeBlobUtil.fs.dirs.DocumentDir;
+  const exists = await ReactNativeBlobUtil.fs.exists(`${dirs}/fileUri`);
+  return exists;
+  // // if (Platform.OS === 'ios') {
+  // //   let arr = fileUri.split('/');
+  // //   const dirs = ReactNativeBlobUtil.fs.dirs;
+  // //   const filePath = `${dirs.DocumentDir}/${arr[arr.length - 1]}`;
+  // // } else {
+  // //   filePath = audioDataUri;
+  // // }
 };

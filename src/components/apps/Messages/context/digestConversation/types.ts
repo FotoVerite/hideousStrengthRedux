@@ -11,10 +11,11 @@ import {CONTACT_NAMES} from '../usersMapping';
 
 export enum DigestedItemTypes {
   EMOJI = 'emoji',
-  STRING = 'string',
   TIME = 'time',
   IMAGE = 'image',
   GLYPH = 'glyph',
+  SNAPSHOT = 'snapshot',
+  STRING = 'string',
 }
 
 export type GlyphContent = {
@@ -86,6 +87,12 @@ export interface DigestedConversationEmojiItemType
   extends AbstractMetaDigestedConversationItemType {
   content: string;
   type: DigestedItemTypes.EMOJI;
+}
+
+export interface DigestedConversationSnapShotItemType
+  extends AbstractMetaDigestedConversationItemType {
+  content?: string;
+  type: DigestedItemTypes.SNAPSHOT;
 }
 export type DigestedConversationListItem =
   | DigestedConversationEmojiItemType
