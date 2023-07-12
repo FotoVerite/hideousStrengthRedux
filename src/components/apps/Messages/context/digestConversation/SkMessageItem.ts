@@ -17,9 +17,10 @@ import {
 } from '../usersMapping';
 import {MessageWithMetaType} from '../types';
 import {GetDimensionsAndSkiaNodes} from './skiaCalculations';
-import {SkFont} from '@shopify/react-native-skia';
+import {SkFont, Skia} from '@shopify/react-native-skia';
 import {BUBBLE_PADDING} from '.';
 import ReactNativeBlobUtil from 'react-native-blob-util';
+import {getSnapshotPath} from 'components/Snapshot/context';
 
 type CalculationsType = {
   height: number;
@@ -77,6 +78,10 @@ export const SkMessageItem = (
     typingDelay: message.typingDelay,
   };
 
+  // if (true) {
+  //   setSnapshot('IMAGE_NAME', width);
+  // }
+
   return skItem;
 };
 
@@ -103,7 +108,7 @@ const calculateWidthHeightAndContent = (
     case DigestedItemTypes.EMOJI:
       return {width: itemWidth, height: 60, content: message.message};
     case DigestedItemTypes.SNAPSHOT:
-      return {width: itemWidth, height: 60, content: message.message};
+      return content;
     case DigestedItemTypes.IMAGE:
       const imageDimensions = Image.resolveAssetSource(
         message.message as ImageSourcePropType,
@@ -139,15 +144,30 @@ const calculateWidthHeightAndContent = (
   }
 };
 
-const setSnapshot = async (fileUri: string) => {
-  const dirs = ReactNativeBlobUtil.fs.dirs.DocumentDir;
-  const exists = await ReactNativeBlobUtil.fs.exists(`${dirs}/fileUri`);
-  return exists;
-  // // if (Platform.OS === 'ios') {
-  // //   let arr = fileUri.split('/');
-  // //   const dirs = ReactNativeBlobUtil.fs.dirs;
-  // //   const filePath = `${dirs.DocumentDir}/${arr[arr.length - 1]}`;
-  // // } else {
-  // //   filePath = audioDataUri;
-  // // }
+const setSnapshot = async (fileName: string, width: number) => {
+  const path = getSnapshotPath('IMAGE_NAME');
+  const exists = await ReactNativeBlobUtil.fs.exists(path);
+  if (!exists) {
+    return {
+      width: width,
+      height: 500,
+      content: {image: undefined, backup: 'backup', fileName: 'IMAGE_NAME'},
+    };
+  }
+  const data = await ReactNativeBlobUtil.fs.readFile(path, 'base64');
+  const image = Skia.Image.MakeImageFromEncoded(data);
+  if (!image) {
+    return {
+      width: width,
+      height: 500,
+      content: {image: undefined, backup: 'backup', fileName: 'IMAGE_NAME'},
+    };
+  }
+  const aspectRation = image.height() / image.width();
+  const imageHeight = width * aspectRation;
+  return {
+    width: width,
+    height: imageHeight,
+    content: {image: image, backup: 'backup', fileName: 'IMAGE_NAME'},
+  };
 };

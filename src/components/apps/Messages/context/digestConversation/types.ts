@@ -4,6 +4,7 @@ import {
   DataSourceParam,
   Glyph,
   SkFont,
+  SkImage,
   SkPath,
   Vector,
 } from '@shopify/react-native-skia';
@@ -91,7 +92,7 @@ export interface DigestedConversationEmojiItemType
 
 export interface DigestedConversationSnapShotItemType
   extends AbstractMetaDigestedConversationItemType {
-  content?: string;
+  content: {image: SkImage; backup: string; fileName: string};
   type: DigestedItemTypes.SNAPSHOT;
 }
 export type DigestedConversationListItem =
@@ -99,4 +100,5 @@ export type DigestedConversationListItem =
   | DigestedConversationTimeType
   | DigestedConversationStringItemType
   | DigestedConversationImageItemType
-  | DigestedConversationGlyphItemType;
+  | DigestedConversationGlyphItemType
+  | DigestedConversationSnapShotItemType;

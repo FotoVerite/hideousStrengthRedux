@@ -1,6 +1,10 @@
+import {SkImage} from '@shopify/react-native-skia';
 import {PropsWithChildren, ReactNode} from 'react';
 import {View} from 'react-native';
-import {GenericStateType} from 'types/genericContextTypes';
+import {
+  GenericOrUndefinedStateType,
+  GenericStateType,
+} from 'types/genericContextTypes';
 
 export type SnapShotContextTypeDigest = {
   children: ReactNode;
@@ -8,5 +12,6 @@ export type SnapShotContextTypeDigest = {
 };
 
 export type SnapShotContextTypeDigested = PropsWithChildren<{
-  takeSnapShot: GenericStateType<boolean>;
+  takeSnapShot: GenericOrUndefinedStateType<string>;
+  image: SkImage | null | undefined;
 }>;

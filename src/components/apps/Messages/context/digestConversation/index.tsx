@@ -50,12 +50,12 @@ export const digestConversation = (
     ret.push(time);
     block.exchanges.forEach(exchange => {
       // SIMPLE ARRAY
-      exchange.messages.forEach((message, index) => {
+      for (const [index, message] of exchange.messages.entries()) {
         const hasTail = index === exchange.messages.length - 1;
         const item = createItem(itemConfiguration, exchange, message, hasTail);
         ret.push(item);
         itemConfiguration.positionAcc += item.height + item.paddingBottom;
-      });
+      }
     });
   });
 

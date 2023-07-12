@@ -19,6 +19,7 @@ import {TypingBubble} from './TypingBubble';
 
 import {TextOrchestrationContext} from 'components/apps/Messages/context/textOrchestration';
 import {delayFor} from 'common';
+import {SnapshotBubble} from './SnapshotBubble';
 
 const ItemContainer: FC<{
   item: DigestedConversationListItem;
@@ -87,6 +88,12 @@ const ItemContainer: FC<{
     }
   }, [item]);
 
+  const MemoSnapshotBubble = useMemo(() => {
+    if (item.type === DigestedItemTypes.SNAPSHOT) {
+      return <SnapshotBubble {...item} />;
+    }
+  }, [item]);
+
   useEffect(() => {
     const toBottom = async (delay: number) => {
       await delayFor(delay);
@@ -129,6 +136,7 @@ const ItemContainer: FC<{
         {MemoTypingBubble}
         {MemoGlyphBubble}
         {MemoImageBubble}
+        {MemoSnapshotBubble}
       </View>
     </Animated.View>
   );
