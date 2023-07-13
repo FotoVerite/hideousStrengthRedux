@@ -92,9 +92,10 @@ export interface DigestedConversationEmojiItemType
 
 export interface DigestedConversationSnapShotItemType
   extends AbstractMetaDigestedConversationItemType {
-  content: {image: SkImage; backup: string; fileName: string};
+  content: {image?: SkImage; backup: string; filename: string};
   type: DigestedItemTypes.SNAPSHOT;
 }
+
 export type DigestedConversationListItem =
   | DigestedConversationEmojiItemType
   | DigestedConversationTimeType

@@ -8,6 +8,7 @@ import {
   Group,
   useImage,
   Image as SkImage,
+  Rect,
 } from '@shopify/react-native-skia';
 
 import {SharedValue} from 'react-native-reanimated';
@@ -18,6 +19,11 @@ import {MessagesContext} from 'components/apps/Messages/context';
 import Reaction from './Reaction';
 import {DigestedConversationSnapShotItemType} from 'components/apps/Messages/context/digestConversation/types';
 import {SnapShotContext} from 'components/Snapshot/context';
+import {
+  BubblePath,
+  flipPath,
+} from 'components/apps/Messages/context/digestConversation/BubblePath';
+import metroidDread from '@apps/Messages/assets/messages/alice/MetroidDread.jpeg';
 
 export const SnapshotBubble: FC<DigestedConversationSnapShotItemType & {}> = ({
   avatar,
@@ -25,18 +31,17 @@ export const SnapshotBubble: FC<DigestedConversationSnapShotItemType & {}> = ({
   leftSide,
   width,
   height,
-  clip,
   reaction,
   colors,
 }) => {
-  const [image, setImage] = useState(content ? useImage(content) : undefined);
-
+  const [image, setImage] = useState(content.image);
   const context = useContext(MessagesContext);
   const snapshotContext = useContext(SnapShotContext);
+  const k = BubblePath(width, height, 16, true);
 
   useEffect(() => {
     if (!image) {
-      snapshotContext.takeSnapShot.set('IMAGE_NAME');
+      snapshotContext.takeSnapShot.set(content.filename);
     }
   });
 
@@ -46,10 +51,13 @@ export const SnapshotBubble: FC<DigestedConversationSnapShotItemType & {}> = ({
     }
   }, [snapshotContext.takeSnapShot, snapshotContext.image]);
 
+  useEffect(() => {}, [image]);
+  const a = useImage(metroidDread);
+
   if (!image) {
     return null;
   }
-
+  console.log(image.height(), image.width());
   return (
     <Row
       style={{
@@ -75,12 +83,13 @@ export const SnapshotBubble: FC<DigestedConversationSnapShotItemType & {}> = ({
               {
                 width: width,
                 height: height,
+                backgroundColor: 'red',
               },
             ]}>
-            <Group clip={clip}>
+            <Group clip={k} strokeWidth={1}>
               <SkImage
                 image={image}
-                fit="fill"
+                fit={'contain'}
                 x={0}
                 y={0}
                 width={width}

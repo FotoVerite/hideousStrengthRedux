@@ -52,8 +52,6 @@ export type ConversationType = {
 export type DigestedConversation = {
   tags: string[];
   name: CONTACT_NAMES;
-  date: string;
-  listContent: string;
   heroImage: DataSourceParam;
   exchanges: DigestedConversationListItem[];
   group?: boolean;
@@ -78,33 +76,37 @@ export type MessageWithMetaType =
   | EmojiMessageWithMeta
   | GlyphMessageWithMeta
   | StringMessageWithMeta
-  | SnapshotMessageWithMeta
-  | ImageMessageWithMeta;
+  | ImageMessageWithMeta
+  | SnapshotMessageWithMeta;
 
 interface AbstractMessageWithMetaType {
-  message: string;
   messageDelay?: number;
   typingDelay?: number;
   reaction?: ReactionType;
 }
 
 export interface StringMessageWithMeta extends AbstractMessageWithMetaType {
+  message: string;
   type: DigestedItemTypes.STRING;
 }
 
 export interface ImageMessageWithMeta extends AbstractMessageWithMetaType {
+  message: string;
   type: DigestedItemTypes.IMAGE;
 }
 
 export interface EmojiMessageWithMeta extends AbstractMessageWithMetaType {
+  message: string;
   type: DigestedItemTypes.EMOJI;
 }
 export interface GlyphMessageWithMeta extends AbstractMessageWithMetaType {
+  message: string;
   type: DigestedItemTypes.GLYPH;
 }
 
 export interface SnapshotMessageWithMeta extends AbstractMessageWithMetaType {
   type: DigestedItemTypes.SNAPSHOT;
+  message: {backup: string; filename: string};
 }
 
 export type ReactionType = {name: string; color: string};

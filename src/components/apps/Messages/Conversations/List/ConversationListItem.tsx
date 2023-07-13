@@ -21,6 +21,7 @@ import {
 } from '../../context/utility';
 import {EventOrchestraContext} from 'components/EventOrchestra/context';
 import {formatMoment} from 'common';
+import {DigestedItemTypes} from '../../context/digestConversation/types';
 
 const ConversationListItem: FC<{conversation: ConversationType}> = ({
   conversation,
@@ -86,7 +87,11 @@ const determineLogLine = (
 const getLastMessageString = (block: ExchangeBlockType[]) => {
   const lastMessage = block.slice(-1)[0].messages.slice(-1)[0];
   if (isMessageWithMeta(lastMessage)) {
-    return lastMessage.message;
+    if (lastMessage.type !== DigestedItemTypes.SNAPSHOT) {
+      return lastMessage.message;
+    } else {
+      return lastMessage.message.filename;
+    }
   } else {
     return lastMessage;
   }

@@ -1,5 +1,9 @@
-import {SkFont} from '@shopify/react-native-skia';
-import {DigestConfigurationType, DigestedConversationListItem} from './types';
+import {SkFont, Skia} from '@shopify/react-native-skia';
+import {
+  DigestConfigurationType,
+  DigestedConversationListItem,
+  DigestedItemTypes,
+} from './types';
 import {createTimeItem} from './TimeItem';
 import {
   ConversationExchangeType,
@@ -10,6 +14,8 @@ import {
 import {createStringItem} from './StringItem';
 import {SkMessageItem} from './SkMessageItem';
 import {isMessageWithMeta} from '../utility';
+import {getSnapshotPath} from 'components/Snapshot/context';
+import ReactNativeBlobUtil from 'react-native-blob-util';
 
 export const BUBBLE_PADDING = 18;
 
@@ -123,5 +129,65 @@ const createItem = (
       hasTail,
       undefined,
     );
+  }
+};
+
+type SnapshotResolverType = {
+  offset: number;
+  arr: DigestedConversationListItem[];
+};
+export const resolveSnapshots = async (
+  digested: DigestedConversationListItem[],
+) => {
+  const resolver = new Promise<SnapshotResolverType>((resolve, reject) => {
+    resolve({
+      arr: new Array(),
+      offset: 0,
+    });
+  });
+  const resolved = await digested.reduce(
+    resolveSnapshotAndUpdateOffset,
+    resolver,
+  );
+  return resolved.arr;
+};
+
+const resolveSnapshotAndUpdateOffset = async (
+  memo: Promise<{
+    offset: number;
+    arr: DigestedConversationListItem[];
+  }>,
+  item: DigestedConversationListItem,
+) => {
+  const acc = await memo;
+  if (item.type !== DigestedItemTypes.SNAPSHOT) {
+    item.offset += acc.offset;
+    acc.arr.push(item);
+    return acc;
+  } else {
+    const path = getSnapshotPath(item.content.filename);
+    const exists = await ReactNativeBlobUtil.fs.exists(path);
+    if (!exists) {
+      acc.arr.push(item);
+      return acc;
+    }
+    console.log(path);
+    const data = await ReactNativeBlobUtil.fs.readFile(
+      '/Users/fotoverite/Downloads/weather-map.png',
+      'base64',
+    );
+    const image = Skia.Image.MakeImageFromEncoded(Skia.Data.fromBase64(data));
+    if (!image) {
+      acc.arr.push(item);
+      return acc;
+    }
+    const aspectRation = image.height() / image.width();
+    const imageHeight = item.width * aspectRation;
+    acc.offset += imageHeight;
+    item.height = imageHeight;
+    item.content.image = image;
+    item.content = Object.assign({}, {...item.content}, {image: image});
+    acc.arr.push(item);
+    return acc;
   }
 };

@@ -32,10 +32,20 @@ export const greg: ConversationType = {
           messages: ['We should plan another session soon'],
         },
         {
-          name: CONTACT_NAMES.GREG,
+          name: CONTACT_NAMES.SELF,
           messages: [
-            {type: DigestedItemTypes.SNAPSHOT, message: 'ZOLA_SNAPSHOT'},
+            {
+              type: DigestedItemTypes.SNAPSHOT,
+              message: {
+                backup: getAvatarFromContacts(CONTACT_NAMES.GREG)!,
+                filename: 'ZARA_MESSAGES_SNAPSHOT',
+              },
+            },
           ],
+        },
+        {
+          name: CONTACT_NAMES.GREG,
+          messages: ['We should plan another session soon'],
         },
       ],
     },

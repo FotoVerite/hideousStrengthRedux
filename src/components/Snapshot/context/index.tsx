@@ -29,7 +29,7 @@ const SnapShotContextProvider: FC<SnapShotContextTypeDigest> = props => {
     const snapShot = async () => {
       if (image && takeSnapShot) {
         await ReactNativeBlobUtil.fs.writeFile(
-          getSnapshotPath('IMAGE_NAME'),
+          getSnapshotPath(takeSnapShot),
           image.encodeToBase64(),
           'base64',
         );

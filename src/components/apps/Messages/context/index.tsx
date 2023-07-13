@@ -8,7 +8,10 @@ import {
 } from './types';
 import {zola} from '../assets/messages/zola';
 import {chris} from '../assets/messages/chris';
-import {digestConversation as digestExchanges} from './digestConversation';
+import {
+  digestConversation as digestExchanges,
+  resolveSnapshots,
+} from './digestConversation';
 import {useWindowDimensions} from 'react-native';
 import {ApplicationContext} from 'context';
 import {seamless} from '../assets/messages/seamless';
@@ -107,7 +110,7 @@ const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
     seenRoutes.forEach(route => createBlockFromSeenRoute(digested, route));
   };
 
-  const setDigestedConversation = (conversation?: ConversationType) => {
+  const setDigestedConversation = async (conversation?: ConversationType) => {
     if (conversation) {
       const {exchanges, ...conversationProps} = conversation;
       const digestedExchanges = digestExchanges(
@@ -117,8 +120,9 @@ const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
         applicationContext.fonts.HelveticaNeue,
         applicationContext.fonts.NotoColor,
       );
+      const resolvedExchanges = await resolveSnapshots(digestedExchanges);
       const digested = Object.assign(conversationProps, {
-        exchanges: digestedExchanges,
+        exchanges: resolvedExchanges,
         availableRoutes: conversation.routes || [],
         route: findAvailableRoutes(
           conversation.name,
@@ -126,6 +130,7 @@ const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
           eventContext.events.state,
         ),
       });
+
       appendSeenRoutes(digested);
       _setConversation(digested);
       setConversationAsViewed(digested.name);

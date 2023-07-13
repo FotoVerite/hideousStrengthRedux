@@ -7,6 +7,7 @@ import {
   DigestedConversationGlyphItemType,
   DigestedConversationImageItemType,
   DigestedConversationListItem,
+  DigestedConversationSnapShotItemType,
   DigestedConversationStringItemType,
   DigestedItemTypes,
 } from './types';
@@ -25,14 +26,15 @@ import {getSnapshotPath} from 'components/Snapshot/context';
 type CalculationsType = {
   height: number;
   width: number;
-  content: string | Element[];
+  content: string | Element[] | {filename: string; backup: string};
 };
 
 type ItemType =
   | DigestedConversationEmojiItemType
   | DigestedConversationStringItemType
   | DigestedConversationImageItemType
-  | DigestedConversationGlyphItemType;
+  | DigestedConversationGlyphItemType
+  | DigestedConversationSnapShotItemType;
 
 export const SkMessageItem = (
   itemConfiguration: DigestConfigurationType,
@@ -78,10 +80,6 @@ export const SkMessageItem = (
     typingDelay: message.typingDelay,
   };
 
-  // if (true) {
-  //   setSnapshot('IMAGE_NAME', width);
-  // }
-
   return skItem;
 };
 
@@ -108,7 +106,11 @@ const calculateWidthHeightAndContent = (
     case DigestedItemTypes.EMOJI:
       return {width: itemWidth, height: 60, content: message.message};
     case DigestedItemTypes.SNAPSHOT:
-      return content;
+      return {
+        width: itemWidth,
+        height: 0,
+        content: message.message,
+      };
     case DigestedItemTypes.IMAGE:
       const imageDimensions = Image.resolveAssetSource(
         message.message as ImageSourcePropType,
@@ -142,32 +144,4 @@ const calculateWidthHeightAndContent = (
     default:
       return {width: itemWidth, height: 60, content: ''};
   }
-};
-
-const setSnapshot = async (fileName: string, width: number) => {
-  const path = getSnapshotPath('IMAGE_NAME');
-  const exists = await ReactNativeBlobUtil.fs.exists(path);
-  if (!exists) {
-    return {
-      width: width,
-      height: 500,
-      content: {image: undefined, backup: 'backup', fileName: 'IMAGE_NAME'},
-    };
-  }
-  const data = await ReactNativeBlobUtil.fs.readFile(path, 'base64');
-  const image = Skia.Image.MakeImageFromEncoded(data);
-  if (!image) {
-    return {
-      width: width,
-      height: 500,
-      content: {image: undefined, backup: 'backup', fileName: 'IMAGE_NAME'},
-    };
-  }
-  const aspectRation = image.height() / image.width();
-  const imageHeight = width * aspectRation;
-  return {
-    width: width,
-    height: imageHeight,
-    content: {image: image, backup: 'backup', fileName: 'IMAGE_NAME'},
-  };
 };
