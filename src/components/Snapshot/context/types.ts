@@ -12,6 +12,7 @@ export type SnapShotContextTypeDigest = {
 };
 
 export type SnapShotContextTypeDigested = PropsWithChildren<{
+  indicatorRunning: GenericStateType<boolean>;
   takeSnapShot: GenericOrUndefinedStateType<string>;
   image: SkImage | null | undefined;
 }>;

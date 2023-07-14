@@ -1,4 +1,4 @@
-import React, {FC, useContext, useRef} from 'react';
+import React, {FC, useContext, useEffect, useRef, useState} from 'react';
 import {
   StyleSheet,
   Image,
@@ -27,17 +27,27 @@ const MediaView: FC = () => {
 
   const context = useContext(MessagesContext);
   const aspectRation = useRef(1);
-  const media = useRef(context.media.state);
+  const [media, setMedia] = useState<{uri: string} | string>();
 
   const showMedia = useSharedValue(0);
 
-  if (context.media.state != null && media.current !== context.media.state) {
-    const dimensions = Image.resolveAssetSource(
-      context.media.state as ImageURISource,
-    );
-    aspectRation.current = dimensions.width / dimensions.height;
-    media.current = context.media.state;
-  }
+  useEffect(() => {
+    if (context.media.state) {
+      const uri = context.media.state;
+      if (typeof uri === 'string') {
+        Image.getSize(uri, (width, height) => {
+          aspectRation.current = width / height;
+          setMedia({uri: context.media.state});
+        });
+      } else {
+        const dimensions = Image.resolveAssetSource(
+          context.media.state as ImageURISource,
+        );
+        aspectRation.current = dimensions.width / dimensions.height;
+        setMedia(context.media.state);
+      }
+    }
+  }, [context.media.state]);
 
   const AnimateMediaTop = useAnimatedStyle(() => {
     if (context.media.state) {
@@ -66,9 +76,9 @@ const MediaView: FC = () => {
         </View>
       </Row>
       <View style={styles.imageContainer}>
-        {media.current != null && (
+        {media != null && (
           <Image
-            source={media.current as ImageURISource}
+            source={media as ImageURISource}
             style={[styles.image, {aspectRatio: aspectRation.current}]}
           />
         )}

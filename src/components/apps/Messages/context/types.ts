@@ -24,6 +24,7 @@ export type MessagesContextTypeDigested = PropsWithChildren<{
     state: DigestedConversation | undefined;
     set: React.Dispatch<React.SetStateAction<DigestedConversation | undefined>>;
     digest: (toDigest: ConversationType | undefined) => void;
+    updateMessage: (index: number, props: any) => void;
   };
   media: GenericOrUndefinedStateType<DataSourceParam>;
 }>;

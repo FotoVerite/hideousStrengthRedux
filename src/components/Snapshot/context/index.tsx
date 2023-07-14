@@ -11,6 +11,8 @@ export const SnapShotContext = React.createContext<SnapShotContextTypeDigested>(
 const SnapShotContextProvider: FC<SnapShotContextTypeDigest> = props => {
   const [takeSnapShot, setTakeSnapShot] = useState<string>();
   const [image, setImage] = useState<undefined | null | SkImage>();
+  const [indicatorRunning, setIndicatorRunning] = useState(false);
+
   const snapShotRef = useRef(props.snapShotRef);
 
   useEffect(() => {
@@ -46,6 +48,7 @@ const SnapShotContextProvider: FC<SnapShotContextTypeDigest> = props => {
     <SnapShotContext.Provider
       value={{
         takeSnapShot: {state: takeSnapShot, set: setTakeSnapShot},
+        indicatorRunning: {state: indicatorRunning, set: setIndicatorRunning},
         image: image,
       }}>
       {props.children}

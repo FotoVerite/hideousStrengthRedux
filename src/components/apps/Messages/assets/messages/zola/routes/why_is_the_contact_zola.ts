@@ -1,14 +1,19 @@
-import {MessageRouteType} from 'components/apps/Messages/context/types';
+import {
+  ExchangeBlockType,
+  MessageRouteType,
+} from 'components/apps/Messages/context/types';
 import {CONTACT_NAMES} from 'components/apps/Messages/context/usersMapping';
 import {ZARA_ROUTE_IDS} from './routes';
 import {ZARA_FOUND_NOTHING_OPTIONS} from './nothing_found';
+import backup from '../ZARA_MESSAGES_SNAPSHOT.png';
+import {DigestedItemTypes} from 'components/apps/Messages/context/digestConversation/types';
 
 export enum ZARA_WHY_IS_CONTACT_ZOLA_OPTIONS {
   A = 'Question',
   B = 'I just started looking',
 }
 
-const exchanges = [
+const exchanges: ExchangeBlockType[] = [
   {
     name: CONTACT_NAMES.ZOLA,
     messages: ["I'm afraid to ask."],
@@ -23,7 +28,28 @@ const exchanges = [
   },
   {
     name: CONTACT_NAMES.SELF,
-    messages: ['Here'],
+    messages: [
+      'Here',
+      {
+        type: DigestedItemTypes.SNAPSHOT,
+        message: {backup: backup, filename: 'ZARA_MESSAGES_SNAPSHOT'},
+      },
+    ],
+  },
+  {
+    name: CONTACT_NAMES.ZOLA,
+    messages: [
+      {
+        type: DigestedItemTypes.STRING,
+        typingDelay: 5000,
+        message: "I don't want to go into that right now. ",
+      },
+      "Inside joke it's not important",
+    ],
+  },
+  {
+    name: CONTACT_NAMES.SELF,
+    messages: ['Okay... sure.'],
   },
 ];
 

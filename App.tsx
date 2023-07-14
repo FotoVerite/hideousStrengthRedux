@@ -8,7 +8,10 @@
 import {NavigationContainer} from '@react-navigation/native';
 import React, {useRef} from 'react';
 
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import Messages from 'components/apps/Messages';
 import ApplicationContextProvider from 'context';
 import {skFontRecords} from 'context/types';
@@ -18,6 +21,7 @@ import TextBoxEngineContextProvider from 'components/TextBoxEngine/context';
 import {View} from 'react-native';
 import EventOrchestraContextProvider from 'components/EventOrchestra/context';
 import SnapShotContextProvider from 'components/Snapshot/context';
+import SnapshotView from 'components/Snapshot';
 
 function App(): JSX.Element {
   const SFPro = useFont(require('@applicationAssets/fonts/SFPro.ttf'), 16);
@@ -46,11 +50,11 @@ function App(): JSX.Element {
           <EventOrchestraContextProvider>
             <TextBoxEngineContextProvider>
               <NavigationContainer>
-                <View ref={screenRef} style={{flex: 1}}>
-                  <SnapShotContextProvider snapShotRef={screenRef}>
+                <SnapShotContextProvider snapShotRef={screenRef}>
+                  <SnapshotView snapshotRef={screenRef}>
                     <Messages />
-                  </SnapShotContextProvider>
-                </View>
+                  </SnapshotView>
+                </SnapShotContextProvider>
               </NavigationContainer>
               <TextBoxEngine screenRef={screenRef} />
             </TextBoxEngineContextProvider>

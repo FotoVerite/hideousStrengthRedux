@@ -1,63 +1,31 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable no-bitwise */
-import React, {FC, useContext, useEffect, useState} from 'react';
+import React, {FC, useContext} from 'react';
 import {Image, TouchableWithoutFeedback, View} from 'react-native';
 
 import {
   Canvas,
   Group,
-  useImage,
-  Image as SkImage,
-  Rect,
+  Image as SkiaImage,
+  SkPath,
+  SkImage,
 } from '@shopify/react-native-skia';
 
-import {SharedValue} from 'react-native-reanimated';
 import {Row} from 'components/common/layout';
 import {StyleSheet} from 'react-native';
 import theme from 'themes';
 import {MessagesContext} from 'components/apps/Messages/context';
-import Reaction from './Reaction';
 import {DigestedConversationSnapShotItemType} from 'components/apps/Messages/context/digestConversation/types';
-import {SnapShotContext} from 'components/Snapshot/context';
-import {
-  BubblePath,
-  flipPath,
-} from 'components/apps/Messages/context/digestConversation/BubblePath';
-import metroidDread from '@apps/Messages/assets/messages/alice/MetroidDread.jpeg';
+import Reaction from '../Reaction';
 
-export const SnapshotBubble: FC<DigestedConversationSnapShotItemType & {}> = ({
-  avatar,
-  content,
-  leftSide,
-  width,
-  height,
-  reaction,
-  colors,
-}) => {
-  const [image, setImage] = useState(content.image);
+export const SnapshotBubbleRenderer: FC<
+  DigestedConversationSnapShotItemType & {clip: SkPath; image?: SkImage}
+> = ({avatar, leftSide, width, height, reaction, colors, clip, image}) => {
   const context = useContext(MessagesContext);
-  const snapshotContext = useContext(SnapShotContext);
-  const k = BubblePath(width, height, 16, true);
-
-  useEffect(() => {
-    if (!image) {
-      snapshotContext.takeSnapShot.set(content.filename);
-    }
-  });
-
-  useEffect(() => {
-    if (snapshotContext.takeSnapShot && snapshotContext.image) {
-      setImage(snapshotContext.image);
-    }
-  }, [snapshotContext.takeSnapShot, snapshotContext.image]);
-
-  useEffect(() => {}, [image]);
-  const a = useImage(metroidDread);
 
   if (!image) {
     return null;
   }
-  console.log(image.height(), image.width());
   return (
     <Row
       style={{
@@ -72,7 +40,7 @@ export const SnapshotBubble: FC<DigestedConversationSnapShotItemType & {}> = ({
       )}
       <TouchableWithoutFeedback
         onPress={() => {
-          context.media.set(image);
+          context.media.set('data:image/png;base64,' + image.encodeToBase64());
         }}>
         <View>
           {reaction && (
@@ -83,13 +51,12 @@ export const SnapshotBubble: FC<DigestedConversationSnapShotItemType & {}> = ({
               {
                 width: width,
                 height: height,
-                backgroundColor: 'red',
               },
             ]}>
-            <Group clip={k} strokeWidth={1}>
-              <SkImage
+            <Group clip={clip}>
+              <SkiaImage
                 image={image}
-                fit={'contain'}
+                fit="fill"
                 x={0}
                 y={0}
                 width={width}

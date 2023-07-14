@@ -28,6 +28,7 @@ import {APP_NAMES} from 'components/apps/types';
 import {CONTACT_NAMES} from './usersMapping';
 import {findAvailableRoutes} from './routeConditions';
 import {RouteObjectType, getSeenRoutes} from './utility';
+import {DigestedConversationListItem} from './digestConversation/types';
 
 //defaults for empty app
 export const MessagesContext = React.createContext<MessagesContextTypeDigested>(
@@ -120,9 +121,8 @@ const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
         applicationContext.fonts.HelveticaNeue,
         applicationContext.fonts.NotoColor,
       );
-      const resolvedExchanges = await resolveSnapshots(digestedExchanges);
       const digested = Object.assign(conversationProps, {
-        exchanges: resolvedExchanges,
+        exchanges: digestedExchanges,
         availableRoutes: conversation.routes || [],
         route: findAvailableRoutes(
           conversation.name,
@@ -132,11 +132,23 @@ const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
       });
 
       appendSeenRoutes(digested);
+      digested.exchanges = await resolveSnapshots(digested.exchanges);
+
       _setConversation(digested);
       setConversationAsViewed(digested.name);
     } else {
       _setConversation(undefined);
     }
+  };
+
+  const updateMessage = (index: number, props: any) => {
+    _setConversation(state => {
+      const newState = Object.assign({}, state);
+      newState.exchanges[index] = Object.assign({}, newState.exchanges[index], {
+        ...props,
+      });
+      return newState;
+    });
   };
 
   return (
@@ -150,6 +162,7 @@ const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
         digestedConversation: {
           state: digestedConversation,
           digest: setDigestedConversation,
+          updateMessage: updateMessage,
           set: _setConversation,
         },
       }}>

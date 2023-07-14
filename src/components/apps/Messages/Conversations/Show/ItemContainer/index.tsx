@@ -29,7 +29,9 @@ const ItemContainer: FC<{
   group: boolean;
 }> = ({item, scrollHandler, scrollRef, group, index}) => {
   const context = useContext(TextOrchestrationContext);
-  const opacity = useSharedValue(item.messageDelay ? 0 : 1);
+  const opacity = useSharedValue(
+    item.messageDelay && item.type != DigestedItemTypes.SNAPSHOT ? 0 : 1,
+  );
 
   const isWaiting =
     item.type === DigestedItemTypes.STRING &&
@@ -90,7 +92,15 @@ const ItemContainer: FC<{
 
   const MemoSnapshotBubble = useMemo(() => {
     if (item.type === DigestedItemTypes.SNAPSHOT) {
-      return <SnapshotBubble {...item} />;
+      return (
+        <SnapshotBubble
+          {...item}
+          index={index}
+          scrollHandler={scrollHandler}
+          group={group}
+          scrollRef={scrollRef}
+        />
+      );
     }
   }, [item]);
 
@@ -103,7 +113,7 @@ const ItemContainer: FC<{
         context.textIsFinished(true);
       }
     };
-    if (item.messageDelay) {
+    if (item.type != DigestedItemTypes.SNAPSHOT && item.messageDelay) {
       toBottom(item.messageDelay);
     }
   }, [item.messageDelay]);

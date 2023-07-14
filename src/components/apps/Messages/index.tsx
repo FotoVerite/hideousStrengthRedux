@@ -13,11 +13,7 @@ const Messages: FC = () => {
   const insets = useSafeAreaInsets();
   return (
     <MessagesContextProvider>
-      <View
-        style={[
-          styles.layout,
-          {marginTop: insets.top, marginBottom: insets.bottom},
-        ]}>
+      <View style={[styles.layout]}>
         <Header />
         <Conversations />
         <Conversation />

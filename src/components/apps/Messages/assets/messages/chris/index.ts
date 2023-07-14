@@ -7,14 +7,14 @@ import {
   CONTACT_NAMES,
   getColorFromContacts,
 } from 'components/apps/Messages/context/usersMapping';
+import {chris_test_route} from './routes/test_route';
 
 //import panopticon from '@apps/Messages/assets/messages/pantopitcon.jpeg';
 
 export const chris: ConversationType = {
   name: CONTACT_NAMES.CHRIS,
   tags: [],
-  date: 'June 15th 2022',
-  listContent: 'Have You?',
+  routes: [],
   heroImage: chrisAvatar,
   interfaceColor: getColorFromContacts(CONTACT_NAMES.CHRIS)[0],
   exchanges: [

@@ -171,11 +171,7 @@ const resolveSnapshotAndUpdateOffset = async (
       acc.arr.push(item);
       return acc;
     }
-    console.log(path);
-    const data = await ReactNativeBlobUtil.fs.readFile(
-      '/Users/fotoverite/Downloads/weather-map.png',
-      'base64',
-    );
+    const data = await ReactNativeBlobUtil.fs.readFile(path, 'base64');
     const image = Skia.Image.MakeImageFromEncoded(Skia.Data.fromBase64(data));
     if (!image) {
       acc.arr.push(item);
