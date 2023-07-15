@@ -3,6 +3,7 @@ import arialAvatar from '@apps/Messages/assets/avatars/alice_avator.jpg';
 import aliceAvatar from '@apps/Messages/assets/avatars/alice_avator.jpg';
 
 import defaultAvatar from '@apps/Messages/assets/avatars/unkown.jpeg';
+import darkoAvatar from '@apps/Messages/assets/avatars/donnie-darko.jpg';
 
 import zaraAvatar from '../assets/avatars/Zara.jpg';
 import chrisAvatar from '../assets/avatars/Chris.jpg';
@@ -22,6 +23,7 @@ export enum CONTACT_NAMES {
   GRACE_RUSSO = 'Grace Russo',
   GREG = 'Fuck Face',
   MILEENA = 'Mileena',
+  MOVIE_NIGHT = 'Movie Night',
   SELF = 'Self',
   STEVE_LITT = 'Steve-0',
   ZOLA = 'Zola',
@@ -35,12 +37,13 @@ export type UserMappingType = {
 };
 export const contactConsts: {[key in CONTACT_NAMES]: UserMappingType} = {
   Arial: {avatar: arialAvatar, colors: ['#dbaf48', '#cdc8bb']},
-  Mileena: {avatar: meleenaAvatar, colors: ['#ff0095', '#cdbbc6']},
   Alice: {avatar: aliceAvatar, colors: ['#d0bd28', '#cdc8bb']},
   Chris: {avatar: chrisAvatar, colors: ['#6bd8e4', '#363243']},
   Clay: {avatar: chrisAvatar, colors: ['#6bd8e4', '#363243']},
   'Fuck Face': {avatar: gregAvatar, colors: ['#48ee4e', '#363243']},
   'Grace Russo': {avatar: graceAvatar, colors: ['#EE6548', '#363243']},
+  Mileena: {avatar: meleenaAvatar, colors: ['#ff0095', '#cdbbc6']},
+  'Movie Night': {avatar: darkoAvatar, colors: ['#6b6b6d', '#363243']},
   Self: {avatar: undefined, colors: ['blue', '#363243']},
   'Steve-0': {avatar: steveLitt, colors: ['#FF002D', '#C3596B']},
   Zola: {avatar: zaraAvatar, colors: ['#b46be4', '#363243']},

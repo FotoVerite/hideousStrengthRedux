@@ -24,7 +24,7 @@ import {
 import {Row} from 'components/common/layout';
 import {StyleSheet} from 'react-native';
 import Reaction from '../Reaction';
-import {DigestedConversationGlyphItemType} from 'components/apps/Messages/context/digestConversation/types';
+import {DigestedConversationGlyphItemType} from 'components/apps/Messages/reducers/conversationReducer/digestion/types';
 
 import theme from 'themes';
 import {P} from 'components/common/StyledText';

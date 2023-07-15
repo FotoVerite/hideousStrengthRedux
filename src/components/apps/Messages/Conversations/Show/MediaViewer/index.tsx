@@ -1,4 +1,11 @@
-import React, {FC, useContext, useEffect, useRef, useState} from 'react';
+import React, {
+  FC,
+  ReactElement,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   StyleSheet,
   Image,
@@ -6,6 +13,7 @@ import {
   TouchableWithoutFeedback,
   View,
   useWindowDimensions,
+  ImageSourcePropType,
 } from 'react-native';
 import Animated, {
   interpolate,
@@ -26,28 +34,13 @@ const MediaView: FC = () => {
   const insets = useSafeAreaInsets();
 
   const context = useContext(MessagesContext);
-  const aspectRation = useRef(1);
-  const [media, setMedia] = useState<{uri: string} | string>();
+  const media = useRef<ReactElement>();
 
   const showMedia = useSharedValue(0);
 
-  useEffect(() => {
-    if (context.media.state) {
-      const uri = context.media.state;
-      if (typeof uri === 'string') {
-        Image.getSize(uri, (width, height) => {
-          aspectRation.current = width / height;
-          setMedia({uri: context.media.state});
-        });
-      } else {
-        const dimensions = Image.resolveAssetSource(
-          context.media.state as ImageURISource,
-        );
-        aspectRation.current = dimensions.width / dimensions.height;
-        setMedia(context.media.state);
-      }
-    }
-  }, [context.media.state]);
+  if (context.media.state != null) {
+    media.current = React.cloneElement(context.media.state);
+  }
 
   const AnimateMediaTop = useAnimatedStyle(() => {
     if (context.media.state) {
@@ -75,19 +68,29 @@ const MediaView: FC = () => {
           </TouchableWithoutFeedback>
         </View>
       </Row>
-      <View style={styles.imageContainer}>
-        {media != null && (
-          <Image
-            source={media as ImageURISource}
-            style={[styles.image, {aspectRatio: aspectRation.current}]}
-          />
-        )}
-      </View>
+      <View style={styles.imageContainer}>{media.current}</View>
     </Animated.View>
   );
 };
 
 export default MediaView;
+
+export const MediaImageElement: FC<{
+  source: ImageSourcePropType;
+  aspectRatio: number;
+}> = ({source, aspectRatio}) => {
+  return (
+    <Image
+      source={source}
+      style={[
+        styles.image,
+        {
+          aspectRatio: aspectRatio,
+        },
+      ]}
+    />
+  );
+};
 
 const styles = StyleSheet.create({
   doneContainer: {marginStart: 'auto'},

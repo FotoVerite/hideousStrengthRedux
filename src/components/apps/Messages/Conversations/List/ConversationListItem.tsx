@@ -2,26 +2,25 @@ import React, {FC, useContext, useMemo} from 'react';
 import {TouchableOpacity, Image, View, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import {DigestedItemTypes} from '../../reducers/conversationReducer/digestion/types';
+import {CONVERSATION_REDUCER_ACTIONS} from '../../reducers/conversationReducer/types';
+
 import {Bold, P} from 'components/common/StyledText';
 import {Row} from 'components/common/layout';
 
-import {
-  ConversationType,
-  ExchangeBlockType,
-  MessageWithMetaType,
-} from '../../context/types';
+import {ConversationType, ExchangeBlockType} from '../../context/types';
 import {MessagesContext} from '../../context';
-import theme from 'themes';
-import {MessageRouteEventDataType} from 'components/EventOrchestra/context/types';
 import moment from 'moment';
-import {
-  RouteObjectType,
-  getLastSeenRoute,
-  isMessageWithMeta,
-} from '../../context/utility';
+
 import {EventOrchestraContext} from 'components/EventOrchestra/context';
 import {formatMoment} from 'common';
-import {DigestedItemTypes} from '../../context/digestConversation/types';
+
+import theme from 'themes';
+import {isMessageWithMeta} from '../../context/utility';
+import {
+  getLastSeenRoute,
+  RouteObjectType,
+} from '../../reducers/conversationReducer/routing/seen';
 
 const ConversationListItem: FC<{conversation: ConversationType}> = ({
   conversation,
@@ -44,7 +43,10 @@ const ConversationListItem: FC<{conversation: ConversationType}> = ({
   return (
     <TouchableOpacity
       onPress={() => {
-        context.digestedConversation.digest(conversation);
+        context.conversation.dispatch({
+          type: CONVERSATION_REDUCER_ACTIONS.DIGEST_CONVERSATION,
+          payload: conversation,
+        });
       }}>
       <Row>
         <Image source={conversation.heroImage} style={styles.image} />

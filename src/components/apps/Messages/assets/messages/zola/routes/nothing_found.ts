@@ -1,4 +1,4 @@
-import {DigestedItemTypes} from 'components/apps/Messages/context/digestConversation/types';
+import {DigestedItemTypes} from 'components/apps/Messages/reducers/conversationReducer/digestion/types';
 import {MessageRouteType} from 'components/apps/Messages/context/types';
 import {CONTACT_NAMES} from 'components/apps/Messages/context/usersMapping';
 import {ZARA_ROUTE_IDS} from './routes';

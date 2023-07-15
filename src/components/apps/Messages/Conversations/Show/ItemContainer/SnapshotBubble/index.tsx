@@ -16,14 +16,15 @@ import {StyleSheet} from 'react-native';
 import {
   DigestedConversationSnapShotItemType,
   DigestedConversationStringItemType,
-} from 'components/apps/Messages/context/digestConversation/types';
+} from 'components/apps/Messages/reducers/conversationReducer/digestion/types';
 
 import {TextOrchestrationContext} from 'components/apps/Messages/context/textOrchestration';
 import {SnapShotContext} from 'components/Snapshot/context';
-import {BubblePath} from 'components/apps/Messages/context/digestConversation/BubblePath';
+import {BubblePath} from 'components/apps/Messages/reducers/conversationReducer/digestion/BubblePath';
 import {SkImage} from '@shopify/react-native-skia';
 import {SnapshotBubbleRenderer} from './SnapshotBubbleRenderer';
 import {MessagesContext} from 'components/apps/Messages/context';
+import {CONVERSATION_REDUCER_ACTIONS} from 'components/apps/Messages/reducers/conversationReducer/types';
 
 export const SnapshotBubble: FC<
   DigestedConversationSnapShotItemType & {
@@ -58,13 +59,19 @@ export const SnapshotBubble: FC<
       const snapshotImage = snapshotContext.image;
       const aspectRation = snapshotImage.height() / snapshotImage.width();
       const imageHeight = props.width * aspectRation;
-      messageContext.digestedConversation.updateMessage(props.index, {
-        content: {
-          image: snapshotImage,
-          filename: props.content.filename,
-          backup: props.content.backup,
+      messageContext.conversation.dispatch({
+        type: CONVERSATION_REDUCER_ACTIONS.UPDATE_MESSAGE,
+        payload: {
+          index: props.index,
+          props: {
+            content: {
+              image: snapshotImage,
+              filename: props.content.filename,
+              backup: props.content.backup,
+            },
+            height: imageHeight,
+          },
         },
-        height: imageHeight,
       });
       setImage(snapshotContext.image);
     }
@@ -72,7 +79,7 @@ export const SnapshotBubble: FC<
 
   useEffect(() => {
     if (!renderWaiting) {
-      context.textIsFinished(true);
+      context.showNextMessage();
     }
   }, [renderWaiting]);
 

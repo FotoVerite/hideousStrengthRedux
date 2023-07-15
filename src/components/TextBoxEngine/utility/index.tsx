@@ -1,5 +1,5 @@
 import {Glyph, SkFont, vec} from '@shopify/react-native-skia';
-import {GlyphContent} from 'components/apps/Messages/context/digestConversation/types';
+import {GlyphContent} from 'components/apps/Messages/reducers/conversationReducer/digestion/types';
 import theme from 'themes';
 
 export const generateFrameDimensions = (

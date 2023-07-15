@@ -3,7 +3,7 @@ import {APP_NAMES} from 'components/apps/types';
 import {PropsWithChildren, ReactNode} from 'react';
 
 export type MessageAppContactsEventType = {
-  [key in CONTACT_NAMES]?: ContactEventType;
+  [key in CONTACT_NAMES]: ContactEventType;
 };
 
 export type MessageRouteEventDataType = {
@@ -17,7 +17,7 @@ export type MessageRouteEventType = {
 };
 
 export type ContactEventType = {
-  views: [Date];
+  views: Date[];
   routes: MessageRouteEventType;
 };
 

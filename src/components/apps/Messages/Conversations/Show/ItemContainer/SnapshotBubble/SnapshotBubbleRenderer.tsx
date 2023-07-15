@@ -1,7 +1,5 @@
-/* eslint-disable react-native/no-inline-styles */
-/* eslint-disable no-bitwise */
 import React, {FC, useContext} from 'react';
-import {Image, TouchableWithoutFeedback, View} from 'react-native';
+import {Image, TouchableWithoutFeedback, View, StyleSheet} from 'react-native';
 
 import {
   Canvas,
@@ -11,12 +9,16 @@ import {
   SkImage,
 } from '@shopify/react-native-skia';
 
-import {Row} from 'components/common/layout';
-import {StyleSheet} from 'react-native';
-import theme from 'themes';
 import {MessagesContext} from 'components/apps/Messages/context';
-import {DigestedConversationSnapShotItemType} from 'components/apps/Messages/context/digestConversation/types';
+
+import {DigestedConversationSnapShotItemType} from 'components/apps/Messages/reducers/conversationReducer/digestion/types';
+
+import {Row} from 'components/common/layout';
+
 import Reaction from '../Reaction';
+import {MediaImageElement} from '../../MediaViewer';
+
+import theme from 'themes';
 
 export const SnapshotBubbleRenderer: FC<
   DigestedConversationSnapShotItemType & {clip: SkPath; image?: SkImage}
@@ -40,7 +42,14 @@ export const SnapshotBubbleRenderer: FC<
       )}
       <TouchableWithoutFeedback
         onPress={() => {
-          context.media.set('data:image/png;base64,' + image.encodeToBase64());
+          context.media.set(
+            <MediaImageElement
+              source={{
+                uri: 'data:image/png;base64,' + image.encodeToBase64(),
+              }}
+              aspectRatio={width / height}
+            />,
+          );
         }}>
         <View>
           {reaction && (

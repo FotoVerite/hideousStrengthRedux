@@ -5,7 +5,7 @@ import {TextBoxEngineContext} from './context';
 import Screen from './Screen';
 import {delayFor} from 'common';
 import {StyleSheet, View} from 'react-native';
-import {GlyphContent} from 'components/apps/Messages/context/digestConversation/types';
+import {GlyphContent} from 'components/apps/Messages/reducers/conversationReducer/digestion/types';
 
 export type DigestedDialogueType = {name: string; glyphs: GlyphContent};
 

@@ -1,4 +1,4 @@
-import {PropsWithChildren, ReactNode} from 'react';
+import {PropsWithChildren, ReactElement, ReactNode} from 'react';
 import {SharedValue} from 'react-native-reanimated';
 import {DataSourceParam} from '@shopify/react-native-skia';
 
@@ -8,7 +8,8 @@ import {CONTACT_NAMES} from './usersMapping';
 import {
   DigestedConversationListItem,
   DigestedItemTypes,
-} from './digestConversation/types';
+} from '../reducers/conversationReducer/digestion/types';
+import {ConversationReducerActionsType} from '../reducers/conversationReducer/types';
 export type MessagesSharedValuesType = {
   wordInputShake: SharedValue<number>;
   infoOpened: SharedValue<number>;
@@ -20,13 +21,11 @@ export type MessagesContextTypeDigest = {
 
 export type MessagesContextTypeDigested = PropsWithChildren<{
   conversations: ConversationType[];
-  digestedConversation: {
-    state: DigestedConversation | undefined;
-    set: React.Dispatch<React.SetStateAction<DigestedConversation | undefined>>;
-    digest: (toDigest: ConversationType | undefined) => void;
-    updateMessage: (index: number, props: any) => void;
+  conversation: {
+    state: DigestedConversationType | undefined;
+    dispatch: (action: ConversationReducerActionsType) => Promise<void>;
   };
-  media: GenericOrUndefinedStateType<DataSourceParam>;
+  media: GenericOrUndefinedStateType<ReactElement>;
 }>;
 
 export type RouteConditionsType = {
@@ -37,7 +36,12 @@ export type MessageRouteType = {
   id: number;
   conditions?: RouteConditionsType;
   options: string[];
-  routes: {[key: string | number]: ExchangeBlockType[]};
+  routes: {[key: string]: ExchangeBlockType[]};
+};
+
+export type DigestedConversationRouteType = MessageRouteType & {
+  exchangeIndex: number;
+  messageIndex: number;
 };
 
 export type ConversationType = {
@@ -50,14 +54,13 @@ export type ConversationType = {
   interfaceColor: string;
 };
 
-export type DigestedConversation = {
+export type DigestedConversationType = {
   tags: string[];
   name: CONTACT_NAMES;
   heroImage: DataSourceParam;
   exchanges: DigestedConversationListItem[];
   group?: boolean;
-  availableRoutes: MessageRouteType[];
-  route?: MessageRouteType;
+  routes: MessageRouteType[];
   interfaceColor: string;
 };
 

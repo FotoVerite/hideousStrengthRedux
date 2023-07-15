@@ -1,5 +1,5 @@
 import moment, {Moment} from 'moment';
-import {ConversationExchangeType} from '../types';
+import {ConversationExchangeType} from '../../../context/types';
 import {DigestedConversationTimeType, DigestedItemTypes} from './types';
 
 const HEIGHT = 60;

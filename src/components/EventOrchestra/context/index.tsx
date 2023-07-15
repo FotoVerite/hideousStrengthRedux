@@ -3,8 +3,10 @@ import {
   EventOrchestraContextTypeDigest,
   EventOrchestraContextTypeDigested,
   EventOrchestraObjectType,
+  MessageAppContactsEventType,
 } from './types';
 import {APP_NAMES} from 'components/apps/types';
+import {CONTACT_NAMES} from 'components/apps/Messages/context/usersMapping';
 
 //defaults for empty app
 export const EventOrchestraContext =
@@ -13,8 +15,17 @@ export const EventOrchestraContext =
 const EventOrchestraContextProvider: FC<
   EventOrchestraContextTypeDigest
 > = props => {
+  const setDefaultMessageEventState = (state: MessageAppContactsEventType) => {
+    for (const name of Object.values(CONTACT_NAMES)) {
+      if (state[name] == undefined) {
+        state[name] = {views: [], routes: {}};
+      }
+    }
+    return state;
+  };
+
   const [events, setEvent] = useState<EventOrchestraObjectType>({
-    [APP_NAMES.MESSAGE]: {},
+    [APP_NAMES.MESSAGE]: setDefaultMessageEventState({}),
   });
 
   return (

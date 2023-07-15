@@ -6,7 +6,7 @@ import {CONTACT_NAMES} from 'components/apps/Messages/context/usersMapping';
 import {ZARA_ROUTE_IDS} from './routes';
 import {ZARA_FOUND_NOTHING_OPTIONS} from './nothing_found';
 import backup from '../ZARA_MESSAGES_SNAPSHOT.png';
-import {DigestedItemTypes} from 'components/apps/Messages/context/digestConversation/types';
+import {DigestedItemTypes} from 'components/apps/Messages/reducers/conversationReducer/digestion/types';
 
 export enum ZARA_WHY_IS_CONTACT_ZOLA_OPTIONS {
   A = 'Question',

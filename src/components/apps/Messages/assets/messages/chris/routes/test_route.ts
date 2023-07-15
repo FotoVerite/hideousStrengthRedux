@@ -1,4 +1,4 @@
-import {DigestedItemTypes} from 'components/apps/Messages/context/digestConversation/types';
+import {DigestedItemTypes} from 'components/apps/Messages/reducers/conversationReducer/digestion/types';
 import {
   ExchangeBlockType,
   MessageRouteType,

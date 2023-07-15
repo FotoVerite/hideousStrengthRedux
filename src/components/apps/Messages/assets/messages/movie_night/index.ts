@@ -1,16 +1,14 @@
-import darkoAvatar from '@apps/Messages/assets/avatars/donnie-darko.jpg';
 import {
   CONTACT_NAMES,
+  getAvatarFromContacts,
   getColorFromContacts,
 } from 'components/apps/Messages/context/usersMapping';
 
 export const movieNight = {
-  name: 'Movie Night',
+  name: CONTACT_NAMES.MOVIE_NIGHT,
   tags: ['Seamless', 'order', 'food', 'hungry', 'grubhub'],
-  date: 'June 24th',
-  listContent: 'Zoolander?',
-  heroImage: darkoAvatar,
-  interfaceColor: getColorFromContacts('movieNight')[0],
+  heroImage: getAvatarFromContacts(CONTACT_NAMES.MOVIE_NIGHT),
+  interfaceColor: getColorFromContacts(CONTACT_NAMES.MOVIE_NIGHT)[0],
   group: true,
   exchanges: [
     {

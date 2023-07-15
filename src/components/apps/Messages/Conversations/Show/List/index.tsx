@@ -1,5 +1,5 @@
-import {DigestedConversationListItem} from 'components/apps/Messages/context/digestConversation/types';
-import {DigestedConversation} from 'components/apps/Messages/context/types';
+import {DigestedConversationListItem} from 'components/apps/Messages/reducers/conversationReducer/digestion/types';
+import {DigestedConversationType} from 'components/apps/Messages/context/types';
 import React, {FC, useContext, useEffect} from 'react';
 import {
   View,
@@ -22,7 +22,7 @@ function ListHeader() {
 }
 
 const List: FC<{
-  conversation: DigestedConversation | undefined;
+  conversation: DigestedConversationType | undefined;
 }> = ({conversation}) => {
   const {width, height} = useWindowDimensions();
   const textOrchestration = useContext(TextOrchestrationContext);
@@ -73,7 +73,6 @@ const List: FC<{
       })}
       maxToRenderPerBatch={10}
       scrollEventThrottle={16}
-      //onContentSizeChange={() => aref.current?.scrollToEnd({animated: true})}
     />
   );
 };

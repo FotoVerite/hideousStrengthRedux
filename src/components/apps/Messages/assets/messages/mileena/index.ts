@@ -1,4 +1,4 @@
-import {DigestedItemTypes} from 'components/apps/Messages/context/digestConversation/types';
+import {DigestedItemTypes} from 'components/apps/Messages/reducers/conversationReducer/digestion/types';
 import {ConversationType} from 'components/apps/Messages/context/types';
 import {
   CONTACT_NAMES,
@@ -11,8 +11,6 @@ import {
 export const mileena: ConversationType = {
   name: CONTACT_NAMES.MILEENA,
   tags: [],
-  date: 'January 19th, 2023',
-  listContent: "I don't want to talk about that right now",
   heroImage: getAvatarFromContacts(CONTACT_NAMES.MILEENA),
   interfaceColor: getColorFromContacts(CONTACT_NAMES.MILEENA)[0],
   exchanges: [

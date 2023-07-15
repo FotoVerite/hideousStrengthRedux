@@ -11,17 +11,15 @@ import {
   DigestedConversationStringItemType,
   DigestedItemTypes,
 } from './types';
+import {SkFont} from '@shopify/react-native-skia';
+import {MessageWithMetaType} from 'components/apps/Messages/context/types';
 import {
   CONTACT_NAMES,
-  getAvatarFromContacts,
   getColorFromContacts,
-} from '../usersMapping';
-import {MessageWithMetaType} from '../types';
-import {GetDimensionsAndSkiaNodes} from './skiaCalculations';
-import {SkFont, Skia} from '@shopify/react-native-skia';
+  getAvatarFromContacts,
+} from 'components/apps/Messages/context/usersMapping';
 import {BUBBLE_PADDING} from '.';
-import ReactNativeBlobUtil from 'react-native-blob-util';
-import {getSnapshotPath} from 'components/Snapshot/context';
+import {GetDimensionsAndSkiaNodes} from './skiaCalculations';
 
 type CalculationsType = {
   height: number;

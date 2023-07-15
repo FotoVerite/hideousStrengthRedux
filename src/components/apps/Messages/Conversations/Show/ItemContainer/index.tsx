@@ -12,7 +12,7 @@ import {ImageBubble} from './ImageBubble';
 import {
   DigestedConversationListItem,
   DigestedItemTypes,
-} from 'components/apps/Messages/context/digestConversation/types';
+} from 'components/apps/Messages/reducers/conversationReducer/digestion/types';
 import {GlyphBubble} from './GlyphBubble';
 import {EmojiBubble} from './EmojiBubble';
 import {TypingBubble} from './TypingBubble';
@@ -110,7 +110,7 @@ const ItemContainer: FC<{
       scrollRef.current?.scrollToEnd({animated: true});
       opacity.value = withTiming(1, {duration: 300});
       if (!isWaiting) {
-        context.textIsFinished(true);
+        context.showNextMessage();
       }
     };
     if (item.type != DigestedItemTypes.SNAPSHOT && item.messageDelay) {
@@ -151,6 +151,7 @@ const ItemContainer: FC<{
     </Animated.View>
   );
 };
+console.log('rend', new Date());
 
 export default ItemContainer;
 

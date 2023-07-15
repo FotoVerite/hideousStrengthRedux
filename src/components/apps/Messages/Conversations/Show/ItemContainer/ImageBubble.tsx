@@ -1,7 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable no-bitwise */
 import React, {FC, useContext} from 'react';
-import {Image, TouchableWithoutFeedback, View} from 'react-native';
+import {
+  Image,
+  ImageSourcePropType,
+  ImageURISource,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 
 import {
   Canvas,
@@ -16,7 +22,8 @@ import {StyleSheet} from 'react-native';
 import theme from 'themes';
 import {MessagesContext} from 'components/apps/Messages/context';
 import Reaction from './Reaction';
-import {DigestedConversationImageItemType} from 'components/apps/Messages/context/digestConversation/types';
+import {DigestedConversationImageItemType} from 'components/apps/Messages/reducers/conversationReducer/digestion/types';
+import {MediaImageElement} from '../MediaViewer';
 
 export const ImageBubble: FC<DigestedConversationImageItemType & {}> = ({
   avatar,
@@ -49,7 +56,12 @@ export const ImageBubble: FC<DigestedConversationImageItemType & {}> = ({
       )}
       <TouchableWithoutFeedback
         onPress={() => {
-          context.media.set(content);
+          context.media.set(
+            <MediaImageElement
+              source={content as ImageSourcePropType}
+              aspectRatio={width / height}
+            />,
+          );
         }}>
         <View>
           {reaction && (

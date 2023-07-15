@@ -11,7 +11,7 @@ import {
 import {advertisementExchange} from './advertisment';
 import {skincare} from './skincare';
 import {first_message_to_zara} from './routes/first_message_to_zara';
-import {DigestedItemTypes} from 'components/apps/Messages/context/digestConversation/types';
+import {DigestedItemTypes} from 'components/apps/Messages/reducers/conversationReducer/digestion/types';
 import {nothing_found} from './routes/nothing_found';
 import {why_is_the_contact_zola} from './routes/why_is_the_contact_zola';
 

@@ -29,18 +29,18 @@ const Conversations: FC = ({}) => {
   const [conversations, setConversations] = useState(context.conversations);
 
   useEffect(() => {
-    if (context.digestedConversation.state) {
+    if (context.conversation.state) {
       pushLeft.value = withDelay(450, withTiming(1, {duration: 750}));
     } else {
       pushLeft.value = withTiming(0, {duration: 750});
     }
-  }, [context.digestedConversation.state, pushLeft]);
+  }, [context.conversation.state, pushLeft]);
 
   const AnimateMessagesLeft = useAnimatedStyle(() => {
     return {
       right: interpolate(pushLeft.value, [0, 1], [0, 75]),
     };
-  }, [context.digestedConversation.state]);
+  }, [context.conversation.state]);
 
   const renderItem: ListRenderItem<ConversationType> = ({item}) => (
     <ConversationListItem conversation={item} />

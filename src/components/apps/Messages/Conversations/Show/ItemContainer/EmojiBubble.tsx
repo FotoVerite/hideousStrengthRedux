@@ -6,7 +6,7 @@ import {Image, Text, View} from 'react-native';
 import {Row} from 'components/common/layout';
 import {StyleSheet} from 'react-native';
 import Reaction from './Reaction';
-import {DigestedConversationEmojiItemType} from 'components/apps/Messages/context/digestConversation/types';
+import {DigestedConversationEmojiItemType} from 'components/apps/Messages/reducers/conversationReducer/digestion/types';
 
 import theme from 'themes';
 import {P} from 'components/common/StyledText';

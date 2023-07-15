@@ -1,6 +1,6 @@
 import chrisAvatar from '@apps/Messages/assets/avatars/Chris.jpg';
 import coil from '@apps/Messages/assets/messages/chris/coil.jpeg';
-import {DigestedItemTypes} from 'components/apps/Messages/context/digestConversation/types';
+import {DigestedItemTypes} from 'components/apps/Messages/reducers/conversationReducer/digestion/types';
 
 import {ConversationType} from 'components/apps/Messages/context/types';
 import {

@@ -13,7 +13,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import {StyleSheet} from 'react-native';
-import {DigestedConversationStringItemType} from 'components/apps/Messages/context/digestConversation/types';
+import {DigestedConversationStringItemType} from 'components/apps/Messages/reducers/conversationReducer/digestion/types';
 
 import {WaitingBubble} from './WaitingBubble';
 import {TextBubble} from '../TextBubble';
@@ -39,7 +39,7 @@ export const TypingBubble: FC<
 
   useEffect(() => {
     if (!renderWaiting) {
-      context.textIsFinished(true);
+      context.showNextMessage();
     }
   }, [renderWaiting]);
 

@@ -1,14 +1,7 @@
-import {FlexAlignType} from 'react-native';
-import {ReactionType} from '../types';
-import {
-  DataSourceParam,
-  Glyph,
-  SkFont,
-  SkImage,
-  SkPath,
-  Vector,
-} from '@shopify/react-native-skia';
-import {CONTACT_NAMES} from '../usersMapping';
+import {FlexAlignType, ImageSourcePropType} from 'react-native';
+import {ReactionType} from '../../../context/types';
+import {Glyph, SkFont, SkImage, SkPath} from '@shopify/react-native-skia';
+import {CONTACT_NAMES} from '../../../context/usersMapping';
 
 export enum DigestedItemTypes {
   EMOJI = 'emoji',
@@ -56,7 +49,7 @@ export interface DigestedConversationTimeType
 export interface AbstractMetaDigestedConversationItemType
   extends AbstractDigestedConversationItemType {
   alignItems: FlexAlignType;
-  avatar?: string;
+  avatar?: ImageSourcePropType;
   colors: string[];
   name: CONTACT_NAMES;
   leftSide: boolean;

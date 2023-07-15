@@ -20,16 +20,15 @@ const Conversations: FC<{
 }> = ({active}) => {
   const context = useContext(MessagesContext);
   const textOrchestraContext = useContext(TextOrchestrationContext);
-
+  const route = textOrchestraContext.route;
   const showOptions = useSharedValue(0);
 
   const [optionsHeight, setOptionsHeight] = useState(0);
 
-  const conversation = context.digestedConversation.state;
+  const conversation = context.conversation.state;
   const conversationRef = useRef(conversation);
   const [refresh, setRefresh] = useState(0);
   const name = conversationRef.current?.name;
-  const route = conversationRef.current?.route;
 
   useEffect(() => {
     if (!conversation) {
@@ -78,15 +77,15 @@ const Conversations: FC<{
     <Animated.View style={[styles.screen, animateOptionsUp]}>
       {conversationRef.current && (
         <View style={{}}>
-          {conversationRef.current.route == null && (
+          {route == null && (
             <NoOption
               active={active}
               totalHeight={setOptionsHeight}
               key={conversationRef.current.name}
             />
           )}
-          {conversationRef.current.route &&
-            conversationRef.current.route.options.map(option => (
+          {route &&
+            route.options.map(option => (
               <Option
                 key={option}
                 option={option}

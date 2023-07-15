@@ -22,17 +22,18 @@ import theme from 'themes';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {BlurView} from '@react-native-community/blur';
 import {Row} from 'components/common/layout';
+import {CONVERSATION_REDUCER_ACTIONS} from '../reducers/conversationReducer/types';
 
 const ConversationHeader: FC = () => {
   const context = useContext(MessagesContext);
 
-  const conversation = useRef(context.digestedConversation.state);
+  const conversation = useRef(context.conversation.state);
 
   if (
-    context.digestedConversation.state?.name != null &&
-    conversation.current !== context.digestedConversation.state
+    context.conversation.state?.name != null &&
+    conversation.current !== context.conversation.state
   ) {
-    conversation.current = context.digestedConversation.state;
+    conversation.current = context.conversation.state;
   }
 
   const {width, height} = useWindowDimensions();
@@ -40,19 +41,19 @@ const ConversationHeader: FC = () => {
   const opacityAndPosition = useSharedValue(0);
 
   useEffect(() => {
-    if (context.digestedConversation.state) {
+    if (context.conversation.state) {
       opacityAndPosition.value = withDelay(250, withTiming(1, {duration: 750}));
     } else {
       opacityAndPosition.value = withTiming(0, {duration: 750});
     }
-  }, [context.digestedConversation.state, opacityAndPosition]);
+  }, [context.conversation.state, opacityAndPosition]);
 
   const popInAndTranslateAnimation = useAnimatedStyle(() => {
     return {
       opacity: opacityAndPosition.value,
       marginLeft: interpolate(opacityAndPosition.value, [0, 1], [width, 0]),
     };
-  }, [context.digestedConversation]);
+  }, [context.conversation]);
 
   return (
     <Animated.View style={[styles.header, popInAndTranslateAnimation]}>
@@ -66,7 +67,11 @@ const ConversationHeader: FC = () => {
         <View style={styles.spacer}>
           <Row style={styles.row}>
             <TouchableWithoutFeedback
-              onPress={() => context.digestedConversation.set(undefined)}>
+              onPress={() =>
+                context.conversation.dispatch({
+                  type: CONVERSATION_REDUCER_ACTIONS.RESET,
+                })
+              }>
               <Icon
                 suppressHighlighting={true}
                 name="chevron-left"

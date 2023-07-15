@@ -19,30 +19,30 @@ const Conversation: FC = () => {
   const insets = useSafeAreaInsets();
   const context = useContext(MessagesContext);
 
-  const digestedConversation = useRef(context.digestedConversation.state);
+  const digestedConversation = useRef(context.conversation.state);
 
   if (
-    context.digestedConversation.state != null &&
-    digestedConversation.current !== context.digestedConversation.state
+    context.conversation.state != null &&
+    digestedConversation.current !== context.conversation.state
   ) {
-    digestedConversation.current = context.digestedConversation.state;
+    digestedConversation.current = context.conversation.state;
   }
 
   const showMessage = useSharedValue(0);
 
   useEffect(() => {
-    if (context.digestedConversation.state) {
+    if (context.conversation.state) {
       showMessage.value = withDelay(300, withTiming(1, {duration: 750}));
     } else {
       showMessage.value = withTiming(0, {duration: 750});
     }
-  }, [context.digestedConversation.state, showMessage]);
+  }, [context.conversation.state, showMessage]);
 
   const AnimateMessageLeft = useAnimatedStyle(() => {
     return {
       marginLeft: interpolate(showMessage.value, [0, 1], [width, 0]),
     };
-  }, [context.digestedConversation.state]);
+  }, [context.conversation.state]);
 
   return (
     <TextOrchestrationContextProvider>

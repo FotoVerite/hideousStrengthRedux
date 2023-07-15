@@ -1,6 +1,6 @@
 import {CONTACT_NAMES} from 'components/apps/Messages/context/usersMapping';
 import {ConversationExchangeType} from '../../../context/types';
-import {DigestedItemTypes} from 'components/apps/Messages/context/digestConversation/types';
+import {DigestedItemTypes} from 'components/apps/Messages/reducers/conversationReducer/digestion/types';
 
 //import panopticon from '@apps/Messages/assets/messages/pantopitcon.jpeg';
 

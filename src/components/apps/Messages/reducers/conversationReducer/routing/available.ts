@@ -1,14 +1,12 @@
 import {
-  EventOrchestraObjectType,
   MessageAppContactsEventType,
+  EventOrchestraObjectType,
 } from 'components/EventOrchestra/context/types';
 import {
-  ConversationType,
-  DigestedConversationRouteType,
-  MessageRouteType,
   RouteConditionsType,
-} from '../types';
-import {CONTACT_NAMES} from '../usersMapping';
+  MessageRouteType,
+} from 'components/apps/Messages/context/types';
+import {CONTACT_NAMES} from 'components/apps/Messages/context/usersMapping';
 
 const contactHasBeenViewedCheck = (
   name: CONTACT_NAMES,
@@ -63,7 +61,7 @@ export const findAvailableRoutes = (
   state: EventOrchestraObjectType,
 ) => {
   if (routes == null || routes.length == 0) {
-    return new Array<MessageRouteType>();
+    return undefined;
   } else {
     return routes.filter(route => {
       // Convert number to string due to objects keys needing to be strings
@@ -74,19 +72,6 @@ export const findAvailableRoutes = (
         (route.conditions == null ||
           messageAppConditionsMet(state.Message, route.conditions))
       );
-    });
-  }
-};
-
-export const findAvailableRoute = (
-  name: CONTACT_NAMES,
-  routes: MessageRouteType[],
-  state: EventOrchestraObjectType,
-): DigestedConversationRouteType | undefined => {
-  const route = findAvailableRoutes(name, routes, state)[0];
-  if (route) {
-    return Object.assign(route, {exchangeIndex: 0, messageIndex: 0});
-  } else {
-    return undefined;
+    })[0];
   }
 };
