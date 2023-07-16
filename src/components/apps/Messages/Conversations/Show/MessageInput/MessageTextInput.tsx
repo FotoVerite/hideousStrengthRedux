@@ -1,16 +1,22 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useContext, useEffect} from 'react';
 import {View, StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import theme from 'themes';
 import Cursor from './Cursor';
 import {GenericStateType} from 'types/genericContextTypes';
+import {TextOrchestrationContext} from 'components/apps/Messages/context/textOrchestration';
 
 const MessageTextInput: FC<{
   active: GenericStateType<boolean>;
 }> = ({active}) => {
+  const textOrchestration = useContext(TextOrchestrationContext);
   return (
     <View style={[styles.container]}>
-      <TouchableWithoutFeedback onPress={() => active.set(state => !!!state)}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          if (textOrchestration.hasActiveRoute == null)
+            active.set(state => !!!state);
+        }}>
         <View style={[styles.textInput]}>
           {active.state && <Cursor />}
           <Icon size={20} name="chevron-up" style={styles.icon} />

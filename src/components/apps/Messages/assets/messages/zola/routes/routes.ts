@@ -1,8 +1,7 @@
 export enum ZARA_ROUTE_IDS {
+  CAN_YOU_PLEASE_HELP_ME_HELP_HIM,
   FIRST_MESSAGE_TO_ZARA,
   FOUND_NOTHING,
+  WHY_ARE_YOU_IN_HIS_APARTMENT,
   WHY_IS_THE_CONTACT_ZOLA,
 }
-
-const first_message_options = ['Zara?'] as const;
-export type FirstMessageOptionType = (typeof first_message_options)[number];

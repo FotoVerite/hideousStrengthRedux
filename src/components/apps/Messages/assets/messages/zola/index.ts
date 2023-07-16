@@ -14,13 +14,21 @@ import {first_message_to_zara} from './routes/first_message_to_zara';
 import {DigestedItemTypes} from 'components/apps/Messages/reducers/conversationReducer/digestion/types';
 import {nothing_found} from './routes/nothing_found';
 import {why_is_the_contact_zola} from './routes/why_is_the_contact_zola';
+import {why_are_you_in_his_apartment} from './routes/why_are_you_in_his_apartment';
+import {can_you_please_help_me} from './routes/can_you_please_help_me';
 
 export const zola: ConversationType = {
   name: CONTACT_NAMES.ZOLA,
   tags: [CONTACT_NAMES.ZOLA, 'Zara', 'Hopescope', 'Panopticon', 'Ads', 'Money'],
   heroImage: zolaAvatar,
   interfaceColor: getColorFromContacts(CONTACT_NAMES.ZOLA)[0],
-  routes: [first_message_to_zara, nothing_found, why_is_the_contact_zola],
+  routes: [
+    first_message_to_zara,
+    why_are_you_in_his_apartment,
+    can_you_please_help_me,
+    nothing_found,
+    why_is_the_contact_zola,
+  ],
   exchanges: [
     {
       time: '2019-05-15T15:00:00Z',

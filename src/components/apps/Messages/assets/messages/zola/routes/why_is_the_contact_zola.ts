@@ -73,5 +73,11 @@ export const why_is_the_contact_zola: MessageRouteType = {
         messages: [ZARA_WHY_IS_CONTACT_ZOLA_OPTIONS.A as string],
       },
     ].concat(exchanges),
+    [ZARA_WHY_IS_CONTACT_ZOLA_OPTIONS.B]: [
+      {
+        name: CONTACT_NAMES.SELF,
+        messages: [ZARA_WHY_IS_CONTACT_ZOLA_OPTIONS.A as string],
+      },
+    ].concat(exchanges),
   },
 };

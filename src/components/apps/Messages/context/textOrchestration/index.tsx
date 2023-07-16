@@ -93,7 +93,7 @@ const TextOrchestrationContextProvider: FC<
   }, [chosenOption]);
 
   useEffect(() => {
-    if (path && path.cursor < path.messages.length) {
+    if (path && !isNaN(path.cursor) && path.cursor < path.messages.length) {
       dispatchConversation({
         type: CONVERSATION_REDUCER_ACTIONS.ADD_MESSAGE,
         payload: path.messages[path.cursor],
@@ -113,7 +113,7 @@ const TextOrchestrationContextProvider: FC<
   };
 
   const showNextMessage = () => {
-    if (path) {
+    if (path && route) {
       setPath(state => {
         const newState = Object.assign({}, state);
         newState.cursor += 1;
@@ -122,6 +122,8 @@ const TextOrchestrationContextProvider: FC<
     } else if (conversation && chosenOption && route) {
       setPathAsSeen(conversation.name, route.id, chosenOption);
       setPath({cursor: 0, messages: route.paths[chosenOption]});
+    } else {
+      setPath(undefined);
     }
   };
 
@@ -146,6 +148,7 @@ const TextOrchestrationContextProvider: FC<
         },
         route: route,
         pickRoute: setChosenOption,
+        hasActiveRoute: chosenOption,
         showNextMessage: showNextMessage,
         scrollTo: {
           state: scrollTo,

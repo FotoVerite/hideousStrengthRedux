@@ -61,58 +61,6 @@ export const first_message_to_zara: MessageRouteType = {
           'How?! he took his keys back from you, I know he did because I kicked his ass over a month to do it.',
         ],
       },
-      {
-        name: CONTACT_NAMES.SELF,
-        messages: [
-          'Zara re-litigating the relationship is not a good use of time.',
-          'Rick let me in.',
-        ],
-      },
-      {
-        name: CONTACT_NAMES.ZOLA,
-        messages: [
-          "I'm so getting Rick fired.",
-          'Never going to trust him again.',
-          'You know I already checked his place yesterday.',
-        ],
-      },
-      {
-        name: CONTACT_NAMES.SELF,
-        messages: [
-          'I assumed',
-          "I would have asked if you hadn't blocked me",
-          'But I wanted to see for myself and see if I could get into his computer or phone',
-        ],
-      },
-      {
-        name: CONTACT_NAMES.ZOLA,
-        messages: ['That sounds so fucking creepy'],
-      },
-      {
-        name: CONTACT_NAMES.SELF,
-        messages: [
-          "Zara, all I want to do is find out where he is and make sure he's safe.",
-          'Just like you',
-          'So please drop the attitude for the moment',
-        ],
-      },
-      {
-        name: CONTACT_NAMES.ZOLA,
-        messages: [
-          "I'm not the one who broke into my ex's place and hacked his phone",
-        ],
-      },
-      {
-        name: CONTACT_NAMES.SELF,
-        messages: ["I didn't hack his phone. He never changed his passwords"],
-      },
-      {
-        name: CONTACT_NAMES.ZOLA,
-        messages: [
-          'Really... REALLY! OMG and he always talks about security.',
-          'Okay fine..., you found anything out?',
-        ],
-      },
     ],
   },
 };

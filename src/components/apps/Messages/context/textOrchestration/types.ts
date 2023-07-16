@@ -22,6 +22,7 @@ export type TextOrchestrationContextTypeDigested = PropsWithChildren<{
   sharedValues: {
     optionsHeight: SharedValue<number>;
   };
+  hasActiveRoute: string | undefined;
   pickRoute: React.Dispatch<React.SetStateAction<string | undefined>>;
   route: TransformedRouteType | undefined;
   showNextMessage: () => void;

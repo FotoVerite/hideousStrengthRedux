@@ -106,8 +106,7 @@ const addMessageFromBlock = (
     positionAcc: offset,
   });
   const message = createSkBubbleFromExchange(itemConfiguration, block, index);
-  message.messageDelay = message.messageDelay ||=
-    message.name === CONTACT_NAMES.SELF ? 50 : 200;
+  message.messageDelay = message.messageDelay ||= 400;
   newState.exchanges.push(message);
   return newState;
 };
@@ -133,8 +132,7 @@ const addMessage = (
     name,
     tail,
   );
-  message.messageDelay = message.messageDelay ||=
-    message.name === CONTACT_NAMES.SELF ? 50 : 200;
+  message.messageDelay = message.messageDelay ||= 400;
   newState.exchanges.push(message);
   return newState;
 };

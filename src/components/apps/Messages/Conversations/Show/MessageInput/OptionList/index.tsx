@@ -87,7 +87,7 @@ const Conversations: FC<{
           {route &&
             route.options.map(option => (
               <Option
-                key={option}
+                key={`${route.id}-${option}`}
                 option={option}
                 active={active}
                 totalHeight={setOptionsHeight}
