@@ -380,13 +380,9 @@ PODS:
     - React-Core
   - react-native-blur (4.3.2):
     - React-Core
-  - react-native-safe-area-context (4.6.3):
-    - RCT-Folly
-    - RCTRequired
-    - RCTTypeSafety
+  - react-native-safe-area-context (4.7.1):
     - React-Core
-    - ReactCommon/turbomodule/core
-  - react-native-skia (0.1.195):
+  - react-native-skia (0.1.197):
     - React
     - React-callinvoker
     - React-Core
@@ -533,7 +529,7 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSVG (13.9.0):
+  - RNSVG (13.10.0):
     - React-Core
   - SocketRocket (0.6.0)
   - Yoga (1.14.0)
@@ -767,8 +763,8 @@ SPEC CHECKSUMS:
   React-logger: 454ffb01980778a43b0153ee98721d0275b56616
   react-native-blob-util: 2d36383bb52c15c5451be81cb7ddf22bc34a12a6
   react-native-blur: cfdad7b3c01d725ab62a8a729f42ea463998afa2
-  react-native-safe-area-context: 36cc67648134e89465663b8172336a19eeda493d
-  react-native-skia: a9100697e223b7c62218e6eb7ccb5bf23fd3b0d6
+  react-native-safe-area-context: 9697629f7b2cda43cf52169bb7e0767d330648c2
+  react-native-skia: e2cb3443442bf7680e3276dc82cd87c97f96b6f9
   react-native-view-shot: f5507655f122e6b104888a11130f267a427f0d57
   React-NativeModulesApple: 038cd625999ff352fc13d11fd335ea7509794599
   React-perflogger: 684a11499a0589cc42135d6d5cc04d0e4e0e261a
@@ -789,7 +785,7 @@ SPEC CHECKSUMS:
   ReactCommon: 517b45ed311ba9146aa8b55a8ef6617425f7448e
   RNGestureHandler: dec4645026e7401a0899f2846d864403478ff6a5
   RNReanimated: 9f7068e43b9358a46a688d94a5a3adb258139457
-  RNSVG: 53c661b76829783cdaf9b7a57258f3d3b4c28315
+  RNSVG: 80584470ff1ffc7994923ea135a3e5ad825546b9
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Yoga: 1d6727ed193122f6adaf435c3de1a768326ff83b
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a

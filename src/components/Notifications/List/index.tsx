@@ -1,5 +1,4 @@
-import {P} from 'components/common/StyledText';
-import React, {FC, useContext, useEffect, useRef, useState} from 'react';
+import React, {FC, useContext, useState} from 'react';
 import {
   ListRenderItem,
   StyleSheet,
@@ -8,27 +7,24 @@ import {
 } from 'react-native';
 import Animated, {
   SharedValue,
-  interpolate,
   useAnimatedRef,
-  useAnimatedStyle,
   useScrollViewOffset,
   useSharedValue,
-  withDelay,
-  withTiming,
 } from 'react-native-reanimated';
 
 import theme from 'themes';
 import {NotificationsContext} from '../context';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
+import Notification from '../Notification';
+import {NotificationType} from '../types';
+
 function Separator() {
   return <View style={styles.itemSeparator} />;
 }
 
-const renderItem: ListRenderItem<any> = ({item}) => (
-  <View style={styles.item}>
-    <P>{item.content}</P>
-  </View>
+const renderItem: ListRenderItem<NotificationType> = ({item}) => (
+  <Notification notification={item} />
 );
 
 const NotificationsList: FC<{left: SharedValue<number>}> = ({left}) => {
@@ -73,12 +69,6 @@ const styles = StyleSheet.create({
 
   itemSeparator: {
     height: 10,
-  },
-
-  item: {
-    borderRadius: 25,
-    backgroundColor: '#ffffffc7',
-    padding: theme.spacing.p1,
   },
 
   list: {

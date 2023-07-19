@@ -5,7 +5,7 @@ import {
   GenericOrUndefinedStateType,
   GenericStateType,
 } from 'types/genericContextTypes';
-import {NotificationType} from '../types';
+import {NotificationType} from '../reducers/notificationsReducer/types';
 
 export type NotificationsContextTypeDigest = {
   children: ReactNode;

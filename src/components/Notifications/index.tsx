@@ -13,6 +13,7 @@ import {
 } from 'react-native-reanimated';
 import {SnapShotContext} from 'components/Snapshot/context';
 import NotificationsContextProvider from './context';
+import ActiveNotifications from './ActiveNotifications';
 
 const Notifications: FC<PropsWithChildren> = ({children}) => {
   const snapshotContext = useContext(SnapShotContext);
@@ -80,6 +81,7 @@ const Notifications: FC<PropsWithChildren> = ({children}) => {
           {children}
         </View>
       </PanGestureHandler>
+      <ActiveNotifications />
     </NotificationsContextProvider>
   );
 };

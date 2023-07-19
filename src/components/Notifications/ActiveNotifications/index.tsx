@@ -20,27 +20,36 @@ import Animated, {
 import theme from 'themes';
 import {NotificationsContext} from '../context';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {NotificationType} from '../types';
+import Notification from '../Notification';
+import ActiveNotificationContainer from './ActiveNotificationContainer';
 
-function Separator() {
-  return <View style={styles.itemSeparator} />;
-}
-
-const renderItem: ListRenderItem<any> = ({item}) => (
-  <View style={styles.item}>
-    <P>{item.content}</P>
-  </View>
-);
-
-const ActiveNotifications: FC<{left: SharedValue<number>}> = ({left}) => {
+const ActiveNotifications: FC = () => {
   const notificationsContext = useContext(NotificationsContext);
+  const notifications = notificationsContext.notifications.state;
+  const [activeNotifications, setActiveNotifications] = useState(
+    notifications.filter(notification => notification.active),
+  );
 
-  const [active, setActive] = useState(false);
-  const pushLeft = useSharedValue(0);
-  const aref = useAnimatedRef<Animated.FlatList<any>>();
-
+  const {width, height} = useWindowDimensions();
   const inset = useSafeAreaInsets();
 
-  return <View pointerEvents="box-none"></View>;
+  useEffect(() => {
+    setActiveNotifications(
+      notifications.filter(notification => notification.active),
+    );
+  }, [notifications]);
+
+  return (
+    <View pointerEvents="box-none" style={styles.screen}>
+      {activeNotifications.map((notification, idx) => (
+        <ActiveNotificationContainer
+          key={`${idx}-notification`}
+          notification={notification}
+        />
+      ))}
+    </View>
+  );
 };
 
 export default ActiveNotifications;

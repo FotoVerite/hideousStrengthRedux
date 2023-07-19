@@ -3,21 +3,31 @@ import {
   NotificationsContextTypeDigested,
   NotificationsContextTypeDigest,
 } from './types';
-import {NotificationType} from '../types';
+import {NotificationType} from '../reducers/notificationsReducer/types';
+import zolaAvatar from '@apps/Messages/assets/avatars/Zara.jpg';
 
 //defaults for empty app
 export const NotificationsContext =
   React.createContext<NotificationsContextTypeDigested>({});
 
+const notification = {
+  title: 'title',
+  content: 'Hello this is a notification',
+  active: true,
+  timestamp: new Date(),
+  image: zolaAvatar,
+};
+
 const NotificationsContextProvider: FC<
   NotificationsContextTypeDigest
 > = props => {
   const [notifications, setNotifications] = useState<NotificationType[]>([
-    {content: 'Hello this is a notification', active: true},
-    {content: 'Hello this is a notification', active: true},
-    {content: 'Hello this is a notification', active: true},
-    {content: 'Hello this is a notification', active: true},
-    {content: 'Hello this is a notification', active: true},
+    notification,
+    notification,
+    notification,
+    notification,
+    notification,
+    notification,
   ]);
 
   return (

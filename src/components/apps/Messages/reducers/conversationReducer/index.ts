@@ -1,8 +1,6 @@
 import {
   DigestedConversationType,
   ExchangeBlockType,
-  MessageRouteType,
-  MessageType,
 } from '../../context/types';
 import {
   AddMessagePayloadType,
@@ -12,10 +10,6 @@ import {
   DigestedMessageProps,
   StartRoutePayloadType,
 } from './types';
-import {EventOrchestraObjectType} from 'components/EventOrchestra/context/types';
-import {CONTACT_NAMES} from '../../context/usersMapping';
-import {GenericStateType} from 'types/genericContextTypes';
-import {APP_NAMES} from 'components/apps/types';
 import {
   createSkBubbleFromExchange,
   createSkBubbleFromMessage,
