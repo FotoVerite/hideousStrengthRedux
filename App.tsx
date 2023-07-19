@@ -22,6 +22,8 @@ import {View} from 'react-native';
 import EventOrchestraContextProvider from 'components/EventOrchestra/context';
 import SnapShotContextProvider from 'components/Snapshot/context';
 import SnapshotView from 'components/Snapshot';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import Notifications from 'components/Notifications';
 
 function App(): JSX.Element {
   const SFPro = useFont(require('@applicationAssets/fonts/SFPro.ttf'), 16);
@@ -45,22 +47,26 @@ function App(): JSX.Element {
     };
 
     return (
-      <SafeAreaProvider>
-        <ApplicationContextProvider fonts={skFontRecord}>
-          <EventOrchestraContextProvider>
-            <TextBoxEngineContextProvider>
-              <NavigationContainer>
-                <SnapShotContextProvider snapShotRef={screenRef}>
-                  <SnapshotView snapshotRef={screenRef}>
-                    <Messages />
-                  </SnapshotView>
-                </SnapShotContextProvider>
-              </NavigationContainer>
-              <TextBoxEngine screenRef={screenRef} />
-            </TextBoxEngineContextProvider>
-          </EventOrchestraContextProvider>
-        </ApplicationContextProvider>
-      </SafeAreaProvider>
+      <GestureHandlerRootView style={{flex: 1}}>
+        <SafeAreaProvider>
+          <ApplicationContextProvider fonts={skFontRecord}>
+            <EventOrchestraContextProvider>
+              <TextBoxEngineContextProvider>
+                <NavigationContainer>
+                  <SnapShotContextProvider snapShotRef={screenRef}>
+                    <Notifications>
+                      <SnapshotView snapshotRef={screenRef}>
+                        <Messages />
+                      </SnapshotView>
+                    </Notifications>
+                  </SnapShotContextProvider>
+                </NavigationContainer>
+                <TextBoxEngine screenRef={screenRef} />
+              </TextBoxEngineContextProvider>
+            </EventOrchestraContextProvider>
+          </ApplicationContextProvider>
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
     );
   }
 }

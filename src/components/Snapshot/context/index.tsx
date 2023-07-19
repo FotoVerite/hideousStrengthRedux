@@ -10,6 +10,9 @@ export const SnapShotContext = React.createContext<SnapShotContextTypeDigested>(
 
 const SnapShotContextProvider: FC<SnapShotContextTypeDigest> = props => {
   const [takeSnapShot, setTakeSnapShot] = useState<string>();
+  const [takeBackground, setTakeBackground] = useState<boolean>();
+  const [background, setBackground] = useState<SkImage>();
+
   const [image, setImage] = useState<undefined | null | SkImage>();
   const [indicatorRunning, setIndicatorRunning] = useState(false);
 
@@ -26,6 +29,20 @@ const SnapShotContextProvider: FC<SnapShotContextTypeDigest> = props => {
       snapShot().catch(console.error);
     }
   }, [snapShotRef, takeSnapShot]);
+
+  useEffect(() => {
+    const snapShot = async () => {
+      if (snapShotRef.current) {
+        const image = await makeImageFromView(snapShotRef.current);
+        if (image) {
+          setBackground(image);
+        }
+      }
+    };
+    if (takeBackground) {
+      snapShot().catch(console.error);
+    }
+  }, [snapShotRef, takeBackground]);
 
   useEffect(() => {
     const snapShot = async () => {
@@ -47,6 +64,8 @@ const SnapShotContextProvider: FC<SnapShotContextTypeDigest> = props => {
   return (
     <SnapShotContext.Provider
       value={{
+        background: {set: setBackground, state: background},
+        takeBackground: {state: takeBackground, set: setTakeBackground},
         takeSnapShot: {state: takeSnapShot, set: setTakeSnapShot},
         indicatorRunning: {state: indicatorRunning, set: setIndicatorRunning},
         image: image,
