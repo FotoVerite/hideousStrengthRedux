@@ -53,7 +53,7 @@ const Notification: FC<HorrorNotificationType> = ({
       borderRadius: theme.BorderRadius.small,
       borderLeftWidth: 1,
       borderColor: 'white',
-      backgroundColor: '#a19898',
+      backgroundColor: '#868686',
       justifyContent: 'center',
       alignItems: 'center',
     },

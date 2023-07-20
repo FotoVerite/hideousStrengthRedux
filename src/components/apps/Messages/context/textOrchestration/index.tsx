@@ -1,5 +1,5 @@
 import {EventOrchestraContext} from 'components/EventOrchestra/context';
-import React, {FC, useContext, useEffect, useState} from 'react';
+import React, {FC, useCallback, useContext, useEffect, useState} from 'react';
 import {useSharedValue} from 'react-native-reanimated';
 import {
   PathType,
@@ -8,7 +8,7 @@ import {
   TextOrchestrationContextTypeDigested,
   TransformedRouteType,
 } from './types';
-import {DigestedConversationType, MessageRouteType} from '../types';
+import {MessageRouteType} from '../types';
 import {MessagesContext} from '../index';
 import {findAvailableRoutes} from '../routeConditions';
 import {
@@ -34,9 +34,10 @@ const TextOrchestrationContextProvider: FC<
   const optionsHeight = useSharedValue(0);
 
   const conversation = messageContext.conversation.state;
+
   const dispatchConversation = messageContext.conversation.dispatch;
 
-  const findAvailableRoute = (conversation?: DigestedConversationType) => {
+  const findAvailableRoute = useCallback(() => {
     if (conversation == null) {
       return;
     }
@@ -50,22 +51,22 @@ const TextOrchestrationContextProvider: FC<
     } else {
       setRoute(undefined);
     }
-  };
+  }, [conversation, eventContext.events.state]);
 
-  const translateRoute = (route: MessageRouteType) => {
+  const translateRoute = (_route: MessageRouteType) => {
     const paths: RoutePathType = {};
-    for (const choice in route.routes) {
-      paths[choice] = route.routes[choice].reduce((acc, block) => {
+    for (const choice in _route.routes) {
+      paths[choice] = _route.routes[choice].reduce((acc, block) => {
         for (const [index, message] of block.messages.entries()) {
-          const tail = block.messages.length - 1 == index;
+          const tail = block.messages.length - 1 === index;
           acc.push({name: block.name, messageContent: message, tail: tail});
         }
         return acc;
-      }, new Array<AddMessagePayloadType>());
+      }, [] as AddMessagePayloadType[]);
     }
     const translated: TransformedRouteType = {
-      id: route.id,
-      options: route.options,
+      id: _route.id,
+      options: _route.options,
       paths: paths,
     };
     return translated;
@@ -79,7 +80,7 @@ const TextOrchestrationContextProvider: FC<
   }, [conversation]);
 
   useEffect(() => {
-    findAvailableRoute(conversation);
+    findAvailableRoute();
   }, [conversation?.routes]);
 
   useEffect(() => {
@@ -100,7 +101,7 @@ const TextOrchestrationContextProvider: FC<
       });
     } else {
       setChosenOption(undefined);
-      findAvailableRoute(conversation);
+      findAvailableRoute();
       setPath(undefined);
     }
   }, [path]);

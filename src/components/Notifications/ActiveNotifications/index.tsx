@@ -1,27 +1,8 @@
-import {P} from 'components/common/StyledText';
-import React, {FC, useContext, useEffect, useRef, useState} from 'react';
-import {
-  ListRenderItem,
-  StyleSheet,
-  View,
-  useWindowDimensions,
-} from 'react-native';
-import Animated, {
-  SharedValue,
-  interpolate,
-  useAnimatedRef,
-  useAnimatedStyle,
-  useScrollViewOffset,
-  useSharedValue,
-  withDelay,
-  withTiming,
-} from 'react-native-reanimated';
+import React, {FC, useContext, useEffect, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 
 import theme from 'themes';
 import {NotificationsContext} from '../context';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {NotificationType} from '../types';
-import Notification from '../Notification';
 import ActiveNotificationContainer from './ActiveNotificationContainer';
 
 const ActiveNotifications: FC = () => {
@@ -30,9 +11,6 @@ const ActiveNotifications: FC = () => {
   const [activeNotifications, setActiveNotifications] = useState(
     notifications.filter(notification => notification.active),
   );
-
-  const {width, height} = useWindowDimensions();
-  const inset = useSafeAreaInsets();
 
   useEffect(() => {
     setActiveNotifications(

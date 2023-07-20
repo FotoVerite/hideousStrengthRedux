@@ -28,14 +28,13 @@ const ItemContainer: FC<{
   scrollRef: React.RefObject<Animated.ScrollView>;
   group: boolean;
 }> = ({item, scrollHandler, scrollRef, group, index}) => {
-  const context = useContext(TextOrchestrationContext);
   const opacity = useSharedValue(
-    item.messageDelay && item.type != DigestedItemTypes.SNAPSHOT ? 0 : 1,
+    item.messageDelay && item.type !== DigestedItemTypes.SNAPSHOT ? 0 : 1,
   );
 
   const isWaiting =
     item.type === DigestedItemTypes.STRING &&
-    item.leftSide == true &&
+    item.leftSide === true &&
     item.messageDelay;
 
   const MemoTextBubble = useMemo(() => {
@@ -49,7 +48,7 @@ const ItemContainer: FC<{
         />
       );
     }
-  }, [scrollHandler, group, item]);
+  }, [item]);
 
   const MemoGlyphBubble = useMemo(() => {
     if (item.type === DigestedItemTypes.GLYPH) {
@@ -110,13 +109,12 @@ const ItemContainer: FC<{
       scrollRef.current?.scrollToEnd({animated: true});
       opacity.value = withTiming(1, {duration: 300});
       if (!isWaiting) {
-        context.showNextMessage();
       }
     };
-    if (item.type != DigestedItemTypes.SNAPSHOT && item.messageDelay) {
+    if (item.type !== DigestedItemTypes.SNAPSHOT && item.messageDelay) {
       toBottom(item.messageDelay);
     }
-  }, [item.messageDelay]);
+  }, []);
 
   const fadeInAnimation = useAnimatedStyle(() => {
     return {opacity: opacity.value};
@@ -151,7 +149,6 @@ const ItemContainer: FC<{
     </Animated.View>
   );
 };
-console.log('rend', new Date());
 
 export default ItemContainer;
 

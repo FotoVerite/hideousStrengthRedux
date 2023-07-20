@@ -1,23 +1,18 @@
-import React, {FC, useContext, useState} from 'react';
+import React, {FC, useContext} from 'react';
 import {
   ListRenderItem,
   StyleSheet,
   View,
   useWindowDimensions,
 } from 'react-native';
-import Animated, {
-  SharedValue,
-  useAnimatedRef,
-  useScrollViewOffset,
-  useSharedValue,
-} from 'react-native-reanimated';
+import Animated, {SharedValue, useAnimatedRef} from 'react-native-reanimated';
 
 import theme from 'themes';
 import {NotificationsContext} from '../context';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import Notification from '../Notification';
-import {NotificationType} from '../types';
+import {NotificationType} from '../reducers/notificationsReducer/types';
 
 function Separator() {
   return <View style={styles.itemSeparator} />;
@@ -29,11 +24,7 @@ const renderItem: ListRenderItem<NotificationType> = ({item}) => (
 
 const NotificationsList: FC<{left: SharedValue<number>}> = ({left}) => {
   const notificationsContext = useContext(NotificationsContext);
-
-  const [active, setActive] = useState(false);
-  const pushLeft = useSharedValue(0);
   const aref = useAnimatedRef<Animated.FlatList<any>>();
-  const scrollHandler = useScrollViewOffset(aref);
 
   const {width, height} = useWindowDimensions();
   const inset = useSafeAreaInsets();

@@ -1,4 +1,3 @@
-import {NAMES} from './names';
 import arialAvatar from '@apps/Messages/assets/avatars/alice_avator.jpg';
 import aliceAvatar from '@apps/Messages/assets/avatars/alice_avator.jpg';
 
@@ -12,8 +11,6 @@ import gregAvatar from '@apps/Messages/assets/avatars/greg.jpg';
 import steveLitt from '@apps/Messages/assets/avatars/steve_litt.png';
 
 import meleenaAvatar from '@apps/Messages/assets/avatars/mileena.png';
-
-import {DataSourceParam} from '@shopify/react-native-skia';
 
 export enum CONTACT_NAMES {
   ARIAL = 'Arial',
@@ -66,5 +63,3 @@ export const getAvatarFromContacts = (name: CONTACT_NAMES | 'string') => {
     return contactConsts[CONTACT_NAMES.DEFAULT].avatar;
   }
 };
-
-export const userMapping: Map<NAMES, UserMappingType> = new Map();

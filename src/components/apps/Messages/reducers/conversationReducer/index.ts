@@ -1,7 +1,4 @@
-import {
-  DigestedConversationType,
-  ExchangeBlockType,
-} from '../../context/types';
+import {DigestedConversationType, ExchangeBlockType} from '../../context/types';
 import {
   AddMessagePayloadType,
   CONVERSATION_REDUCER_ACTIONS,

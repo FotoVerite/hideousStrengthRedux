@@ -1,6 +1,7 @@
 import React, {
   FC,
   ReactElement,
+  useCallback,
   useContext,
   useEffect,
   useReducer,
@@ -26,6 +27,7 @@ import {
   ConversationReducerActionsType,
 } from '../reducers/conversationReducer/types';
 import {digestConversation} from '../reducers/conversationReducer/digestion';
+import {CONTACT_NAMES} from './usersMapping';
 
 //defaults for empty app
 export const MessagesContext = React.createContext<MessagesContextTypeDigested>(
@@ -47,6 +49,18 @@ const conversations = [
 const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
   const applicationContext = useContext(ApplicationContext);
   const eventContext = useContext(EventOrchestraContext);
+  const setTheEvent = eventContext.events.set;
+
+  const setViewEvent = useCallback(
+    (name: CONTACT_NAMES) =>
+      setTheEvent(events => {
+        const newState = Object.assign({}, events);
+        const views = newState.Message[name].views;
+        views.push(new Date());
+        return newState;
+      }),
+    [setTheEvent],
+  );
 
   const [media, setMedia] = useState<ReactElement>();
 
@@ -76,15 +90,10 @@ const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
   };
 
   useEffect(() => {
-    if (conversation && conversation.name) {
-      eventContext.events.set(events => {
-        const newState = Object.assign({}, events);
-        const views = newState.Message[conversation?.name].views;
-        views.push(new Date());
-        return newState;
-      });
+    if (conversation?.name != null) {
+      setViewEvent(conversation.name);
     }
-  }, [conversation?.name]);
+  }, [conversation?.name, setViewEvent]);
 
   return (
     <MessagesContext.Provider

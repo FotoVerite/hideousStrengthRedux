@@ -1,36 +1,23 @@
-import {P} from 'components/common/StyledText';
-import React, {FC, useContext, useEffect, useRef, useState} from 'react';
-import {
-  LayoutChangeEvent,
-  ListRenderItem,
-  StyleSheet,
-  View,
-  useWindowDimensions,
-} from 'react-native';
+import React, {FC, useEffect, useRef, useState} from 'react';
+import {LayoutChangeEvent, StyleSheet, useWindowDimensions} from 'react-native';
 import Animated, {
-  SharedValue,
   interpolate,
   runOnJS,
-  useAnimatedRef,
   useAnimatedStyle,
-  useScrollViewOffset,
   useSharedValue,
-  withDelay,
   withTiming,
 } from 'react-native-reanimated';
 
-import theme from 'themes';
-import {NotificationsContext} from '../context';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Notification from '../Notification';
 import {PanGestureHandler} from 'react-native-gesture-handler';
 import {NotificationType} from '../reducers/notificationsReducer/types';
 
+import theme from 'themes';
+
 const ActiveNotificationContainer: FC<{notification: NotificationType}> = ({
   notification,
 }) => {
-  const {width, height} = useWindowDimensions();
-  const inset = useSafeAreaInsets();
+  const {width} = useWindowDimensions();
 
   const visible = useSharedValue(0);
   const translateX = useSharedValue(0);
@@ -62,13 +49,13 @@ const ActiveNotificationContainer: FC<{notification: NotificationType}> = ({
     } else {
     }
     return () => clearTimeout(timer);
-  }, [deactivate]);
+  }, [deactivate, opacity]);
 
   useEffect(() => {
     if (notificationHeight) {
       visible.value = withTiming(1, {duration: 750});
     }
-  }, [notificationHeight]);
+  }, [notificationHeight, visible]);
 
   useEffect(() => {
     if (deactivationTimeout.current) {
@@ -77,13 +64,13 @@ const ActiveNotificationContainer: FC<{notification: NotificationType}> = ({
   }, [setDeactivate]);
 
   const animatedStyles = useAnimatedStyle(() => {
-    if (notificationHeight)
+    if (notificationHeight) {
       return {
         top: interpolate(visible.value, [0, 1], [-500, notificationHeight]),
         transform: [{translateX: translateX.value}],
         opacity: opacity.value,
       };
-    else {
+    } else {
       return {};
     }
   }, [notificationHeight]);
@@ -91,7 +78,7 @@ const ActiveNotificationContainer: FC<{notification: NotificationType}> = ({
   return (
     <PanGestureHandler
       activeOffsetX={[-50, 50]}
-      onEnded={e => {
+      onEnded={() => {
         if (Math.abs(translateX.value) >= (width - theme.spacing.p4) / 4) {
           translateX.value = withTiming(
             -width,
@@ -111,14 +98,13 @@ const ActiveNotificationContainer: FC<{notification: NotificationType}> = ({
         style={[
           styles.notification,
           {
-            top: -500,
             width: width - theme.spacing.p4,
           },
           animatedStyles,
         ]}
         onLayout={(layout: LayoutChangeEvent) => {
           const itemHeight = layout.nativeEvent.layout.height;
-          setNotificationHeight(itemHeight + inset.top);
+          setNotificationHeight(itemHeight);
         }}>
         {<Notification notification={notification} />}
       </Animated.View>
@@ -130,6 +116,7 @@ export default ActiveNotificationContainer;
 
 const styles = StyleSheet.create({
   notification: {
+    top: -500,
     position: 'absolute',
     left: theme.spacing.p2,
   },

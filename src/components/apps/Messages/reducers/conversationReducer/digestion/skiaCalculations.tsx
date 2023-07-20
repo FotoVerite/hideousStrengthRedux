@@ -1,6 +1,6 @@
 import React from 'react';
-import {Glyph, SkFont, Text, Vector, vec} from '@shopify/react-native-skia';
-import {GlyphContent, GlyphItemContentType} from './types';
+import {Glyph, SkFont, Text, vec} from '@shopify/react-native-skia';
+import {GlyphContent} from './types';
 
 type LineQueueType = SectionType[][];
 

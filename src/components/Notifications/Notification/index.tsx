@@ -1,8 +1,8 @@
+import React, {FC} from 'react';
 import {formatMoment} from 'common';
 import {Bold, P} from 'components/common/StyledText';
 import {Row} from 'components/common/layout';
 import moment from 'moment';
-import {FC} from 'react';
 import {View, Image, StyleSheet} from 'react-native';
 import {NotificationType} from '../reducers/notificationsReducer/types';
 import theme from 'themes';
@@ -30,7 +30,7 @@ export default Notification;
 const styles = StyleSheet.create({
   container: {
     borderRadius: 25,
-    backgroundColor: '#ffffffc7',
+    backgroundColor: '#999999',
     padding: theme.spacing.p1,
   },
   contentContainer: {

@@ -3,7 +3,6 @@ import {
   MessageAppContactsEventType,
 } from 'components/EventOrchestra/context/types';
 import {
-  ConversationType,
   DigestedConversationRouteType,
   MessageRouteType,
   RouteConditionsType,

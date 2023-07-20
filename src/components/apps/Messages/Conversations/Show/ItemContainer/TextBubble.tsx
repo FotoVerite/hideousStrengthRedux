@@ -49,7 +49,6 @@ export const TextBubble: FC<
     leftSide,
     scrollHandler,
   );
-
   return (
     <Row style={styles.row}>
       {leftSide && (

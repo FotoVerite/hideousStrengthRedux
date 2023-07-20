@@ -1,9 +1,9 @@
-import React, {FC, MutableRefObject, useContext} from 'react';
+import React, {FC, useContext} from 'react';
 import Fuse from 'fuse.js';
 
 import theme from 'themes';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {StyleSheet, TextInput, View} from 'react-native';
+import {StyleSheet, TextInput} from 'react-native';
 import {ConversationType} from '../../context/types';
 import Animated, {
   Extrapolate,

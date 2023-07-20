@@ -28,18 +28,6 @@ const List: FC<{
   const textOrchestration = useContext(TextOrchestrationContext);
   const aref = useAnimatedRef<Animated.ScrollView>();
   const scrollHandler = useScrollViewOffset(aref);
-  const renderDigestedConversation: ListRenderItem<
-    DigestedConversationListItem
-  > = ({item, index}) => (
-    <ItemContainer
-      item={item}
-      group={conversation?.group || false}
-      scrollHandler={scrollHandler}
-      index={index}
-      scrollRef={aref}
-      key={`item-${index}`}
-    />
-  );
 
   useEffect(() => {
     if (textOrchestration.scrollTo.state != null) {
@@ -60,7 +48,16 @@ const List: FC<{
       ref={aref}
       style={[styles.list, {width: width}]}
       data={conversation?.exchanges}
-      renderItem={renderDigestedConversation}
+      renderItem={({item, index}) => (
+        <ItemContainer
+          item={item}
+          group={false}
+          scrollHandler={scrollHandler}
+          index={index}
+          scrollRef={aref}
+          key={`item-${index}`}
+        />
+      )}
       keyExtractor={(item: DigestedConversationListItem, index) =>
         `$conversation.name}-${index}`
       }
