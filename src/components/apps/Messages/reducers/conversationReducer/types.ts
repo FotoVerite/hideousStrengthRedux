@@ -1,14 +1,11 @@
-import {ReactElement} from 'react';
 import {DigestedConversationListItem} from './digestion/types';
 import {
   ConversationType,
   DigestedConversationType,
   ExchangeBlockType,
-  MessageRouteType,
   MessageType,
 } from '../../context/types';
 import {SkFont} from '@shopify/react-native-skia';
-import {GenericStateType} from 'types/genericContextTypes';
 import {EventOrchestraObjectType} from 'components/EventOrchestra/context/types';
 import {CONTACT_NAMES} from '../../context/usersMapping';
 
@@ -16,6 +13,7 @@ export enum CONVERSATION_REDUCER_ACTIONS {
   ADD_CONVERSATION,
   ADD_MESSAGE,
   ADD_MESSAGE_FROM_BLOCK,
+  CONTINUE_ROUTE,
   DIGEST_CONVERSATION,
   START_ROUTE,
   UPDATE_MESSAGE,
@@ -26,20 +24,10 @@ export type DigestedMessageProps = {
   [index in keyof DigestedConversationListItem]?: DigestedConversationListItem[index];
 };
 
-export type StartRoutePayloadType = {
-  name: CONTACT_NAMES;
-  id: number;
-  chosen: string;
-};
-
 export type AddMessagePayloadType = {
   messageContent: MessageType;
   name: CONTACT_NAMES;
   tail: boolean;
-};
-
-type AbstractConversationReducerAction = {
-  type: CONVERSATION_REDUCER_ACTIONS;
 };
 
 type AddConversationActionType = {
@@ -57,6 +45,10 @@ type AddMessageActionType = {
   payload: {block: ExchangeBlockType; index: number};
 };
 
+type ContinueRouteActionType = {
+  type: CONVERSATION_REDUCER_ACTIONS.CONTINUE_ROUTE;
+};
+
 type DigestConversationActionType = {
   type: CONVERSATION_REDUCER_ACTIONS.DIGEST_CONVERSATION;
   payload: ConversationType;
@@ -68,7 +60,10 @@ type ResetConversationActionType = {
 
 type StartRouteActionType = {
   type: CONVERSATION_REDUCER_ACTIONS.START_ROUTE;
-  payload: StartRoutePayloadType;
+  payload: {
+    id: number;
+    chosenOption: string;
+  };
 };
 
 type UpdateMessageActionType = {
@@ -83,7 +78,7 @@ export type ConversationReducerConfigurationType = {
   font: SkFont;
   emojiFont: SkFont;
   width: number;
-  events: GenericStateType<EventOrchestraObjectType>;
+  events: EventOrchestraObjectType;
 };
 
 export type DigestConfigurationType = {
@@ -95,6 +90,7 @@ export type ConversationReducerActionsType =
   | AddMessageActionType
   | AddMessageFromBlockActionType
   | AddConversationActionType
+  | ContinueRouteActionType
   | DigestConversationActionType
   | ResetConversationActionType
   | StartRouteActionType

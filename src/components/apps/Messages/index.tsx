@@ -1,24 +1,18 @@
 import React, {FC} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import MessagesContextProvider from './context';
-import Conversations from './Conversations/List';
-import Header from './Header';
-import ConversationHeader from './Header/ConversationHeader';
 import MediaView from './Conversations/Show/MediaViewer';
-import Conversation from './Conversations/Show';
+import NewMessage from './Conversations/NewMessage';
+import MainScreen from './MainScreen';
 
 const Messages: FC = () => {
-  const insets = useSafeAreaInsets();
   return (
     <MessagesContextProvider>
       <View style={[styles.layout]}>
-        <Header />
-        <Conversations />
-        <Conversation />
-        <ConversationHeader />
+        <MainScreen />
         <MediaView />
+        <NewMessage />
       </View>
     </MessagesContextProvider>
   );

@@ -5,7 +5,6 @@ import {Image, View} from 'react-native';
 
 import {
   Canvas,
-  Circle,
   Group,
   LinearGradient,
   Rect,
@@ -26,13 +25,13 @@ import {
   flipPath,
 } from 'components/apps/Messages/reducers/conversationReducer/digestion/BubblePath';
 
-export const WaitingBubble: FC<
-  DigestedConversationStringItemType & {
-    scrollHandler: SharedValue<number>;
-    scrollRef: React.RefObject<Animated.ScrollView>;
-    group?: boolean;
-  }
-> = ({avatar, colors, scrollHandler, offset, leftSide, clip, name, group}) => {
+export const WaitingBubble: FC<{
+  item: DigestedConversationStringItemType;
+  scrollHandler: SharedValue<number>;
+  scrollRef: React.RefObject<Animated.ScrollView>;
+  group?: boolean;
+}> = ({item, scrollHandler, group}) => {
+  const {avatar, colors, offset, leftSide, name} = item;
   const computedColors = useHeightDeterminedGradient(
     colors,
     offset,
@@ -42,7 +41,7 @@ export const WaitingBubble: FC<
 
   const waitingWidth = 75;
   const waitingHeight = 38;
-  clip = BubblePath(waitingWidth, waitingHeight - 5, 12, false);
+  const clip = BubblePath(waitingWidth, waitingHeight - 5, 12, false);
   flipPath(clip, waitingWidth);
 
   clip.addCircle(13, 26, 7);
@@ -64,7 +63,6 @@ export const WaitingBubble: FC<
             {name}
           </P>
         )}
-
         <Canvas
           style={{
             width: waitingWidth,

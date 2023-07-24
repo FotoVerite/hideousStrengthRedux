@@ -7,6 +7,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import Animated, {
+  SharedValue,
   interpolate,
   useAnimatedStyle,
   useSharedValue,
@@ -24,7 +25,7 @@ import {BlurView} from '@react-native-community/blur';
 import {Row} from 'components/common/layout';
 import {CONVERSATION_REDUCER_ACTIONS} from '../reducers/conversationReducer/types';
 
-const ConversationHeader: FC = () => {
+const ConversationHeader: FC<{shrink: SharedValue<number>}> = ({shrink}) => {
   const context = useContext(MessagesContext);
 
   const conversation = useRef(context.conversation.state);
@@ -52,6 +53,8 @@ const ConversationHeader: FC = () => {
     return {
       opacity: opacityAndPosition.value,
       marginLeft: interpolate(opacityAndPosition.value, [0, 1], [width, 0]),
+      borderTopLeftRadius: interpolate(shrink.value, [0, 1], [0, 10]),
+      borderTopRightRadius: interpolate(shrink.value, [0, 1], [0, 10]),
     };
   }, [context.conversation]);
 
@@ -114,6 +117,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
+    borderRadius: 10,
   },
   row: {
     alignItems: 'center',

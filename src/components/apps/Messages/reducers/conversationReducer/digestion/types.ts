@@ -1,5 +1,5 @@
 import {FlexAlignType, ImageSourcePropType} from 'react-native';
-import {ReactionType} from '../../../context/types';
+import {ConversationType, ReactionType} from '../../../context/types';
 import {Glyph, SkFont, SkImage, SkPath} from '@shopify/react-native-skia';
 import {CONTACT_NAMES} from '../../../context/usersMapping';
 
@@ -8,8 +8,10 @@ export enum DigestedItemTypes {
   TIME = 'time',
   IMAGE = 'image',
   GLYPH = 'glyph',
+  NUMBER = 'number',
   SNAPSHOT = 'snapshot',
   STRING = 'string',
+  VCARD = 'vcard',
 }
 
 export type GlyphContent = {
@@ -83,16 +85,35 @@ export interface DigestedConversationEmojiItemType
   type: DigestedItemTypes.EMOJI;
 }
 
+export interface DigestedConversationNumberItemType
+  extends AbstractMetaDigestedConversationItemType {
+  content: ConversationType;
+  clip: SkPath;
+  type: DigestedItemTypes.NUMBER;
+}
+
 export interface DigestedConversationSnapShotItemType
   extends AbstractMetaDigestedConversationItemType {
   content: {image?: SkImage; backup: string; filename: string};
   type: DigestedItemTypes.SNAPSHOT;
 }
 
-export type DigestedConversationListItem =
+export interface DigestedConversationVCardItemType
+  extends AbstractMetaDigestedConversationItemType {
+  content: ConversationType;
+  clip: SkPath;
+  type: DigestedItemTypes.VCARD;
+}
+
+export type BubbleItemType =
   | DigestedConversationEmojiItemType
-  | DigestedConversationTimeType
-  | DigestedConversationStringItemType
   | DigestedConversationImageItemType
   | DigestedConversationGlyphItemType
-  | DigestedConversationSnapShotItemType;
+  | DigestedConversationNumberItemType
+  | DigestedConversationSnapShotItemType
+  | DigestedConversationStringItemType
+  | DigestedConversationVCardItemType;
+
+export type DigestedConversationListItem =
+  | BubbleItemType
+  | DigestedConversationTimeType;

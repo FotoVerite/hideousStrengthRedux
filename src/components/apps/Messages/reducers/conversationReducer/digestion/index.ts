@@ -15,6 +15,7 @@ import {
 
 import ReactNativeBlobUtil from 'react-native-blob-util';
 import {
+  AddMessagePayloadType,
   ConversationReducerConfigurationType,
   DigestConfigurationType,
 } from '../types';
@@ -26,6 +27,7 @@ import {
   RouteObjectType,
   isMessageWithMeta,
 } from '../routing/seen';
+import {findAvailableRoutes} from '../routing/available';
 
 type BaseConfigType = {
   font: SkFont;
@@ -41,6 +43,9 @@ export const BUBBLE_PADDING = 18;
 
 export const getListHeight = (exchanges: DigestedConversationListItem[]) => {
   const lastNode = exchanges.slice(-1)[0];
+  if (lastNode == null) {
+    return 0;
+  }
   return lastNode.offset + lastNode.height + lastNode.paddingBottom;
 };
 
@@ -50,6 +55,7 @@ export const digestConversation = async (
 ) => {
   const {exchanges, ...conversationProps} = conversation;
   const {events, ...configProps} = config;
+
   const digestedExchanges = digestExchanges(
     configProps,
     exchanges,
@@ -58,8 +64,14 @@ export const digestConversation = async (
   const digested = Object.assign(conversationProps, {
     exchanges: digestedExchanges,
     routes: conversationProps.routes || [],
+    activePath: [],
+    availableRoute: findAvailableRoutes(
+      conversationProps.name,
+      conversationProps.routes || [],
+      events,
+    )[0],
   });
-  digested.exchanges = appendSeenRoutes(digested, events.state, configProps);
+  digested.exchanges = appendSeenRoutes(digested, events, configProps);
   digested.exchanges = await resolveSnapshots(digested.exchanges);
   return digested;
 };
@@ -72,7 +84,12 @@ const appendSeenRoutes = (
   if (digested.routes == null) {
     digested.exchanges;
   }
-  const seenRoutes = getSeenRoutes(digested.name, event, digested.routes);
+  const seenRoutes = getSeenRoutes(
+    digested.name,
+    event,
+    digested.routes,
+    digested.eventBasedRoutes,
+  );
 
   return seenRoutes.reduce((digestedExchanges, routes) => {
     return appendRoute(digestedExchanges, routes, digested.group, config);
@@ -178,6 +195,16 @@ export const resolveSnapshots = async (
     resolver,
   );
   return resolved.arr;
+};
+
+export const digestPath = (path: ExchangeBlockType[]) => {
+  return path.reduce((acc, block) => {
+    for (const [index, message] of block.messages.entries()) {
+      const tail = block.messages.length - 1 === index;
+      acc.push({name: block.name, messageContent: message, tail: tail});
+    }
+    return acc;
+  }, [] as AddMessagePayloadType[]);
 };
 
 const resolveSnapshotAndUpdateOffset = async (

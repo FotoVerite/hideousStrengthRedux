@@ -24,6 +24,8 @@ const ActiveNotifications: FC = () => {
         <ActiveNotificationContainer
           key={`${idx}-notification`}
           notification={notification}
+          dispatch={notificationsContext.notifications.dispatch}
+          index={idx}
         />
       ))}
     </View>

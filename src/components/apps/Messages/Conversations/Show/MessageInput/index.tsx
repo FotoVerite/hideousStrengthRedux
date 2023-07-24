@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, memo, useCallback, useEffect, useState} from 'react';
 import {StyleSheet, useWindowDimensions} from 'react-native';
 import {BlurView} from '@react-native-community/blur';
 import Animated from 'react-native-reanimated';
@@ -6,13 +6,50 @@ import Animated from 'react-native-reanimated';
 import MessageTextInput from './MessageTextInput';
 import OptionList from './OptionList';
 
+import {ConversationShowRefs} from '..';
+
 import theme from 'themes';
+import {DigestedConversationType} from 'components/apps/Messages/context/types';
+import {ConversationReducerActionsType} from 'components/apps/Messages/reducers/conversationReducer/types';
 
-const MessageInput: FC = () => {
-  const {width, height} = useWindowDimensions();
+const MessageInput: FC<
+  ConversationShowRefs & {
+    conversation?: DigestedConversationType;
+    dispatch: (action: ConversationReducerActionsType) => Promise<void>;
+  }
+> = ({footerHeight, animatedScrollRef, conversation, dispatch}) => {
+  const [activeRoute, setRoute] = useState(conversation?.availableRoute);
+  const [name, setName] = useState(conversation?.name);
 
-  const [active, setActive] = useState(false);
-  const activeObject = {state: active, set: setActive};
+  const [active, _setActive] = useState(false);
+
+  const {width} = useWindowDimensions();
+
+  const setActive = useCallback((state: boolean) => {
+    _setActive(state);
+  }, []);
+
+  useEffect(() => {
+    if (!conversation) {
+      setActive(false);
+    }
+  }, [conversation, setActive]);
+
+  useEffect(() => {
+    if (
+      conversation &&
+      (conversation.availableRoute == null ||
+        activeRoute !== conversation.availableRoute)
+    ) {
+      setRoute(conversation.availableRoute);
+    }
+  }, [conversation, activeRoute]);
+
+  useEffect(() => {
+    if (conversation && name !== conversation.name) {
+      setName(conversation.name);
+    }
+  }, [conversation, name]);
 
   return (
     <Animated.View style={[{width: width}, styles.container]}>
@@ -22,13 +59,21 @@ const MessageInput: FC = () => {
         blurAmount={25}
         reducedTransparencyFallbackColor="white"
       />
-      <MessageTextInput active={activeObject} />
-      <OptionList active={activeObject} />
+      <MessageTextInput active={active} setActive={setActive} />
+      <OptionList
+        active={active}
+        setActive={setActive}
+        dispatch={dispatch}
+        footerHeight={footerHeight}
+        name={name}
+        activeRoute={activeRoute}
+        animatedScrollRef={animatedScrollRef}
+      />
     </Animated.View>
   );
 };
 
-export default MessageInput;
+export default memo(MessageInput);
 
 const styles = StyleSheet.create({
   blur: {

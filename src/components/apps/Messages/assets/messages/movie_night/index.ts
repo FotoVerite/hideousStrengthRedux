@@ -1,10 +1,11 @@
+import {ConversationType} from 'components/apps/Messages/context/types';
 import {
   CONTACT_NAMES,
   getAvatarFromContacts,
   getColorFromContacts,
 } from 'components/apps/Messages/context/usersMapping';
 
-export const movieNight = {
+export const movieNight: ConversationType = {
   name: CONTACT_NAMES.MOVIE_NIGHT,
   tags: ['Seamless', 'order', 'food', 'hungry', 'grubhub'],
   heroImage: getAvatarFromContacts(CONTACT_NAMES.MOVIE_NIGHT),

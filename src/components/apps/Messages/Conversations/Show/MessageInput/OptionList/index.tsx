@@ -1,6 +1,17 @@
-import {MessagesContext} from 'components/apps/Messages/context';
-import React, {FC, useContext, useEffect, useRef, useState} from 'react';
-import {FlatList, ListRenderItem, StyleSheet, View} from 'react-native';
+import React, {
+  FC,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import {
+  LayoutChangeEvent,
+  StyleSheet,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import Animated, {
   interpolate,
   runOnJS,
@@ -9,97 +20,112 @@ import Animated, {
   withDelay,
   withTiming,
 } from 'react-native-reanimated';
-import {GenericStateType} from 'types/genericContextTypes';
 import Option from './Option';
 import theme from 'themes';
 import NoOption from './NoOption';
-import {TextOrchestrationContext} from 'components/apps/Messages/context/textOrchestration';
+import {ConversationShowRefs} from '../..';
+import {MessageRouteType} from 'components/apps/Messages/context/types';
+import {CONTACT_NAMES} from 'components/apps/Messages/context/usersMapping';
+import {ConversationReducerActionsType} from 'components/apps/Messages/reducers/conversationReducer/types';
 
-const Conversations: FC<{
-  active: GenericStateType<boolean>;
-}> = ({active}) => {
-  const context = useContext(MessagesContext);
-  const textOrchestraContext = useContext(TextOrchestrationContext);
-  const route = textOrchestraContext.route;
+const OptionList: FC<
+  {
+    active: boolean;
+    setActive: (active: boolean) => void;
+    activeRoute: MessageRouteType | undefined;
+    dispatch: (action: ConversationReducerActionsType) => Promise<void>;
+    name: CONTACT_NAMES;
+  } & ConversationShowRefs
+> = ({
+  active,
+  setActive,
+  activeRoute,
+  animatedScrollRef,
+  dispatch,
+  footerHeight,
+  name,
+}) => {
   const showOptions = useSharedValue(0);
 
   const [optionsHeight, setOptionsHeight] = useState(0);
 
-  const conversation = context.conversation.state;
-  const conversationRef = useRef(conversation);
-  const [refresh, setRefresh] = useState(0);
-  const name = conversationRef.current?.name;
+  const {width} = useWindowDimensions();
 
   useEffect(() => {
-    if (!conversation) {
-      active.set(false);
-    } else {
-      conversationRef.current = conversation;
-      setRefresh(i => (i += 1));
-    }
-  }, [conversation]);
-
-  useEffect(() => {
-    if (conversationRef.current) {
-      setOptionsHeight(0);
-    }
-  }, [name, route]);
-
-  useEffect(() => {
-    if (active.state) {
+    if (active) {
       showOptions.value = withDelay(50, withTiming(1, {duration: 300}));
     } else {
       showOptions.value = withDelay(50, withTiming(0, {duration: 300}));
     }
-  }, [active.state]);
+  }, [active, showOptions]);
+
+  const scrollToEnd = useCallback(() => {
+    if (animatedScrollRef.current) {
+      animatedScrollRef.current.scrollToEnd({animated: true});
+    }
+  }, [animatedScrollRef]);
 
   useEffect(() => {
-    if (active.state) {
-      textOrchestraContext.sharedValues.optionsHeight.value = withTiming(
+    if (active) {
+      footerHeight.value = withTiming(
         optionsHeight,
-        {duration: 50},
-        () => runOnJS(textOrchestraContext.scrollTo.set)(-1),
+        {duration: 100},
+        finished => {
+          if (finished) {
+            runOnJS(scrollToEnd)();
+          }
+        },
       );
     } else {
-      textOrchestraContext.sharedValues.optionsHeight.value = withDelay(
-        50,
-        withTiming(0, {duration: 300}),
-      );
+      footerHeight.value = withDelay(50, withTiming(0, {duration: 300}));
     }
-  }, [active.state]);
+  }, [active, footerHeight, scrollToEnd, optionsHeight]);
 
   const animateOptionsUp = useAnimatedStyle(() => {
     return {
       height: interpolate(showOptions.value, [0, 1], [0, optionsHeight]),
     };
-  }, [showOptions, active.state]);
+  }, [showOptions, active]);
+
+  const options = useMemo(() => {
+    if (activeRoute != null) {
+      return activeRoute.options.map(option => (
+        <Option
+          key={`${activeRoute.routes.id}-${option}`}
+          id={activeRoute.id}
+          option={option}
+          setActive={setActive}
+          dispatch={dispatch}
+          name={name}
+        />
+      ));
+    } else {
+      return <NoOption setActive={setActive} />;
+    }
+  }, [activeRoute, dispatch, name, setActive]);
+
   return (
     <Animated.View style={[styles.screen, animateOptionsUp]}>
-      {conversationRef.current && (
-        <View style={{}}>
-          {route == null && (
-            <NoOption
-              active={active}
-              totalHeight={setOptionsHeight}
-              key={conversationRef.current.name}
-            />
-          )}
-          {route &&
-            route.options.map(option => (
-              <Option
-                key={`${route.id}-${option}`}
-                option={option}
-                active={active}
-                totalHeight={setOptionsHeight}
-              />
-            ))}
-        </View>
-      )}
+      <View
+        style={[
+          styles.optionList,
+          {
+            width: width,
+          },
+        ]}
+        onLayout={(layout: LayoutChangeEvent) => {
+          const layoutHeight = layout.nativeEvent.layout.height;
+          if (layoutHeight !== Math.round(optionsHeight)) {
+            setOptionsHeight(layoutHeight);
+          }
+        }}>
+        {options}
+      </View>
     </Animated.View>
   );
 };
 
-export default Conversations;
+export default memo(OptionList);
 
 const styles = StyleSheet.create({
   screen: {
@@ -112,9 +138,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     backgroundColor: 'gray',
   },
-
-  list: {
-    paddingHorizontal: theme.spacing.p2,
-    flexGrow: 1,
+  optionList: {
+    position: 'absolute',
   },
 });

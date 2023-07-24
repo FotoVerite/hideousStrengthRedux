@@ -17,9 +17,6 @@ export const useSlideAnimation = (
     animationDuration?: number;
   },
 ) => {
-  console.log(styleProp);
-  console.log(width);
-  console.log(options);
   const amount = useSharedValue(0);
   const _options = Object.assign(
     {

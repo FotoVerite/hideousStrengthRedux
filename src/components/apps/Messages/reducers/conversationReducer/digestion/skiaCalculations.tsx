@@ -164,6 +164,17 @@ const getGlyphIdsAndWidths = (
   });
 };
 
+export const calculatedItemWidth = (
+  font: SkFont,
+  sentence: string,
+  maxWidth: number,
+) => {
+  const LINE_PADDING = 40;
+  const RIGHT_SIDE_PADDING = 8;
+  let calculatedWidth = font.getTextWidth(sentence) + LINE_PADDING;
+  return Math.min(calculatedWidth, maxWidth) + RIGHT_SIDE_PADDING;
+};
+
 export const GetDimensionsAndSkiaNodes = (
   font: SkFont,
   emojiFont: SkFont,
@@ -173,13 +184,7 @@ export const GetDimensionsAndSkiaNodes = (
 ) => {
   const LINE_HEIGHT = 19;
   const LINE_PADDING = 40;
-  const RIGHT_SIDE_PADDING = 8;
-  const MAX_WIDTH = leftSide ? width * 0.65 - 30 : width * 0.65;
-  let calculatedWidth = font.getTextWidth(sentence) + LINE_PADDING;
-  calculatedWidth = Math.min(
-    calculatedWidth + RIGHT_SIDE_PADDING,
-    MAX_WIDTH + 8,
-  );
+  const MAX_WIDTH = leftSide ? width * 0.65 - 30 : width * 0.7;
   const lineQueue = generateLineQueue(
     font,
     emojiFont,
@@ -187,6 +192,12 @@ export const GetDimensionsAndSkiaNodes = (
     MAX_WIDTH - LINE_PADDING,
     leftSide,
   );
+  const calculatedWidth = lineQueue.reduce((acc, line) => {
+    return Math.max(
+      acc,
+      calculatedItemWidth(font, line.map(p => p.content).join(''), MAX_WIDTH),
+    );
+  }, 0);
   const [lineCount, textNodes] = generateTextNodes(lineQueue, font, emojiFont);
 
   return [lineCount * LINE_HEIGHT, calculatedWidth, textNodes] as const;

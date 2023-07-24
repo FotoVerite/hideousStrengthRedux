@@ -15,10 +15,12 @@ const Notification: FC<{notification: NotificationType}> = props => {
         <Image source={image} style={styles.image} />
         <View style={styles.contentContainer}>
           <Row style={styles.header}>
-            <Bold>{title}</Bold>
+            <View>
+              <Bold style={styles.text}>{title}</Bold>
+              <P style={styles.text}>{content}</P>
+            </View>
             <P style={styles.date}>{formatMoment(moment(timestamp))}</P>
           </Row>
-          <P>{content}</P>
         </View>
       </Row>
     </View>
@@ -30,7 +32,7 @@ export default Notification;
 const styles = StyleSheet.create({
   container: {
     borderRadius: 25,
-    backgroundColor: '#999999',
+    backgroundColor: '#b2b0b092',
     padding: theme.spacing.p1,
   },
   contentContainer: {
@@ -43,9 +45,16 @@ const styles = StyleSheet.create({
     marginEnd: theme.spacing.p1,
   },
   header: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   date: {
     marginLeft: 'auto',
+    marginTop: 0,
+    color: '#343434',
+    fontSize: 13,
+  },
+  text: {
+    color: '#343434',
+    fontSize: 13,
   },
 });

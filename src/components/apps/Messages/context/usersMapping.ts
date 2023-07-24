@@ -11,10 +11,12 @@ import gregAvatar from '@apps/Messages/assets/avatars/greg.jpg';
 import steveLitt from '@apps/Messages/assets/avatars/steve_litt.png';
 
 import meleenaAvatar from '@apps/Messages/assets/avatars/mileena.png';
+import {ImageSourcePropType} from 'react-native';
 
 export enum CONTACT_NAMES {
   ARIAL = 'Arial',
   ALICE = 'Alice',
+  BASE = '',
   CHRIS = 'Chris',
   CLAY = 'Clay',
   GRACE_RUSSO = 'Grace Russo',
@@ -23,16 +25,19 @@ export enum CONTACT_NAMES {
   MOVIE_NIGHT = 'Movie Night',
   SELF = 'Self',
   STEVE_LITT = 'Steve-0',
+  TEST = 'Test',
+  TEST2 = 'Test2',
   ZOLA = 'Zola',
   DEFAULT = 'Default',
   SEAMLESS = '30368',
 }
 
 export type UserMappingType = {
-  avatar?: string;
+  avatar: ImageSourcePropType;
   colors: string[];
 };
 export const contactConsts: {[key in CONTACT_NAMES]: UserMappingType} = {
+  '': {avatar: defaultAvatar, colors: ['#6b6b6d', '#363243']},
   Arial: {avatar: arialAvatar, colors: ['#dbaf48', '#cdc8bb']},
   Alice: {avatar: aliceAvatar, colors: ['#d0bd28', '#cdc8bb']},
   Chris: {avatar: chrisAvatar, colors: ['#6bd8e4', '#363243']},
@@ -41,8 +46,10 @@ export const contactConsts: {[key in CONTACT_NAMES]: UserMappingType} = {
   'Grace Russo': {avatar: graceAvatar, colors: ['#EE6548', '#363243']},
   Mileena: {avatar: meleenaAvatar, colors: ['#ff0095', '#cdbbc6']},
   'Movie Night': {avatar: darkoAvatar, colors: ['#6b6b6d', '#363243']},
-  Self: {avatar: undefined, colors: ['blue', '#363243']},
+  Self: {avatar: defaultAvatar, colors: ['blue', '#363243']},
   'Steve-0': {avatar: steveLitt, colors: ['#FF002D', '#C3596B']},
+  Test: {avatar: defaultAvatar, colors: ['#FF002D', '#C3596B']},
+  Test2: {avatar: defaultAvatar, colors: ['#FF002D', '#C3596B']},
   Zola: {avatar: zaraAvatar, colors: ['#b46be4', '#363243']},
   30368: {avatar: defaultAvatar, colors: ['#6b6b6d', '#363243']},
   Default: {avatar: defaultAvatar, colors: ['#6b6b6d', '#363243']},

@@ -5,6 +5,7 @@ import {
 import {
   RouteConditionsType,
   MessageRouteType,
+  EventBasedRouteType,
 } from 'components/apps/Messages/context/types';
 import {CONTACT_NAMES} from 'components/apps/Messages/context/usersMapping';
 
@@ -41,7 +42,7 @@ const routeHasBeenChosenCheck = (
   }, true);
 };
 
-const messageAppConditionsMet = (
+export const messageAppConditionsMet = (
   state: MessageAppContactsEventType,
   conditions: RouteConditionsType,
 ) => {
@@ -55,13 +56,15 @@ const messageAppConditionsMet = (
   return ret;
 };
 
-export const findAvailableRoutes = (
+export const findAvailableRoutes = <
+  AvailableRouteType extends EventBasedRouteType | MessageRouteType,
+>(
   name: CONTACT_NAMES,
-  routes: MessageRouteType[],
+  routes: AvailableRouteType[],
   state: EventOrchestraObjectType,
 ) => {
-  if (routes == null || routes.length == 0) {
-    return undefined;
+  if (routes == null || routes.length === 0) {
+    return [] as AvailableRouteType[];
   } else {
     return routes.filter(route => {
       // Convert number to string due to objects keys needing to be strings
@@ -72,6 +75,6 @@ export const findAvailableRoutes = (
         (route.conditions == null ||
           messageAppConditionsMet(state.Message, route.conditions))
       );
-    })[0];
+    }) as AvailableRouteType[];
   }
 };

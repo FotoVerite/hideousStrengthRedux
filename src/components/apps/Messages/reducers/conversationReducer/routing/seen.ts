@@ -3,6 +3,7 @@ import {
   MessageEventType,
 } from 'components/EventOrchestra/context/types';
 import {
+  EventBasedRouteType,
   ExchangeBlockType,
   MessageRouteType,
   MessageWithMetaType,
@@ -39,6 +40,9 @@ const constructSeenRoutes = (
 ) => {
   const ret: RouteObjectType[] = [];
   for (const [key, value] of Object.entries(routeEvents)) {
+    if (availableRoutes[key] == null) {
+      continue;
+    }
     ret.push(
       Object.assign(
         {},
@@ -52,7 +56,30 @@ const constructSeenRoutes = (
   return ret;
 };
 
-export const getSeenRoutes = (
+const constructSeenEventRoutes = (
+  routeEvents: MessageRouteEventType,
+  availableRoutes: EventBasedRouteType[],
+) => {
+  const ret: RouteObjectType[] = [];
+  for (const [key, value] of Object.entries(routeEvents)) {
+    const event = availableRoutes.find(a => a.id.toString() === key);
+    if (event == null) {
+      continue;
+    }
+    ret.push(
+      Object.assign(
+        {},
+        {routeId: key},
+        {...value},
+        {exchanges: event.exchanges},
+      ),
+    );
+  }
+  ret.sort((a, b) => a.position - b.position);
+  return ret;
+};
+
+export const getSeenOptionRoutes = (
   name: CONTACT_NAMES,
   events: MessageEventType,
   availableRoutes?: MessageRouteType[],
@@ -68,10 +95,43 @@ export const getSeenRoutes = (
   );
 };
 
+export const getSeenEventRoutes = (
+  name: CONTACT_NAMES,
+  events: MessageEventType,
+  availableRoutes?: EventBasedRouteType[],
+) => {
+  if (!availableRoutes) {
+    return [];
+  }
+  const routeEvents = events.Message[name]?.routes || {};
+
+  return constructSeenEventRoutes(routeEvents, availableRoutes);
+};
+
+export const getSeenRoutes = (
+  name: CONTACT_NAMES,
+  events: MessageEventType,
+  availableRoutes?: MessageRouteType[],
+  availableEventBasedRoutes?: EventBasedRouteType[],
+) => {
+  const routes = getSeenOptionRoutes(name, events, availableRoutes).concat(
+    getSeenEventRoutes(name, events, availableEventBasedRoutes).sort(
+      (a, b) => a.position - b.position,
+    ),
+  );
+  return routes;
+};
+
 export const getLastSeenRoute = (
   name: CONTACT_NAMES,
   events: MessageEventType,
   availableRoutes?: MessageRouteType[],
+  availableEventBasedRoutes?: EventBasedRouteType[],
 ): RouteObjectType | undefined => {
-  return getSeenRoutes(name, events, availableRoutes).slice(-1)[0];
+  return getSeenRoutes(
+    name,
+    events,
+    availableRoutes,
+    availableEventBasedRoutes,
+  ).slice(-1)[0];
 };

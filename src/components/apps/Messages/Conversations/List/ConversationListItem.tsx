@@ -2,25 +2,19 @@ import React, {FC, useContext, useMemo} from 'react';
 import {TouchableOpacity, Image, View, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {DigestedItemTypes} from '../../reducers/conversationReducer/digestion/types';
 import {CONVERSATION_REDUCER_ACTIONS} from '../../reducers/conversationReducer/types';
 
 import {Bold, P} from 'components/common/StyledText';
 import {Row} from 'components/common/layout';
 
-import {ConversationType, ExchangeBlockType} from '../../context/types';
+import {ConversationType} from '../../context/types';
 import {MessagesContext} from '../../context';
-import moment from 'moment';
 
 import {EventOrchestraContext} from 'components/EventOrchestra/context';
-import {formatMoment} from 'common';
 
 import theme from 'themes';
-import {isMessageWithMeta} from '../../context/utility';
-import {
-  getLastSeenRoute,
-  RouteObjectType,
-} from '../../reducers/conversationReducer/routing/seen';
+import {getLastSeenRoute} from '../../reducers/conversationReducer/routing/seen';
+import {determineLogLine} from '../../context/conversationFunctions';
 
 const ConversationListItem: FC<{conversation: ConversationType}> = ({
   conversation,
@@ -36,6 +30,7 @@ const ConversationListItem: FC<{conversation: ConversationType}> = ({
           conversation.name,
           eventContext.events.state,
           conversation.routes,
+          conversation.eventBasedRoutes,
         ),
       ),
     [conversation, eventContext.events.state],
@@ -66,38 +61,6 @@ const ConversationListItem: FC<{conversation: ConversationType}> = ({
 };
 
 export default ConversationListItem;
-
-const determineLogLine = (
-  conversation: ConversationType,
-  routeEvent?: RouteObjectType,
-): {time: string; content: string} => {
-  if (routeEvent == null) {
-    const lastExchange = conversation.exchanges.slice(-1)[0];
-    const date = moment(lastExchange.time);
-    return {
-      time: formatMoment(date),
-      content: getLastMessageString(lastExchange.exchanges),
-    };
-  } else {
-    return {
-      time: formatMoment(moment(routeEvent.date)),
-      content: getLastMessageString(routeEvent.exchanges),
-    };
-  }
-};
-
-const getLastMessageString = (block: ExchangeBlockType[]) => {
-  const lastMessage = block.slice(-1)[0].messages.slice(-1)[0];
-  if (isMessageWithMeta(lastMessage)) {
-    if (lastMessage.type !== DigestedItemTypes.SNAPSHOT) {
-      return lastMessage.message;
-    } else {
-      return lastMessage.message.filename;
-    }
-  } else {
-    return lastMessage;
-  }
-};
 
 const styles = StyleSheet.create({
   image: {

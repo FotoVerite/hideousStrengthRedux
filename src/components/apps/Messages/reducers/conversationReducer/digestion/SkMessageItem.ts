@@ -7,32 +7,46 @@ import {
   DigestedConversationGlyphItemType,
   DigestedConversationImageItemType,
   DigestedConversationListItem,
+  DigestedConversationNumberItemType,
   DigestedConversationSnapShotItemType,
   DigestedConversationStringItemType,
+  DigestedConversationVCardItemType,
   DigestedItemTypes,
 } from './types';
 import {SkFont} from '@shopify/react-native-skia';
-import {MessageWithMetaType} from 'components/apps/Messages/context/types';
+import {
+  ConversationType,
+  MessageWithMetaType,
+} from 'components/apps/Messages/context/types';
 import {
   CONTACT_NAMES,
   getColorFromContacts,
   getAvatarFromContacts,
 } from 'components/apps/Messages/context/usersMapping';
 import {BUBBLE_PADDING} from '.';
-import {GetDimensionsAndSkiaNodes} from './skiaCalculations';
+import {
+  GetDimensionsAndSkiaNodes,
+  calculatedItemWidth,
+} from './skiaCalculations';
 
 type CalculationsType = {
   height: number;
   width: number;
-  content: string | Element[] | {filename: string; backup: string};
+  content:
+    | string
+    | Element[]
+    | {filename: string; backup: string}
+    | ConversationType;
 };
 
 type ItemType =
   | DigestedConversationEmojiItemType
-  | DigestedConversationStringItemType
   | DigestedConversationImageItemType
   | DigestedConversationGlyphItemType
-  | DigestedConversationSnapShotItemType;
+  | DigestedConversationNumberItemType
+  | DigestedConversationStringItemType
+  | DigestedConversationSnapShotItemType
+  | DigestedConversationVCardItemType;
 
 export const SkMessageItem = (
   itemConfiguration: DigestConfigurationType,
@@ -57,7 +71,7 @@ export const SkMessageItem = (
     alignItems: leftSide ? 'flex-start' : 'flex-end',
     content: calculations.content,
     height:
-      group && name !== CONTACT_NAMES.SELF
+      group && hasTail && name !== CONTACT_NAMES.SELF
         ? calculations.height + ADDED_HEIGHT_FOR_VISIBLE_NAME
         : calculations.height,
     width: calculations.width,
@@ -116,6 +130,12 @@ const calculateWidthHeightAndContent = (
       const aspectRation = imageDimensions.height / imageDimensions.width;
       const imageHeight = itemWidth * aspectRation;
       return {width: itemWidth, height: imageHeight, content: message.message};
+    case DigestedItemTypes.NUMBER:
+      return {
+        width: calculatedItemWidth(font, message.message.name, itemWidth),
+        height: 30,
+        content: message.message,
+      };
     case DigestedItemTypes.STRING:
       const [boxHeight, boxWidth, textNodes] = GetDimensionsAndSkiaNodes(
         font,
@@ -139,6 +159,12 @@ const calculateWidthHeightAndContent = (
         leftSide,
       );
       return {width: glyphWidth, height: glyphHeight, content: glyphNodes};
+    case DigestedItemTypes.VCARD:
+      return {
+        width: 180,
+        height: 60,
+        content: message.message,
+      };
     default:
       return {width: itemWidth, height: 60, content: ''};
   }

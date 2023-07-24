@@ -9,7 +9,11 @@ import {
   DigestedConversationListItem,
   DigestedItemTypes,
 } from '../reducers/conversationReducer/digestion/types';
-import {ConversationReducerActionsType} from '../reducers/conversationReducer/types';
+import {
+  AddMessagePayloadType,
+  ConversationReducerActionsType,
+} from '../reducers/conversationReducer/types';
+import {ImageSourcePropType} from 'react-native';
 export type MessagesSharedValuesType = {
   wordInputShake: SharedValue<number>;
   infoOpened: SharedValue<number>;
@@ -22,6 +26,10 @@ export type MessagesContextTypeDigest = {
 export type MessagesContextTypeDigested = PropsWithChildren<{
   conversations: ConversationType[];
   conversation: {
+    state: DigestedConversationType | undefined;
+    dispatch: (action: ConversationReducerActionsType) => Promise<void>;
+  };
+  newMessage: {
     state: DigestedConversationType | undefined;
     dispatch: (action: ConversationReducerActionsType) => Promise<void>;
   };
@@ -39,28 +47,34 @@ export type MessageRouteType = {
   routes: {[key: string]: ExchangeBlockType[]};
 };
 
-export type DigestedConversationRouteType = MessageRouteType & {
-  exchangeIndex: number;
-  messageIndex: number;
+export type EventBasedRouteType = {
+  id: number;
+  conditions?: RouteConditionsType;
+  exchanges: ExchangeBlockType[];
 };
 
 export type ConversationType = {
   tags: string[];
+  conditions?: RouteConditionsType;
   name: CONTACT_NAMES;
-  heroImage: DataSourceParam;
+  heroImage: ImageSourcePropType;
   exchanges: ConversationExchangeType[];
   group?: boolean;
   routes?: MessageRouteType[];
+  eventBasedRoutes?: EventBasedRouteType[];
   interfaceColor: string;
 };
 
 export type DigestedConversationType = {
+  activePath: AddMessagePayloadType[];
+  availableRoute?: MessageRouteType;
   tags: string[];
   name: CONTACT_NAMES;
-  heroImage: DataSourceParam;
+  heroImage: ImageSourcePropType;
   exchanges: DigestedConversationListItem[];
   group?: boolean;
   routes: MessageRouteType[];
+  eventBasedRoutes?: EventBasedRouteType[];
   interfaceColor: string;
 };
 
@@ -79,9 +93,11 @@ export type MessageType = string | MessageWithMetaType;
 export type MessageWithMetaType =
   | EmojiMessageWithMeta
   | GlyphMessageWithMeta
-  | StringMessageWithMeta
   | ImageMessageWithMeta
-  | SnapshotMessageWithMeta;
+  | NumberMessageWithMeta
+  | StringMessageWithMeta
+  | SnapshotMessageWithMeta
+  | VCardMessageWithMeta;
 
 interface AbstractMessageWithMetaType {
   messageDelay?: number;
@@ -108,9 +124,19 @@ export interface GlyphMessageWithMeta extends AbstractMessageWithMetaType {
   type: DigestedItemTypes.GLYPH;
 }
 
+export interface NumberMessageWithMeta extends AbstractMessageWithMetaType {
+  message: ConversationType;
+  type: DigestedItemTypes.NUMBER;
+}
+
 export interface SnapshotMessageWithMeta extends AbstractMessageWithMetaType {
   type: DigestedItemTypes.SNAPSHOT;
   message: {backup: string; filename: string};
+}
+
+export interface VCardMessageWithMeta extends AbstractMessageWithMetaType {
+  message: ConversationType;
+  type: DigestedItemTypes.VCARD;
 }
 
 export type ReactionType = {name: string; color: string};

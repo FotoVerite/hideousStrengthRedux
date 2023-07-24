@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useContext} from 'react';
 
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -9,29 +9,45 @@ import {View, StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import {Icon} from 'react-native-elements';
 
 import theme from 'themes';
+import {MessagesContext, baseConversation} from '../context';
+import {CONVERSATION_REDUCER_ACTIONS} from '../reducers/conversationReducer/types';
+import {clay} from '../assets/messages/clay';
 
 const Header: FC = () => {
   const navigation = useNavigation<StackNavigationProp<screenParams>>();
-
+  const context = useContext(MessagesContext);
   return (
-    <>
-      <Row style={[styles.container]}>
+    <Row style={[styles.container]}>
+      <TouchableWithoutFeedback
+        style={{}}
+        onPress={() => {
+          //navigation.navigate('Desktop');
+        }}>
+        <View style={styles.spacer}>
+          <Row style={styles.row}>
+            <Icon name="chevron-left" color={'black'} size={16} />
+            <P style={styles.backButton}>Back</P>
+          </Row>
+        </View>
+      </TouchableWithoutFeedback>
+      <P style={styles.header}>Messages</P>
+      <View style={[styles.spacer]}>
         <TouchableWithoutFeedback
           style={{}}
           onPress={() => {
-            //navigation.navigate('Desktop');
+            context.newMessage.dispatch({
+              type: CONVERSATION_REDUCER_ACTIONS.DIGEST_CONVERSATION,
+              payload: clay,
+            });
           }}>
           <View style={styles.spacer}>
-            <Row style={styles.row}>
-              <Icon name="chevron-left" color={'black'} size={16} />
-              <P style={styles.backButton}>Back</P>
+            <Row style={styles.plusIcon}>
+              <Icon name="add-circle-outline" color={'black'} size={24} />
             </Row>
           </View>
         </TouchableWithoutFeedback>
-        <P style={styles.header}>Messages</P>
-        <View style={styles.spacer} />
-      </Row>
-    </>
+      </View>
+    </Row>
   );
 };
 
@@ -56,5 +72,10 @@ const styles = StyleSheet.create({
   },
   row: {
     alignItems: 'center',
+  },
+  plusIcon: {
+    alignItems: 'center',
+    marginStart: 'auto',
+    marginEnd: theme.spacing.p2,
   },
 });

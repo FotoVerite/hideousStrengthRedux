@@ -1,60 +1,40 @@
 import {DigestedConversationListItem} from 'components/apps/Messages/reducers/conversationReducer/digestion/types';
 import {DigestedConversationType} from 'components/apps/Messages/context/types';
-import React, {FC, useContext, useEffect} from 'react';
-import {
-  View,
-  useWindowDimensions,
-  ListRenderItem,
-  StyleSheet,
-} from 'react-native';
-import Animated, {
-  useAnimatedRef,
-  useScrollViewOffset,
-} from 'react-native-reanimated';
-import ItemContainer from '../ItemContainer';
+import React, {FC} from 'react';
+import {View, useWindowDimensions, StyleSheet} from 'react-native';
+import Animated, {useScrollViewOffset} from 'react-native-reanimated';
 import theme from 'themes';
 import Footer from './Footer';
-import {GenericStateType} from 'types/genericContextTypes';
-import {TextOrchestrationContext} from 'components/apps/Messages/context/textOrchestration';
+import {ConversationShowRefs} from '..';
+import ListItem from '../ItemContainer/ListItem';
+import {ConversationReducerActionsType} from 'components/apps/Messages/reducers/conversationReducer/types';
 
 function ListHeader() {
   return <View style={styles.listHeader} />;
 }
 
-const List: FC<{
-  conversation: DigestedConversationType | undefined;
-}> = ({conversation}) => {
-  const {width, height} = useWindowDimensions();
-  const textOrchestration = useContext(TextOrchestrationContext);
-  const aref = useAnimatedRef<Animated.ScrollView>();
-  const scrollHandler = useScrollViewOffset(aref);
-
-  useEffect(() => {
-    if (textOrchestration.scrollTo.state != null) {
-      if (textOrchestration.scrollTo.state === -1) {
-        aref.current?.scrollToEnd({animated: true});
-      } else {
-        aref.current?.scrollTo({
-          y: textOrchestration.scrollTo.state,
-          animated: true,
-        });
-      }
-      textOrchestration.scrollTo.set(undefined);
-    }
-  }, [textOrchestration.scrollTo.state]);
+const List: FC<
+  {
+    conversation: DigestedConversationType | undefined;
+    dispatch: (action: ConversationReducerActionsType) => Promise<void>;
+  } & ConversationShowRefs
+> = ({conversation, dispatch, footerHeight, animatedScrollRef}) => {
+  const {width} = useWindowDimensions();
+  const scrollHandler = useScrollViewOffset(animatedScrollRef);
 
   return (
     <Animated.FlatList
-      ref={aref}
+      ref={animatedScrollRef}
       style={[styles.list, {width: width}]}
       data={conversation?.exchanges}
       renderItem={({item, index}) => (
-        <ItemContainer
+        <ListItem
+          dispatch={dispatch}
           item={item}
-          group={false}
+          group={conversation?.group || false}
           scrollHandler={scrollHandler}
           index={index}
-          scrollRef={aref}
+          scrollRef={animatedScrollRef}
           key={`item-${index}`}
         />
       )}
@@ -62,7 +42,7 @@ const List: FC<{
         `$conversation.name}-${index}`
       }
       ListHeaderComponent={ListHeader}
-      ListFooterComponent={<Footer />}
+      ListFooterComponent={<Footer footerHeight={footerHeight} />}
       getItemLayout={(data, index) => ({
         length: data[index].height + data[index].paddingBottom,
         offset: data[index].offset,
@@ -86,7 +66,6 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.p2 + 50,
   },
   list: {
-    backgroundColor: theme.colors.muted,
     padding: theme.spacing.p1,
     paddingBottom: 0,
     flexGrow: 1,

@@ -1,4 +1,4 @@
-import React, {FC, useContext, useEffect, useRef, useState} from 'react';
+import React, {FC, useContext, useEffect, useState} from 'react';
 import {ListRenderItem, StyleSheet, View} from 'react-native';
 import Animated, {
   interpolate,
@@ -10,15 +10,21 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import theme from 'themes';
 import {ConversationType} from '../../context/types';
 import ConversationListItem from './ConversationListItem';
 import {MessagesContext} from '../../context';
 import Search from './Search';
 
+import theme from 'themes';
+
 function Separator() {
   return <View style={styles.itemSeparator} />;
 }
+
+function ListHeader() {
+  return <View style={{height: 50}} />;
+}
+
 const Conversations: FC = ({}) => {
   const context = useContext(MessagesContext);
 
@@ -26,7 +32,9 @@ const Conversations: FC = ({}) => {
   const aref = useAnimatedRef<Animated.FlatList<ConversationType>>();
   const scrollHandler = useScrollViewOffset(aref);
 
-  const [conversations, setConversations] = useState(context.conversations);
+  const [displayedConversation, setViewableConversation] = useState(
+    context.conversations,
+  );
 
   useEffect(() => {
     if (context.conversation.state) {
@@ -50,18 +58,22 @@ const Conversations: FC = ({}) => {
     <Animated.View style={[styles.screen, AnimateMessagesLeft]}>
       <Search
         scrollOffset={scrollHandler}
-        conversations={{state: conversations, set: setConversations}}
+        conversations={{
+          state: context.conversations,
+          set: setViewableConversation,
+        }}
       />
       <Animated.FlatList
         ref={aref}
         ItemSeparatorComponent={Separator}
         style={styles.list}
-        data={conversations}
+        data={context.conversations}
         renderItem={renderItem}
         keyExtractor={(item: ConversationType, index) =>
           index + '-conversation'
         }
         scrollEventThrottle={16}
+        ListFooterComponent={ListHeader}
       />
     </Animated.View>
   );

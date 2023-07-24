@@ -1,24 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable no-bitwise */
-import React, {FC, useContext, useEffect, useRef, useState} from 'react';
+import React, {FC, useContext, useEffect, useState} from 'react';
 import {View} from 'react-native';
 
 import Animated, {
   SharedValue,
-  interpolate,
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
-  withDelay,
   withTiming,
 } from 'react-native-reanimated';
 import {StyleSheet} from 'react-native';
-import {
-  DigestedConversationSnapShotItemType,
-  DigestedConversationStringItemType,
-} from 'components/apps/Messages/reducers/conversationReducer/digestion/types';
+import {DigestedConversationSnapShotItemType} from 'components/apps/Messages/reducers/conversationReducer/digestion/types';
 
-import {TextOrchestrationContext} from 'components/apps/Messages/context/textOrchestration';
 import {SnapShotContext} from 'components/Snapshot/context';
 import {BubblePath} from 'components/apps/Messages/reducers/conversationReducer/digestion/BubblePath';
 import {SkImage} from '@shopify/react-native-skia';
@@ -34,7 +28,6 @@ export const SnapshotBubble: FC<
     group?: boolean;
   }
 > = props => {
-  const context = useContext(TextOrchestrationContext);
   const messageContext = useContext(MessagesContext);
   const snapshotContext = useContext(SnapShotContext);
 
@@ -79,7 +72,7 @@ export const SnapshotBubble: FC<
 
   useEffect(() => {
     if (!renderWaiting) {
-      context.showNextMessage();
+      //context.showNextMessage();
     }
   }, [renderWaiting]);
 
@@ -89,7 +82,7 @@ export const SnapshotBubble: FC<
       !snapshotContext.indicatorRunning.state &&
       props.messageDelay
     ) {
-      context.scrollTo.set(-1);
+      //context.scrollTo.set(-1);
       opacity.value = withTiming(1, {duration: 300}, finished => {
         if (finished) {
           runOnJS(setRenderWaiting)(false);

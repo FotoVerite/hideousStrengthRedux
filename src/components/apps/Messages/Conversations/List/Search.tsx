@@ -47,10 +47,10 @@ const Search: FC<{
         Extrapolate.CLAMP,
       ),
     };
-  });
+  }, [scrollOffset.value]);
 
   return (
-    <Animated.View style={[styles.searchInput, heightAnimation]}>
+    <Animated.View style={[styles.searchInput]}>
       <AnimatedIcon
         name={'search'}
         size={20}

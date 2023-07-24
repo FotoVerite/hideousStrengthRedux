@@ -10,13 +10,19 @@ import Animated, {
 
 import Notification from '../Notification';
 import {PanGestureHandler} from 'react-native-gesture-handler';
-import {NotificationType} from '../reducers/notificationsReducer/types';
+import {
+  NOTIFICATIONS_REDUCER_ACTIONS,
+  NotificationType,
+  NotificationsReducerActionsType,
+} from '../reducers/notificationsReducer/types';
 
 import theme from 'themes';
 
-const ActiveNotificationContainer: FC<{notification: NotificationType}> = ({
-  notification,
-}) => {
+const ActiveNotificationContainer: FC<{
+  dispatch: React.Dispatch<NotificationsReducerActionsType>;
+  index: number;
+  notification: NotificationType;
+}> = ({dispatch, index, notification}) => {
   const {width} = useWindowDimensions();
 
   const visible = useSharedValue(0);
@@ -24,32 +30,44 @@ const ActiveNotificationContainer: FC<{notification: NotificationType}> = ({
   const opacity = useSharedValue(1);
 
   const [notificationHeight, setNotificationHeight] = useState<number>();
-  const [deactivate, setDeactivate] = useState(false);
+  const [deactivated, setDeactivated] = useState(false);
 
   const deactivationTimeout = useRef(
     setTimeout(() => {
       withTiming(1, {duration: 500}, finished => {
         if (finished) {
-          runOnJS(setDeactivate)(true);
+          runOnJS(setDeactivated)(true);
         }
       });
     }, 500),
   );
 
   useEffect(() => {
+    if (deactivated) {
+      dispatch({
+        type: NOTIFICATIONS_REDUCER_ACTIONS.UPDATE,
+        payload: {
+          index: index,
+          data: Object.assign({}, {...notification}, {active: false}),
+        },
+      });
+    }
+  }, [deactivated]);
+
+  useEffect(() => {
     let timer: NodeJS.Timeout;
-    if (!deactivate) {
+    if (!deactivated) {
       timer = setTimeout(() => {
         opacity.value = withTiming(0, {duration: 500}, finished => {
           if (finished) {
-            runOnJS(setDeactivate)(true);
+            runOnJS(setDeactivated)(true);
           }
         });
-      }, 10000);
+      }, 5000);
     } else {
     }
     return () => clearTimeout(timer);
-  }, [deactivate, opacity]);
+  }, [deactivated, opacity]);
 
   useEffect(() => {
     if (notificationHeight) {
@@ -61,7 +79,7 @@ const ActiveNotificationContainer: FC<{notification: NotificationType}> = ({
     if (deactivationTimeout.current) {
       clearTimeout(deactivationTimeout.current);
     }
-  }, [setDeactivate]);
+  }, [setDeactivated]);
 
   const animatedStyles = useAnimatedStyle(() => {
     if (notificationHeight) {
@@ -85,7 +103,7 @@ const ActiveNotificationContainer: FC<{notification: NotificationType}> = ({
             {
               duration: 250,
             },
-            () => runOnJS(setDeactivate)(true),
+            () => runOnJS(setDeactivated)(true),
           );
         } else {
           translateX.value = withTiming(0, {duration: 150});

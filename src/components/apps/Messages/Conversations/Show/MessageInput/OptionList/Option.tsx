@@ -1,37 +1,53 @@
-import React, {FC, useContext} from 'react';
-import {
-  TouchableOpacity,
-  Image,
-  View,
-  StyleSheet,
-  LayoutChangeEvent,
-} from 'react-native';
+import React, {FC, useCallback, useContext} from 'react';
+import {TouchableOpacity, View, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {Bold, P} from 'components/common/StyledText';
+import {P} from 'components/common/StyledText';
 import {Row} from 'components/common/layout';
 import theme from 'themes';
-import {GenericStateType} from 'types/genericContextTypes';
-import {TextOrchestrationContext} from 'components/apps/Messages/context/textOrchestration';
+import {
+  CONVERSATION_REDUCER_ACTIONS,
+  ConversationReducerActionsType,
+} from 'components/apps/Messages/reducers/conversationReducer/types';
+import {EventOrchestraContext} from 'components/EventOrchestra/context';
+import {CONTACT_NAMES} from 'components/apps/Messages/context/usersMapping';
 
 const Option: FC<{
-  active: GenericStateType<boolean>;
-  totalHeight: React.Dispatch<React.SetStateAction<number>>;
+  setActive: (boolean: boolean) => void;
+  dispatch: (action: ConversationReducerActionsType) => Promise<void>;
+  id: number;
+  name: CONTACT_NAMES;
   option: string;
-}> = ({active, option, totalHeight}) => {
-  const context = useContext(TextOrchestrationContext);
+}> = ({setActive, dispatch, id, name, option}) => {
+  const eventSet = useContext(EventOrchestraContext).events.set;
+
+  const setPathAsSeen = useCallback(
+    (_name: CONTACT_NAMES, _id: number, chosen: string) => {
+      eventSet(state => {
+        const newState = Object.assign({}, state);
+        const seenRoutes = newState.Message[_name].routes;
+        seenRoutes[_id] = {
+          chosen: chosen.toString(),
+          date: new Date(),
+          position: Object.keys(seenRoutes).length + 1,
+        };
+        return newState;
+      });
+    },
+    [eventSet],
+  );
+
   return (
     <TouchableOpacity
       onPress={() => {
-        active.set(false);
-        context.pickRoute(option);
+        setActive(false);
+        setPathAsSeen(name, id, option);
+        dispatch({
+          type: CONVERSATION_REDUCER_ACTIONS.START_ROUTE,
+          payload: {id: id, chosenOption: option},
+        });
       }}>
-      <Row
-        style={styles.container}
-        onLayout={(layout: LayoutChangeEvent) => {
-          const layoutHeight = layout.nativeEvent.layout.height;
-          totalHeight(height => (height += layoutHeight));
-        }}>
+      <Row style={styles.container}>
         <View style={styles.content}>
           <Row style={styles.infoRow}>
             <Row style={styles.dateRow}>

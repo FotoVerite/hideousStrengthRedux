@@ -4,14 +4,19 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useReducer,
   useState,
 } from 'react';
-import {MessagesContextTypeDigest, MessagesContextTypeDigested} from './types';
+import {
+  ConversationType,
+  MessagesContextTypeDigest,
+  MessagesContextTypeDigested,
+} from './types';
 import {zola} from '../assets/messages/zola';
 import {chris} from '../assets/messages/chris';
 import {useWindowDimensions} from 'react-native';
-import {ApplicationContext} from 'context';
+import context, {ApplicationContext} from 'context';
 import {seamless} from '../assets/messages/seamless';
 import {movieNight} from '../assets/messages/movie_night';
 import {clay} from '../assets/messages/clay';
@@ -28,6 +33,15 @@ import {
 } from '../reducers/conversationReducer/types';
 import {digestConversation} from '../reducers/conversationReducer/digestion';
 import {CONTACT_NAMES} from './usersMapping';
+import {testConvo} from '../assets/messages/test';
+import {testConvo2} from '../assets/messages/test2';
+import {
+  viewableConversations,
+  conversationHasExchange,
+  sortConversations,
+  sendNotification,
+} from './conversationFunctions';
+import {NotificationsContext} from 'components/Notifications/context';
 
 //defaults for empty app
 export const MessagesContext = React.createContext<MessagesContextTypeDigested>(
@@ -44,17 +58,27 @@ const conversations = [
   grace_russo,
   alice,
   greg,
+  testConvo,
+  testConvo2,
 ];
+
+export const baseConversation: ConversationType = {
+  name: '',
+  tags: [],
+  exchanges: [],
+};
 
 const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
   const applicationContext = useContext(ApplicationContext);
   const eventContext = useContext(EventOrchestraContext);
-  const setTheEvent = eventContext.events.set;
+  const notificationContext = useContext(NotificationsContext);
 
+  const setTheEvent = eventContext.events.set;
+  const events = eventContext.events.state;
   const setViewEvent = useCallback(
     (name: CONTACT_NAMES) =>
-      setTheEvent(events => {
-        const newState = Object.assign({}, events);
+      setTheEvent(_events => {
+        const newState = Object.assign({}, _events);
         const views = newState.Message[name].views;
         views.push(new Date());
         return newState;
@@ -62,32 +86,96 @@ const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
     [setTheEvent],
   );
 
+  const setPathAsSeen = useCallback(
+    (_name: CONTACT_NAMES, _id: number, chosen?: string) => {
+      setTheEvent(state => {
+        const newState = Object.assign({}, state);
+        const seenRoutes = newState.Message[_name].routes;
+        seenRoutes[_id] = {
+          chosen: chosen ? chosen.toString() : undefined,
+          date: new Date(),
+          position: Object.keys(seenRoutes).length + 1,
+        };
+        return newState;
+      });
+    },
+    [setTheEvent],
+  );
+
   const [media, setMedia] = useState<ReactElement>();
+  const [prevConversations, setPreConversations] = useState(
+    conversations.filter(viewableConversations(events)),
+  );
+
+  const filteredConversations = useMemo(
+    () =>
+      conversations
+        .filter(viewableConversations(events))
+        .filter(c => conversationHasExchange(c, events))
+        .sort(sortConversations(events)),
+    [events],
+  );
 
   const {width, _} = useWindowDimensions();
-  const config = {
-    font: applicationContext.fonts.HelveticaNeue,
-    emojiFont: applicationContext.fonts.NotoColor,
-    width: width,
-    events: eventContext.events,
-  };
+
+  const config = useMemo(() => {
+    return {
+      font: applicationContext.fonts.HelveticaNeue,
+      emojiFont: applicationContext.fonts.NotoColor,
+      events: events,
+      width: width,
+    };
+  }, [
+    applicationContext.fonts.HelveticaNeue,
+    applicationContext.fonts.NotoColor,
+    events,
+    width,
+  ]);
+
   const [conversation, dispatchConversation] = useReducer(
     createConversationReducer(config),
     undefined,
   );
 
-  const reducerResolver = async (action: ConversationReducerActionsType) => {
-    if (action.type === CONVERSATION_REDUCER_ACTIONS.DIGEST_CONVERSATION) {
-      const digested = await digestConversation(config, action.payload);
+  const [newMessage, dispatchNewMessage] = useReducer(
+    createConversationReducer(config),
+    undefined,
+  );
 
-      dispatchConversation({
-        type: CONVERSATION_REDUCER_ACTIONS.ADD_CONVERSATION,
-        payload: digested,
-      });
-    } else {
-      dispatchConversation(action);
-    }
-  };
+  const reducerResolver = useCallback(
+    async (action: ConversationReducerActionsType) => {
+      if (action.type === CONVERSATION_REDUCER_ACTIONS.DIGEST_CONVERSATION) {
+        const digested = await digestConversation(config, action.payload);
+        dispatchConversation({
+          type: CONVERSATION_REDUCER_ACTIONS.ADD_CONVERSATION,
+          payload: digested,
+        });
+      } else {
+        dispatchConversation(action);
+      }
+    },
+    [config],
+  );
+
+  const newMessageResolver = useCallback(
+    async (action: ConversationReducerActionsType) => {
+      if (action.type === CONVERSATION_REDUCER_ACTIONS.DIGEST_CONVERSATION) {
+        const digested = await digestConversation(config, action.payload);
+        dispatchNewMessage({
+          type: CONVERSATION_REDUCER_ACTIONS.ADD_CONVERSATION,
+          payload: digested,
+        });
+      } else {
+        dispatchNewMessage(action);
+      }
+    },
+    [config],
+  );
+
+  const viewable = useMemo(
+    () => conversations.filter(viewableConversations(events)),
+    [events],
+  );
 
   useEffect(() => {
     if (conversation?.name != null) {
@@ -95,13 +183,43 @@ const MessagesContextProvider: FC<MessagesContextTypeDigest> = props => {
     }
   }, [conversation?.name, setViewEvent]);
 
+  useEffect(() => {
+    if (prevConversations && prevConversations !== viewable) {
+      const newConversations = viewable.filter(
+        c => !prevConversations.includes(c),
+      );
+      newConversations.forEach(c => {
+        if (c.name !== newMessage?.name && c.name !== conversation?.name) {
+          sendNotification(
+            c,
+            events,
+            setTheEvent,
+            notificationContext.notifications.dispatch,
+          );
+        }
+      });
+      setPreConversations(viewable);
+    }
+  }, [
+    viewable,
+    events,
+    prevConversations,
+    newMessage?.name,
+    conversation?.name,
+    notificationContext.notifications.dispatch,
+  ]);
+
   return (
     <MessagesContext.Provider
       value={{
-        conversations: conversations,
+        conversations: filteredConversations,
         media: {
           state: media,
           set: setMedia,
+        },
+        newMessage: {
+          state: newMessage,
+          dispatch: newMessageResolver,
         },
         conversation: {
           state: conversation,

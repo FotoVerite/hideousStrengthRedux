@@ -53,7 +53,7 @@ export default NotificationsList;
 
 const styles = StyleSheet.create({
   screen: {
-    backgroundColor: '#6e6e6e52',
+    backgroundColor: '#bebebe52',
     position: 'absolute',
     zIndex: 100,
   },
